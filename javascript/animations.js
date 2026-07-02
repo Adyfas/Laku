@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const animationObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const el = entry.target;
+      const isOnce = el.getAttribute('data-once') === 'true';
+
       if (entry.isIntersecting) {
         if (el.classList.contains('text-animation-split')) {
           animateSplitText(el);
@@ -30,14 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
           animateContent(el);
         } else if (el.classList.contains('scale-up')) {
           animateScaleUp(el);
+        } else if (el.classList.contains('text-count')) {
+          animateTextCount(el);
+        }
+
+        if (isOnce) {
+          animationObserver.unobserve(el);
         }
       } else {
+        if (isOnce) return;
+
         if (el.classList.contains('text-animation-split')) {
           resetSplitText(el);
         } else if (el.classList.contains('animated-content') || el.classList.contains('fade-in')) {
           resetContent(el);
         } else if (el.classList.contains('scale-up')) {
           resetScaleUp(el);
+        } else if (el.classList.contains('text-count')) {
+          resetTextCount(el);
         }
       }
     });
@@ -263,10 +275,112 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- 4. Text Count Animation ---
+  function initTextCount(el) {
+    const from = getVal(el, 'data-from', 0);
+    el.textContent = from;
+    animationObserver.observe(el);
+  }
+
+  function animateTextCount(el) {
+    const from = getVal(el, 'data-from', 0);
+    const to = getVal(el, 'data-to', 100);
+    const duration = getVal(el, 'data-duration', 2) * 1000;
+    const delay = getVal(el, 'data-delay', 0) * 1000;
+    const prefix = el.getAttribute('data-prefix') || '';
+    const suffix = el.getAttribute('data-suffix') || '';
+    const decimals = getVal(el, 'data-decimals', 0);
+
+    el.getAnimations().forEach(anim => anim.cancel());
+
+    const startTime = performance.now() + delay;
+    const range = to - from;
+
+    function easeOutExpo(t) {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+
+      if (elapsed < 0) {
+        requestAnimationFrame(update);
+        return;
+      }
+
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutExpo(progress);
+      const currentValue = from + (range * easedProgress);
+
+      el.textContent = prefix + currentValue.toFixed(decimals) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  function resetTextCount(el) {
+    const from = getVal(el, 'data-from', 0);
+    el.textContent = from;
+  }
+
   // Initialize all target elements
   document.querySelectorAll('.text-animation-split').forEach(initSplitText);
   document.querySelectorAll('.animated-content, .fade-in').forEach(initContent);
   document.querySelectorAll('.scale-up').forEach(initScaleUp);
+  document.querySelectorAll('.text-count').forEach(initTextCount);
+
+  // --- 4. BG Parallax Effect ---
+  function initParallax() {
+    const parallaxSections = document.querySelectorAll('.bg-parallax');
+    if (parallaxSections.length < 2) return;
+
+    let ticking = false;
+
+    function handleParallax() {
+      const scrollTop = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+
+      parallaxSections.forEach((section, index) => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const scrollProgress = (scrollTop - sectionTop + windowHeight) / (sectionHeight + windowHeight);
+
+        if (index === 0) {
+          // Section pertama: sink down + fade out saat scroll
+          const sink = Math.min(scrollTop * 0.5, sectionHeight * 0.3);
+          const fadeOut = Math.max(0, 1 - scrollTop / (windowHeight * 0.5));
+
+          section.style.transform = `translateY(${sink}px)`;
+          section.style.opacity = fadeOut;
+        } else if (index === 1) {
+          // Section kedua: muncul dari bawah
+          const sectionInView = scrollTop + windowHeight - sectionTop;
+          const progress = Math.max(0, Math.min(1, sectionInView / windowHeight));
+
+          if (progress > 0) {
+            const translateY = (1 - progress) * 100;
+            section.style.transform = `translateY(${translateY}px)`;
+            section.style.opacity = progress;
+          }
+        }
+      });
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(handleParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  initParallax();
 });
 
 
@@ -291,3 +405,19 @@ document.addEventListener('DOMContentLoaded', () => {
 //      data-direction="up" 
 //      data-ease="elastic">
 // </div>
+
+
+// <span class="text-count" 
+//       data-from="0" 
+//       data-to="100" 
+//       data-duration="2" 
+//       data-suffix="%"
+//       data-once="true">
+// </span>
+// <span class="text-count" 
+//       data-from="0" 
+//       data-to="1951" 
+//       data-duration="2.5"
+//       data-suffix="+"
+//       data-once="true">
+// </span>
