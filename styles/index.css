@@ -131,13 +131,6 @@
   transition-delay: .65s;
 }
 
-.bg-parallax {
-  position: relative;
-  will-change: transform, opacity;
-}
-
-
-
 /* Responsive: mobile */
 @media (max-width: 800px) {
   #navbar        { width: 92vw; }

@@ -333,54 +333,63 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.scale-up').forEach(initScaleUp);
   document.querySelectorAll('.text-count').forEach(initTextCount);
 
-  // --- 4. BG Parallax Effect ---
-  function initParallax() {
-    const parallaxSections = document.querySelectorAll('.bg-parallax');
-    if (parallaxSections.length < 2) return;
+  // --- 5. Cursor Follow Button ---
+  function initCursorFollow() {
+    const videoSection = document.querySelector('#followBtn');
+    if (!videoSection) return;
 
-    let ticking = false;
+    const thumbnail = videoSection.querySelector('#thumbnail');
+    if (!thumbnail) return;
 
-    function handleParallax() {
-      const scrollTop = window.pageYOffset;
-      const windowHeight = window.innerHeight;
+    const playButton = videoSection.querySelector('#follback');
+    if (!playButton) return;
 
-      parallaxSections.forEach((section, index) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const scrollProgress = (scrollTop - sectionTop + windowHeight) / (sectionHeight + windowHeight);
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-        if (index === 0) {
-          // Section pertama: sink down + fade out saat scroll
-          const sink = Math.min(scrollTop * 0.5, sectionHeight * 0.3);
-          const fadeOut = Math.max(0, 1 - scrollTop / (windowHeight * 0.5));
-
-          section.style.transform = `translateY(${sink}px)`;
-          section.style.opacity = fadeOut;
-        } else if (index === 1) {
-          // Section kedua: muncul dari bawah
-          const sectionInView = scrollTop + windowHeight - sectionTop;
-          const progress = Math.max(0, Math.min(1, sectionInView / windowHeight));
-
-          if (progress > 0) {
-            const translateY = (1 - progress) * 100;
-            section.style.transform = `translateY(${translateY}px)`;
-            section.style.opacity = progress;
-          }
-        }
-      });
-
-      ticking = false;
+    if (isMobile) {
+      playButton.style.position = 'absolute';
+      // playButton.style.bottom = '80px'
+      // playButton.style.left = '50%';
+      // playButton.style.top = '50%';
+      // playButton.style.transform = 'translate(-50%, -50%)';
+      return;
     }
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(handleParallax);
-        ticking = true;
-      }
-    }, { passive: true });
+    playButton.style.position = 'absolute';
+    playButton.style.transition = 'all 0.15s ease-out';
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let buttonX = 0;
+    let buttonY = 0;
+
+    thumbnail.addEventListener('mousemove', (e) => {
+      const rect = videoSection.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top ;
+    });
+
+    thumbnail.addEventListener('mouseleave', () => {
+      const rect = videoSection.getBoundingClientRect();
+      mouseX = rect.width / 2;
+      mouseY = rect.height / 2;
+    });
+
+    function animate() {
+      buttonX += (mouseX - buttonX) * 0.12;
+      buttonY += (mouseY - buttonY) * 0.12;
+
+      playButton.style.left = `${buttonX}px`;
+      playButton.style.top = `${buttonY}px`;
+      playButton.style.transform = 'translate(-50%, -50%)';
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   }
 
-  initParallax();
+  initCursorFollow();
 });
 
 

@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleScroll() {
     const currentScrollY = window.pageYOffset;
 
+    if (navbar.classList.contains('open')) {
+      lastScrollY = currentScrollY;
+      ticking = false;
+      return;
+    }
+
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
       hideNavbar();
     } else if (currentScrollY < lastScrollY) {
