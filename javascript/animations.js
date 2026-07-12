@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
           animateScaleUp(el);
         } else if (el.classList.contains('text-count')) {
           animateTextCount(el);
+        } else if (el.classList.contains('reveal')) {
+          animateReveal(el);
         }
 
         if (isOnce) {
@@ -50,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
           resetScaleUp(el);
         } else if (el.classList.contains('text-count')) {
           resetTextCount(el);
+        } else if (el.classList.contains('reveal')) {
+          resetReveal(el);
         }
       }
     });
@@ -327,11 +331,184 @@ document.addEventListener('DOMContentLoaded', () => {
     el.textContent = from;
   }
 
+  // --- 5. Reveal Text Animation ---
+  function initReveal(el) {
+    const initialOpacity = getVal(el, 'data-initial-opacity', 0);
+    const distance = getVal(el, 'data-distance', 50);
+    const direction = getVal(el, 'data-direction', 'up');
+    const mode = el.getAttribute('data-mode') || 'normal';
+
+    el.style.overflow = 'hidden';
+
+    if (mode === 'normal') {
+      el.style.opacity = initialOpacity;
+      if (direction === 'up') {
+        el.style.transform = `translateY(${distance}px)`;
+      } else if (direction === 'down') {
+        el.style.transform = `translateY(-${distance}px)`;
+      } else if (direction === 'left') {
+        el.style.transform = `translateX(${distance}px)`;
+      } else if (direction === 'right') {
+        el.style.transform = `translateX(-${distance}px)`;
+      }
+    } else {
+      const text = el.textContent.trim();
+      el.textContent = '';
+
+      if (mode === 'word') {
+        const words = text.split(/\s+/);
+        words.forEach((word, wordIdx) => {
+          const wrapper = document.createElement('span');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.overflow = 'hidden';
+
+          const inner = document.createElement('span');
+          inner.style.display = 'inline-block';
+          inner.style.opacity = initialOpacity;
+          inner.classList.add('reveal-item');
+
+          if (direction === 'up') {
+            inner.style.transform = `translateY(${distance}px)`;
+          } else if (direction === 'down') {
+            inner.style.transform = `translateY(-${distance}px)`;
+          } else if (direction === 'left') {
+            inner.style.transform = `translateX(${distance}px)`;
+          } else if (direction === 'right') {
+            inner.style.transform = `translateX(-${distance}px)`;
+          }
+
+          inner.textContent = word;
+          wrapper.appendChild(inner);
+          el.appendChild(wrapper);
+
+          if (wordIdx < words.length - 1) {
+            el.appendChild(document.createTextNode(' '));
+          }
+        });
+      } else if (mode === 'char') {
+        const chars = text.split('');
+        chars.forEach(char => {
+          const wrapper = document.createElement('span');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.overflow = 'hidden';
+
+          const inner = document.createElement('span');
+          inner.style.display = 'inline-block';
+          inner.style.opacity = initialOpacity;
+          inner.classList.add('reveal-item');
+
+          if (direction === 'up') {
+            inner.style.transform = `translateY(${distance}px)`;
+          } else if (direction === 'down') {
+            inner.style.transform = `translateY(-${distance}px)`;
+          } else if (direction === 'left') {
+            inner.style.transform = `translateX(${distance}px)`;
+          } else if (direction === 'right') {
+            inner.style.transform = `translateX(-${distance}px)`;
+          }
+
+          inner.textContent = char === ' ' ? '\u00A0' : char;
+          wrapper.appendChild(inner);
+          el.appendChild(wrapper);
+        });
+      }
+    }
+
+    animationObserver.observe(el);
+  }
+
+  function animateReveal(el) {
+    const duration = getVal(el, 'data-duration', 0.8) * 1000;
+    const delay = getVal(el, 'data-delay', 0) * 1000;
+    const initialOpacity = getVal(el, 'data-initial-opacity', 0);
+    const distance = getVal(el, 'data-distance', 50);
+    const direction = getVal(el, 'data-direction', 'up');
+    const easeType = getVal(el, 'data-ease', 'out-back');
+    const easing = EASING_PRESETS[easeType] || easeType;
+    const stagger = getVal(el, 'data-stagger', 0.04) * 1000;
+    const mode = el.getAttribute('data-mode') || 'normal';
+
+    let fromTransform = '';
+    if (direction === 'up') {
+      fromTransform = `translateY(${distance}px)`;
+    } else if (direction === 'down') {
+      fromTransform = `translateY(-${distance}px)`;
+    } else if (direction === 'left') {
+      fromTransform = `translateX(${distance}px)`;
+    } else if (direction === 'right') {
+      fromTransform = `translateX(-${distance}px)`;
+    }
+
+    if (mode === 'normal') {
+      el.getAnimations().forEach(anim => anim.cancel());
+      el.animate([
+        { opacity: initialOpacity, transform: fromTransform },
+        { opacity: 1, transform: 'translate(0)' }
+      ], {
+        duration: duration,
+        delay: delay,
+        easing: easing,
+        fill: 'forwards'
+      });
+    } else {
+      const items = el.querySelectorAll('.reveal-item');
+      items.forEach((item, index) => {
+        item.getAnimations().forEach(anim => anim.cancel());
+        item.animate([
+          { opacity: initialOpacity, transform: fromTransform },
+          { opacity: 1, transform: 'translate(0)' }
+        ], {
+          duration: duration,
+          delay: delay + (index * stagger),
+          easing: easing,
+          fill: 'forwards'
+        });
+      });
+    }
+  }
+
+  function resetReveal(el) {
+    const initialOpacity = getVal(el, 'data-initial-opacity', 0);
+    const distance = getVal(el, 'data-distance', 50);
+    const direction = getVal(el, 'data-direction', 'up');
+    const mode = el.getAttribute('data-mode') || 'normal';
+
+    if (mode === 'normal') {
+      el.getAnimations().forEach(anim => anim.cancel());
+      el.style.opacity = initialOpacity;
+      if (direction === 'up') {
+        el.style.transform = `translateY(${distance}px)`;
+      } else if (direction === 'down') {
+        el.style.transform = `translateY(-${distance}px)`;
+      } else if (direction === 'left') {
+        el.style.transform = `translateX(${distance}px)`;
+      } else if (direction === 'right') {
+        el.style.transform = `translateX(-${distance}px)`;
+      }
+    } else {
+      const items = el.querySelectorAll('.reveal-item');
+      items.forEach(item => {
+        item.getAnimations().forEach(anim => anim.cancel());
+        item.style.opacity = initialOpacity;
+        if (direction === 'up') {
+          item.style.transform = `translateY(${distance}px)`;
+        } else if (direction === 'down') {
+          item.style.transform = `translateY(-${distance}px)`;
+        } else if (direction === 'left') {
+          item.style.transform = `translateX(${distance}px)`;
+        } else if (direction === 'right') {
+          item.style.transform = `translateX(-${distance}px)`;
+        }
+      });
+    }
+  }
+
   // Initialize all target elements
   document.querySelectorAll('.text-animation-split').forEach(initSplitText);
   document.querySelectorAll('.animated-content, .fade-in').forEach(initContent);
   document.querySelectorAll('.scale-up').forEach(initScaleUp);
   document.querySelectorAll('.text-count').forEach(initTextCount);
+  document.querySelectorAll('.reveal').forEach(initReveal);
 
   // --- 5. Cursor Follow Button ---
   function initCursorFollow() {
@@ -430,3 +607,28 @@ document.addEventListener('DOMContentLoaded', () => {
 //       data-suffix="+"
 //       data-once="true">
 // </span>
+
+
+// <p class="reveal" data-mode="normal" data-once="true">
+//   Text biasa
+// </p>
+
+// <!-- Mode per kata -->
+// <p class="reveal" 
+//    data-mode="word" 
+//    data-duration="0.6"
+//    data-stagger="0.08"
+//    data-distance="50"
+//    data-once="true">
+//   Text per kata muncul
+// </p>
+
+// <!-- Mode per huruf -->
+// <p class="reveal" 
+//    data-mode="char" 
+//    data-duration="0.5"
+//    data-stagger="0.03"
+//    data-distance="40"
+//    data-once="true">
+//   Text per huruf muncul
+// </p>

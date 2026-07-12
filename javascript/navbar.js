@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 0, transform: 'translateY(-20px)' }
     ], {
       duration: 300,
-      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)', 
       fill: 'forwards'
     });
   }
