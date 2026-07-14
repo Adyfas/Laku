@@ -571,6 +571,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
 // <h1 class="text-animation-split" 
 //     data-duration="0.7" 
 //     data-delay="0.1" 
