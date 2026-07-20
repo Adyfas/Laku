@@ -101,7 +101,7 @@ aboutSection.innerHTML = aboutSectionMapping;
 const UMKMaboutSectionMapping = UMKMCardSection.map(
   (item) => `
 
-  <div class="rounded-3xl p-6 bg-stone-50 shadow-sm border border-stone-100 h-55">
+  <div class="rounded-3xl p-6 bg-stone-50 shadow-sm border border-stone-100 h-55 w-full">
   <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center mb-4">
     <img src="${item.icon}" alt="${item.title}" class="w-6 h-6">
   </div>
