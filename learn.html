@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar</title>
+      <link rel="stylesheet" href="./styles/output.css" />
+</head>
+<body>
+    
+    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
+              <!-- Navbar -->
+      <div
+        id="nav-overlay"
+        class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450"
+      ></div>
+
+      <nav
+         data-delay="0.9"
+         data-direction="down"
+         id="navbar"
+         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"
+       >
+           <div class="h-[72px] flex items-center justify-between px-[22px]">
+           <a
+             href="/"
+             class="text-xl font-bold tracking-[3px] text-black-main no-underline"
+           >
+             LAKU
+           </a>
+ 
+           <button
+             id="nav-menu-btn"
+             class="relative w-[42px] h-[42px] cursor-pointer"
+             aria-label="Toggle menu"
+             aria-expanded="false"
+           >
+             <span
+               class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+           </button>
+         </div>
+         <div
+           id="nav-content"
+           class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10"
+         >
+              <div class="flex flex-col gap-[18px]" id="items-nav">
+
+
+              </div>
+              <div class="flex flex-col justify-between">
+         <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px]">
+           <div
+             class="w-full h-full bg-linear-to-br from-green-main to-green-main/60 flex items-center justify-center"
+           >
+             <a
+               href="#belajar"
+               class="text-white-main font-semibold text-lg no-underline"
+               >Mulai Belajar →</a
+             >
+           </div>
+         </div>
+          </div>
+       </nav>
+      <!-- End Navbar -->
+    </div>
+
+
+
+
+
+
+
+
+
+      <!-- Call to action -->
+      <section class="w-full bg-white py-24 px-6 min-h-screen">
+        <div class="max-w-5xl mx-auto text-center">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+            Aplikasi
+            <span class="text-lime-600 text-xl">✦</span>
+          </p>
+          <h2
+            class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight"
+          >
+            Saatnya Mengelola UMKM
+            <br />
+            Dengan Lebih Mudah
+          </h2>
+          <p
+            class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed"
+          >
+            Gunakan
+            <span class="font-semibold text-black-main">Aplikasi Laku</span>
+            untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
+            belajar lebih praktis dalam satu tempat.
+          </p>
+
+          <div class="flex flex-col sm:flex-row justify-center gap-4 mt-12">
+            <a
+              href="#"
+              class="bg-lime-main transition-all duration-300 text-black-main font-semibold px-10 py-4 rounded-full flex items-center group"
+            >
+              Buka Aplikasi
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="group-hover:translate-x-1 transition-transform rotate-180"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- End Call to action -->
+
+      <!-- Footer  -->
+      <footer
+        class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen"
+      >
+        <div
+          class="absolute -left-72 top-1/2 -translate-y-1/2 w-175 h-175 rounded-full bg-backdrop opacity-20 blur-[180px]"
+        ></div>
+        <div
+          class="absolute -right-72 top-1/2 -translate-y-1/2 w-175] h-175 rounded-full bg-backdrop opacity-20 blur-[180px]"
+        ></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+            <div class="lg:col-span-2">
+              <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+                Footer
+              <span class="text-lime-600 text-xl">✦</span>
+            </p> -->
+              <h2 class="text-4xl font-semibold leading-tight">
+                Bersama Laku,
+                <br />
+                UMKM Tumbuh
+                <br />
+                Lebih Mudah.
+              </h2>
+              <div class="mt-12 text-sm text-black-main/60 space-y-3">
+                <p>© Copyright 2026 Laku.</p>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-semibold mb-5">Menu</h3>
+              <ul class="space-y-3 text-black-main/60">
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#">Tentang</a></li>
+                <li><a href="#">Belajar</a></li>
+                <li><a href="#">Kontak</a></li>
+              </ul>
+            </div>
+            <!-- Product -->
+            <div>
+              <h3 class="font-semibold mb-5">Aplikasi</h3>
+              <ul class="space-y-3 text-black-main/60">
+                <li><a href="#">Aplikasi Laku</a></li>
+                <li><a href="#">Edukasi</a></li>
+              </ul>
+            </div>
+            <div></div>
+          </div>
+        </div>
+        <h2
+          class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none"
+        >
+          Laku
+        </h2>
+      </footer>
+
+
+<script src="/javascript/navbar.js"></script>
+<script src="/javascript/animations.js"></script>
+
+</body>
+</html>

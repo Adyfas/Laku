@@ -54,6 +54,7 @@ let UMKMCardSection = [
 const aboutSection = document.getElementById("aboutSection");
 const UMKMAboutSection = document.getElementById("UMKMAboutSection");
 
+
 // Render
 const aboutSectionMapping = aboutSectionRaw
   .map(
