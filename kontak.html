@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kontak - Laku</title>
+    <link rel="stylesheet" href="./styles/output.css" />
+  </head>
+  <body class="bg-white-main">
+    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
+      <!-- Navbar -->
+       <div
+         id="nav-overlay"
+         class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450"
+       ></div>
+ 
+       <nav
+         data-delay="0.9"
+         data-direction="down"
+         id="navbar"
+         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"
+       >
+           <div class="h-[72px] flex items-center justify-between px-[22px]">
+           <a
+             href="/"
+             class="text-xl font-bold tracking-[3px] text-black-main no-underline"
+           >
+             LAKU
+           </a>
+ 
+           <button
+             id="nav-menu-btn"
+             class="relative w-[42px] h-[42px] cursor-pointer"
+             aria-label="Toggle menu"
+             aria-expanded="false"
+           >
+             <span
+               class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+           </button>
+         </div>
+         <div
+           id="nav-content"
+           class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10"
+         >
+              <div class="flex flex-col gap-[18px]" id="items-nav">
+              </div>
+              <div class="flex flex-col justify-between">
+          <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+              <source src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" type="video/mp4" />
+            </video>
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
+            <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
+              <a
+                href="./learn.html"
+                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform"
+                >Mulai Belajar →</a
+              >
+            </div>
+          </div>
+          </div>
+       </nav>
+      <!-- End Navbar -->
+
+      <!-- Contact Section -->
+      <section class="min-h-screen pt-48 pb-20 px-6 flex flex-col lg:flex-row gap-20">
+        <!-- Left Side -->
+        <div class="flex-1 flex flex-col justify-between">
+          <h1 class="text-5xl lg:text-[70px] font-medium text-black-main leading-[1.1] tracking-tight max-w-lg">
+           Hubungi Kami, Mulai dari Sini.
+          </h1>
+          <!-- Social Icons -->
+          <div class="flex gap-4 mt-20 lg:mt-auto text-black-main">
+          </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="flex-1 flex flex-col justify-between pt-4">
+          <!-- Info from JS -->
+          <div id="contact-info-container" class="flex gap-16 mb-20 text-sm">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Form -->
+          <form id="contact-form" class="flex flex-col gap-6 w-full max-w-md ml-auto mr-auto lg:mr-0">
+            <input type="text" id="name" name="name" placeholder="Name" class="w-full border-b border-black-main/40 bg-transparent py-4 text-lg outline-none focus:border-black-main placeholder-black-main/50 transition-colors" required>
+            <input type="email" id="email" name="email" placeholder="name@yourname.com" class="w-full border-b border-black-main/40 bg-transparent py-4 text-lg outline-none focus:border-black-main placeholder-black-main/50 transition-colors" required>
+            <input type="text" id="message" name="message" placeholder="Enter your message here..." class="w-full border-b border-black-main/40 bg-transparent py-4 text-lg outline-none focus:border-black-main placeholder-black-main/50 transition-colors" required>
+            
+            <div class="flex justify-end mt-4">
+              <button type="submit" class="bg-[#101917] text-white-main px-8 py-3.5 rounded-lg font-medium hover:bg-black-main transition-colors text-sm">
+                Submit Form
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/contact.js"></script>
+  </body>
+</html>

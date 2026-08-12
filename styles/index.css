@@ -98,8 +98,8 @@ button{
     height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 #navbar.open {
-  width: 760px;
-  height: 420px;
+  width: 720px;
+  height: 350px;
 }
 
 #nav-overlay.show {
@@ -108,13 +108,13 @@ button{
 }
 
 .nav-bar-1 {
-  top: 13px;
+  top: 15px;
 }
 .nav-bar-2 {
   top: 20px;
 }
 .nav-bar-3 {
-  top: 27px;
+  top: 25px;
 }
 
 #navbar.open .nav-bar-1 {
@@ -131,7 +131,7 @@ button{
 
 #nav-content {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
   transition:
     opacity 0.4s,
     transform 0.4s;
@@ -141,12 +141,12 @@ button{
 #navbar.open #nav-content {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.28s;
+  transition-delay: 0.25s;
   pointer-events: auto;
 }
 
 .nav-link {
-  transform: translateX(-20px);
+  transform: translateX(-16px);
   opacity: 0;
   transition:
     transform 0.35s,
@@ -160,56 +160,53 @@ button{
 }
 
 #navbar.open .nav-link:nth-child(1) {
-  transition-delay: 0.35s;
+  transition-delay: 0.30s;
 }
 #navbar.open .nav-link:nth-child(2) {
-  transition-delay: 0.42s;
+  transition-delay: 0.36s;
 }
 #navbar.open .nav-link:nth-child(3) {
-  transition-delay: 0.49s;
+  transition-delay: 0.42s;
 }
 #navbar.open .nav-link:nth-child(4) {
-  transition-delay: 0.56s;
+  transition-delay: 0.48s;
+}
+#navbar.open .nav-link:nth-child(5) {
+  transition-delay: 0.54s;
 }
 
 #nav-card {
-  transform: translateX(40px);
+  transform: translateX(30px);
   opacity: 0;
   transition:
-    transform 0.55s,
-    opacity 0.55s;
+    transform 0.45s,
+    opacity 0.45s;
 }
 
 #navbar.open #nav-card {
   transform: translateX(0);
   opacity: 1;
-  transition-delay: 0.45s;
-}
-
-#nav-bottom {
-  transform: translateY(20px);
-  opacity: 0;
-  transition:
-    transform 0.35s,
-    opacity 0.35s;
-}
-
-#navbar.open #nav-bottom {
-  transform: translateY(0);
-  opacity: 1;
-  transition-delay: 0.65s;
+  transition-delay: 0.4s;
 }
 
 /* Responsive: mobile */
 @media (max-width: 800px) {
   #navbar {
-    width: 92vw;
+    width: calc(100vw - 32px);
+    max-width: 420px;
   }
   #navbar.open {
-    width: 92vw;
-    height: 550px;
+    width: calc(100vw - 32px);
+    max-width: 420px;
+    height: 485px;
   }
   .nav-link {
-    font-size: 26px;
+    font-size: 20px;
+  }
+  #nav-card {
+    transform: translateY(20px);
+  }
+  #navbar.open #nav-card {
+    transform: translateY(0);
   }
 }

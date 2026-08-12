@@ -9,23 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       title: "Beranda",
       link: "/",
-      path:'/'
+      path: "/",
     },
     {
       title: "Tentang",
       link: "./about.html",
-      path:"/about"
-
+      path: "/about",
     },
     {
       title: "Belajar",
       link: "./learn.html",
-      path:'/learn'
+      path: "/learn",
     },
     {
       title: "Kontak",
       link: "./kontak.html",
-      path:'/kontak'
+      path: "/kontak",
     },
   ];
 
@@ -130,16 +129,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbarItemsSectionMapping = navbarItems
     .map(
       (item) => `
- <a
+  <a
     href=${item.link}
-    class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl ${item.path == window.location.pathname ? 'text-black-main/50' : 'hover:text-black-main/50'}"
+    class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl ${item.path == window.location.pathname ? "text-black-main/50" : "hover:text-black-main/50"}"
     >${item.title}
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
       viewBox="0 0 24 24"
-      class="transform ${item.path == window.location.pathname ? 'rotate-45' : 'hover:rotate-45'} transition-all duration-500"
+      class="transform ${item.path == window.location.pathname ? "rotate-45" : "hover:rotate-45"} group-hover:rotate-45 transition-all duration-500"
     >
       <path d="M0 0h24v24H0z" fill="none" />
       <path
@@ -152,7 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
     )
     .join("");
 
-  console.log(window.location.pathname);
-
-  navbarItemsSection.innerHTML = navbarItemsSectionMapping;
+  navbarItemsSection.innerHTML = `
+  ${navbarItemsSectionMapping}
+  <div class="mt-2 pt-1 nav-link">
+    <a href="./learn.html" class="rounded-2xl py-3 px-5 bg-lime-main hover:bg-lime-200 transition-all duration-300 text-black-main font-semibold w-full flex items-center justify-between gap-4 text-base no-underline cursor-pointer shadow-xs">
+      <span>Aplikasi</span> 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path
+          fill="currentColor"
+          d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
+        />
+      </svg>
+    </a>
+  </div>
+  `;
 });
