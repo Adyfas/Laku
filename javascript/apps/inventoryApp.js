@@ -52,10 +52,28 @@ function getInventoryAppUI() {
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1">Harga Beli / Modal (Rp)</label>
               <input type="text" inputmode="numeric" id="invHarga" placeholder="Contoh: 65.000" oninput="window.formatNumberInput(this)" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Satuan</label>
+              <select id="invSatuan" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm">
+                <option value="pcs">Pcs / Buah</option>
+                <option value="kg">Kg</option>
+                <option value="gram">Gram</option>
+                <option value="liter">Liter</option>
+                <option value="ml">Ml</option>
+                <option value="butir">Butir</option>
+                <option value="bungkus">Bungkus</option>
+                <option value="pack">Pack</option>
+                <option value="botol">Botol</option>
+                <option value="lusin">Lusin</option>
+                <option value="roll">Roll</option>
+                <option value="lembar">Lembar</option>
+                <option value="dosin">Dosin</option>
+              </select>
             </div>
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Stok Awal</label>

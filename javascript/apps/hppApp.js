@@ -1,87 +1,334 @@
 /**
- * hppApp.js - Template UI Kalkulator HPP & Harga Jual
+ * hppApp.js — Template UI Kalkulator HPP & Harga Jual (Recipe-Based)
+ * Multi-step wizard: Info Produk → Bahan dari Stok → Biaya Tambahan → Margin & Hasil
  */
 function getHppAppUI() {
   return `
     <div class="max-w-2xl mx-auto space-y-8 animate-fade-in-up">
+      <!-- Header -->
       <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
         <div class="flex items-center gap-3 mb-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
           <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Keuangan UMKM</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">Kalkulator HPP & Harga Jual</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Kalkulator HPP &amp; Harga Jual</h2>
         <p class="text-white/80 text-sm leading-relaxed">
-        Hitung modal bahan baku, biaya operasional, dan tentukan harga jual aman untuk mencegah kerugian usaha Anda.
+          Hitung modal kamu per produk dengan cara masak: catat bahan, tenaga, dan biaya lain. Biar tahu harga jual yang aman dan nggak rugi.
         </p>
       </div>
 
-      <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-6">
-        <form id="hppForm" class="space-y-5">
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Modal Bahan Baku per Unit (Rp)</label>
-            <input
-              type="text"
-              inputmode="numeric"
-              id="hppBahan"
-              placeholder="Contoh: 8.000"
-              oninput="window.formatNumberInput(this)"
-              class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base"
-              required
-            />
-          </div>
+      <!-- Mode Toggle -->
+      <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-2 flex gap-1">
+        <button type="button" id="hppModeResep" class="flex-1 py-2.5 px-4 rounded-2xl text-sm font-bold transition-all cursor-pointer">
+          📋 Pakai Stok
+        </button>
+        <button type="button" id="hppModeCepat" class="flex-1 py-2.5 px-4 rounded-2xl text-sm font-bold transition-all cursor-pointer">
+          ⚡ Hitung Cepat
+        </button>
+      </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Biaya Operasional & Kemasan per Unit (Rp)</label>
-            <input
-              type="text"
-              inputmode="numeric"
-              id="hppOps"
-              placeholder="Contoh: 2.000"
-              oninput="window.formatNumberInput(this)"
-              class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base"
-              required
-            />
-          </div>
+      <!-- Step Indicator -->
+      <div class="flex items-center justify-center gap-2 sm:gap-4">
+        <div class="flex items-center gap-2">
+          <div id="stepDot1" class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-[#274c43] text-white transition-all">1</div>
+          <span class="text-xs text-gray-500 hidden sm:inline">Info</span>
+        </div>
+        <div class="w-8 h-0.5 bg-gray-200 rounded-full"></div>
+        <div class="flex items-center gap-2">
+          <div id="stepDot2" class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-gray-200 text-gray-400 transition-all">2</div>
+          <span class="text-xs text-gray-500 hidden sm:inline">Bahan</span>
+        </div>
+        <div class="w-8 h-0.5 bg-gray-200 rounded-full"></div>
+        <div class="flex items-center gap-2">
+          <div id="stepDot3" class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-gray-200 text-gray-400 transition-all">3</div>
+          <span class="text-xs text-gray-500 hidden sm:inline">Biaya</span>
+        </div>
+        <div class="w-8 h-0.5 bg-gray-200 rounded-full"></div>
+        <div class="flex items-center gap-2">
+          <div id="stepDot4" class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-gray-200 text-gray-400 transition-all">4</div>
+          <span class="text-xs text-gray-500 hidden sm:inline">Harga</span>
+        </div>
+      </div>
 
+      <!-- STEP 1: Info Produk -->
+      <div id="hppStep1" class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
+        <div class="text-center mb-2">
+          <span class="text-3xl">📝</span>
+          <h3 class="text-lg font-bold text-gray-800 mt-2">Kamu lagi jualan apa hari ini?</h3>
+          <p class="text-gray-500 text-sm">Isi dulu nama produk dan berapa banyak yang kamu buat.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Produk</label>
+          <input type="text" id="hppNamaProduk" placeholder="Contoh: Nasi Goreng, Kue Lumpur, Sambal Bawang..." class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base" />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Target Margin Keuntungan (%)</label>
-            <input
-              type="number"
-              id="hppMargin"
-              placeholder="Contoh: 25"
-              min="1"
-              max="99"
-              class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base"
-              required
-            />
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Jumlah yang dibuat</label>
+            <input type="number" id="hppJumlahProduksi" placeholder="Contoh: 50" min="1" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base" />
           </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Satuan</label>
+            <select id="hppSatuanProduksi" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3.5 px-5 rounded-2xl outline-none border border-transparent focus:border-[#274c43] transition-all text-base">
+              <option value="porsi">Porsi</option>
+              <option value="bungkus">Bungkus</option>
+              <option value="kotak">Kotak</option>
+              <option value="botol">Botol</option>
+              <option value="biji">Biji / Buah</option>
+              <option value="kg">Kg</option>
+              <option value="liter">Liter</option>
+              <option value="pack">Pack</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" id="hppStep1Next" class="w-full bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
+          Lanjut Pilih Bahan →
+        </button>
+      </div>
 
-          <button
-            type="submit"
-            class="w-full bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer"
-          >
-            Hitung Harga Jual Pas →
+      <!-- STEP 2: Bahan dari Stok -->
+      <div id="hppStep2" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
+        <div class="text-center mb-2">
+          <span class="text-3xl">🛒</span>
+          <h3 class="text-lg font-bold text-gray-800 mt-2">Bahan apa aja yang kamu pakai?</h3>
+          <p class="text-gray-500 text-sm" id="hppStep2Desc">Pilih bahan dari stok yang sudah kamu catat.</p>
+        </div>
+
+        <!-- Empty State (resep mode, no inventory) -->
+        <div id="hppInventoryEmpty" class="hidden text-center py-8 bg-stone-50 rounded-2xl space-y-3">
+          <span class="text-4xl">📦</span>
+          <p class="text-gray-600 font-medium">Kamu belum punya bahan di stok.</p>
+          <p class="text-gray-400 text-sm">Yuk tambahkan dulu bahan-bahan yang biasa kamu pakai untuk jualan.</p>
+          <button type="button" id="hppGoToInventory" class="inline-flex items-center gap-2 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-md text-sm cursor-pointer">
+            → Tambah Bahan ke Stok
           </button>
-        </form>
+        </div>
 
-        <div id="hppResult" class="hidden mt-8 pt-6 border-t border-gray-100 space-y-4">
-          <div class="bg-[#f8faf9] p-6 rounded-2xl border border-gray-200/80 text-center">
-            <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Rekomendasi Harga Jual Pas</span>
-            <div id="resHargaJual" class="text-3xl md:text-4xl font-extrabold text-[#274c43] my-2">Rp 0</div>
-            <p class="text-xs text-gray-500">Harga jual rekomendasi agar keuntungan Anda utuh sesuai target margin.</p>
+        <!-- Ingredient List -->
+        <div id="hppIngredientList" class="space-y-3"></div>
+
+        <!-- Add Ingredient (Resep Mode) -->
+        <div id="hppAddIngredientArea" class="hidden space-y-3">
+          <select id="hppInventorySelect" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm">
+            <option value="">— Pilih bahan dari stok —</option>
+          </select>
+          <div class="flex gap-2 items-center">
+            <input type="number" id="hppJumlahPakai" placeholder="Jumlah pakai" step="0.01" min="0.01" class="flex-1 bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
+            <select id="hppJumlahPakaiUnit" class="w-28 bg-[#f5f5f5] text-black-main font-medium py-3 px-2 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm cursor-pointer"></select>
+            <button type="button" id="hppAddIngredientBtn" class="bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3 px-5 rounded-2xl transition-all shadow-sm text-sm cursor-pointer whitespace-nowrap">
+              + Tambah
+            </button>
           </div>
+          <p class="text-[11px] text-gray-400">💡 Pilih satuan bebas — otomatis dikonversi ke satuan stok (mis. 500 gram = 0.5 kg).</p>
+        </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 text-center">
-              <span class="text-xs text-gray-500 block">Total HPP Modal</span>
-              <span id="resTotalHpp" class="text-lg font-bold text-gray-800">Rp 0</span>
+        <!-- Add Ingredient Manual (Cepat Mode) -->
+        <div id="hppManualIngredientArea" class="hidden space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="hppManualNama" placeholder="Nama bahan" class="bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
+            <input type="text" inputmode="numeric" id="hppManualHarga" placeholder="Harga beli" oninput="window.formatNumberInput(this)" class="bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
+          </div>
+          <div class="flex gap-2">
+            <input type="number" id="hppManualJumlah" placeholder="Jumlah pakai" step="0.01" min="0.01" class="flex-1 bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
+            <select id="hppManualSatuan" class="w-28 bg-[#f5f5f5] text-black-main font-medium py-3 px-2 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm cursor-pointer">
+              <option value="pcs">Pcs</option>
+              <option value="kg">Kg</option>
+              <option value="gram">Gram</option>
+              <option value="liter">Liter</option>
+              <option value="ml">Ml</option>
+              <option value="butir">Butir</option>
+              <option value="bungkus">Bungkus</option>
+              <option value="pack">Pack</option>
+              <option value="botol">Botol</option>
+              <option value="lusin">Lusin</option>
+              <option value="dosin">Dosin</option>
+            </select>
+            <button type="button" id="hppAddManualBtn" class="bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3 px-5 rounded-2xl transition-all shadow-sm text-sm cursor-pointer whitespace-nowrap">
+              + Tambah
+            </button>
+          </div>
+        </div>
+
+        <!-- Subtotal Bahan -->
+        <div id="hppSubtotalBahan" class="hidden pt-4 border-t border-gray-100 flex items-center justify-between">
+          <span class="text-sm font-bold text-gray-600">Total belanja bahan:</span>
+          <span id="hppSubtotalBahanValue" class="text-lg font-extrabold text-[#274c43]">Rp 0</span>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" id="hppStep2Back" class="flex-1 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-4 rounded-2xl transition-all text-base cursor-pointer">
+            ← Kembali
+          </button>
+          <button type="button" id="hppStep2Next" class="flex-1 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
+            Lanjut Biaya Tambahan →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Biaya Tambahan -->
+      <div id="hppStep3" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
+        <div class="text-center mb-2">
+          <span class="text-3xl">👷</span>
+          <h3 class="text-lg font-bold text-gray-800 mt-2">Ada biaya lain selain bahan?</h3>
+          <p class="text-gray-500 text-sm">Kayak ongkos kerja kamu, gas, listrik, atau kemasan. Isi aja yang kamu ingat.</p>
+        </div>
+
+        <!-- Tenaga Kerja -->
+        <div class="bg-emerald-50 p-5 rounded-2xl space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">👷</span>
+            <span class="text-sm font-bold text-emerald-800">Ongkos Kerja Kamu</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-emerald-700 mb-1">Berapa jam kerja?</label>
+              <input type="number" id="hppJamKerja" placeholder="Contoh: 2" min="0" step="0.5" class="w-full bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-emerald-500 text-sm" />
             </div>
-            <div class="bg-lime-50 p-4 rounded-2xl border border-lime-200/80 text-center">
-              <span class="text-xs text-lime-700 block">Profit Bersih per Unit</span>
-              <span id="resProfitBersih" class="text-lg font-bold text-lime-700">Rp 0</span>
+            <div>
+              <label class="block text-xs text-emerald-700 mb-1">Upah per jam (Rp)</label>
+              <input type="text" inputmode="numeric" id="hppUpahPerJam" placeholder="Contoh: 15.000" oninput="window.formatNumberInput(this)" class="w-full bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-emerald-500 text-sm" />
+            </div>
+          </div>
+          <div id="hppTotalTenaga" class="hidden text-sm font-bold text-emerald-700">
+            Total ongkos: <span id="hppTotalTenagaValue">Rp 0</span>
+          </div>
+        </div>
+
+        <!-- Overhead -->
+        <div class="bg-amber-50 p-5 rounded-2xl space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">⚡</span>
+            <span class="text-sm font-bold text-amber-800">Biaya Lain-lain (Gas, Listrik, dll)</span>
+          </div>
+          <div id="hppOverheadList" class="space-y-2">
+            <div class="text-center py-3 text-amber-700/60 text-xs">Kosong — isi kalau ada biaya lain.</div>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="hppOverheadNama" placeholder="Nama biaya (contoh: Gas)" class="flex-1 bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-amber-500 text-sm" />
+            <input type="text" inputmode="numeric" id="hppOverheadBiaya" placeholder="Rp" oninput="window.formatNumberInput(this)" class="w-36 bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-amber-500 text-sm" />
+            <button type="button" id="hppAddOverheadBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-sm text-sm cursor-pointer whitespace-nowrap">
+              + Tambah
+            </button>
+          </div>
+        </div>
+
+        <!-- Kemasan -->
+        <div class="bg-blue-50 p-5 rounded-2xl space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">📦</span>
+            <span class="text-sm font-bold text-blue-800">Biaya Kemasan &amp; Label</span>
+          </div>
+          <input type="text" inputmode="numeric" id="hppBiayaKemasan" placeholder="Contoh: 50.000 (total semua kemasan)" oninput="window.formatNumberInput(this)" class="w-full bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-blue-500 text-sm" />
+          <p class="text-xs text-blue-600">💡 Total biaya semua kemasan, stiker, atau plastik untuk sekali produksi.</p>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" id="hppStep3Back" class="flex-1 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-4 rounded-2xl transition-all text-base cursor-pointer">
+            ← Kembali
+          </button>
+          <button type="button" id="hppStep3Next" class="flex-1 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
+            Lihat Hasilnya →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Margin & Hasil -->
+      <div id="hppStep4" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
+        <div class="text-center mb-2">
+          <span class="text-3xl">🏷️</span>
+          <h3 class="text-lg font-bold text-gray-800 mt-2">Mau untung berapa?</h3>
+          <p class="text-gray-500 text-sm">Geser untuk tentukan keuntungan yang kamu mau.</p>
+        </div>
+
+        <!-- Margin Slider -->
+        <div class="bg-stone-50 p-6 rounded-2xl space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-gray-600">Margin keuntungan</span>
+            <span id="hppMarginDisplay" class="text-2xl font-extrabold text-[#274c43]">30%</span>
+          </div>
+          <input type="range" id="hppMarginSlider" min="5" max="100" value="30" step="5" class="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-[#274c43]" />
+          <div class="flex justify-between text-xs text-gray-400 font-medium">
+            <span>5% (Sedikit)</span>
+            <span>30% (Wajar)</span>
+            <span>100% (Banyak)</span>
+          </div>
+          <p class="text-xs text-gray-400">💡 Kebanyakan UMKM pakai margin 20-30%.</p>
+        </div>
+
+        <!-- Ringkasan -->
+        <div id="hppRingkasan" class="bg-[#f8faf9] p-6 rounded-2xl border border-gray-200/80 space-y-3">
+          <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider text-center">Ringkasan Modal Kamu</h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500">🛒 Total belanja bahan</span>
+              <span id="hppRingkasanBahan" class="font-bold text-gray-800">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">👷 Ongkos kerja</span>
+              <span id="hppRingkasanTenaga" class="font-bold text-gray-800">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">⚡ Biaya lain-lain</span>
+              <span id="hppRingkasanOverhead" class="font-bold text-gray-800">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">📦 Kemasan</span>
+              <span id="hppRingkasanKemasan" class="font-bold text-gray-800">Rp 0</span>
+            </div>
+            <div class="pt-2 border-t border-gray-200 flex justify-between">
+              <span class="font-bold text-gray-700">💰 Total modal</span>
+              <span id="hppRingkasanTotal" class="text-lg font-extrabold text-[#274c43]">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-bold text-gray-700">📦 Modal per <span id="hppRingkasanSatuan">unit</span></span>
+              <span id="hppRingkasanHpp" class="text-lg font-extrabold text-amber-700">Rp 0</span>
             </div>
           </div>
         </div>
+
+        <!-- Harga Jual -->
+        <div class="bg-[#274c43] p-6 rounded-2xl text-center text-white space-y-2">
+          <span class="text-xs font-bold text-lime-300 uppercase tracking-widest">Harga Jual yang Aman</span>
+          <div id="hppHargaJual" class="text-3xl md:text-4xl font-extrabold">Rp 0</div>
+          <div id="hppHargaBulat" class="text-sm text-white/70">Dibulatkan: Rp 0</div>
+          <p class="text-xs text-white/60">Harga ini sudah termasuk modal + untung kamu.</p>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" id="hppStep4Back" class="flex-1 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-4 rounded-2xl transition-all text-base cursor-pointer">
+            ← Kembali
+          </button>
+          <button type="button" id="hppSimpanResep" class="flex-1 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
+            💾 Simpan Resep
+          </button>
+        </div>
+      </div>
+
+      <!-- DAFTAR RESEP TERSIMPAN -->
+      <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-gray-800">📄 Resep Tersimpan</h3>
+          <span class="text-xs text-gray-400">Bisa diedit atau diduplikat</span>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="overflow-x-auto hidden lg:block">
+          <table class="w-full text-left text-sm text-gray-600">
+            <thead class="bg-stone-50 text-xs font-bold text-gray-500 uppercase">
+              <tr>
+                <th class="py-3 px-4 rounded-l-xl">Produk</th>
+                <th class="py-3 px-4 text-center">Produksi</th>
+                <th class="py-3 px-4 text-right">HPP/Unit</th>
+                <th class="py-3 px-4 text-right">Harga Jual</th>
+                <th class="py-3 px-4 text-center">Margin</th>
+                <th class="py-3 px-4 rounded-r-xl text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="recipeTableBody" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div id="recipeMobileList" class="block lg:hidden space-y-3.5"></div>
       </div>
     </div>
   `;

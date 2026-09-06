@@ -4,6 +4,51 @@
 function initInventoryAppLogic() {
   const INV_STORAGE_KEY = "laku_inventory_data";
 
+  const U = window.LakuUnits;
+
+  // Tampilkan angka rapi: max 2 desimal, buang nol di belakang (4.50 → 4.5)
+  const formatQty = (num) => {
+    const n = U.round2(num);
+    return parseFloat(n.toFixed(2)).toString();
+  };
+
+  // Konversi qty dari displayUnit → baseUnit (untuk simpan)
+  const toBase = (qty, displayUnit) => {
+    const base = U.getBaseUnit(displayUnit);
+    if (!base || base === displayUnit) return U.round2(qty);
+    const converted = U.convertUnit(qty, displayUnit, base);
+    return converted === null ? U.round2(qty) : converted;
+  };
+
+  // Konversi qty dari baseUnit → displayUnit (untuk tampil)
+  const fromBase = (qty, displayUnit) => {
+    const base = U.getBaseUnit(displayUnit);
+    if (!base || base === displayUnit) return U.round2(qty);
+    const converted = U.convertUnit(qty, base, displayUnit);
+    return converted === null ? U.round2(qty) : converted;
+  };
+
+  // MIGRASI SEKALI JALAN: data lama (stok dalam displayUnit) → stok dalam baseUnit
+  const migrateInventoryData = (data) => {
+    let changed = false;
+    const migrated = data.map((item) => {
+      if (item.baseUnit && item.displayUnit) return item; // sudah termigrasi
+      changed = true;
+      const displayUnit = item.satuan || "pcs";
+      const baseUnit = U.getBaseUnit(displayUnit) || displayUnit;
+      return {
+        ...item,
+        satuan: displayUnit,   // tetap ada utk kompatibilitas
+        displayUnit,           // satuan tampilan pilihan user
+        baseUnit,              // satuan dasar grup
+        stok: toBase(item.stok || 0, displayUnit),      // → base
+        minStok: toBase(item.minStok || 0, displayUnit), // → base
+      };
+    });
+    if (changed) saveInventoryData(migrated);
+    return migrated;
+  };
+
   const formatRupiah = (num) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -14,7 +59,7 @@ function initInventoryAppLogic() {
 
   const loadInventoryData = () => {
     const raw = localStorage.getItem(INV_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    return raw ? migrateInventoryData(JSON.parse(raw)) : [];
   };
 
   const saveInventoryData = (data) => {
@@ -56,6 +101,11 @@ function initInventoryAppLogic() {
         const isKosong = item.stok <= 0;
         const isTipis = !isKosong && item.stok <= item.minStok;
 
+        // Nilai display: konversi dari baseUnit → displayUnit
+        const displayUnit = item.displayUnit || item.satuan || "pcs";
+        const stokDisplay = formatQty(fromBase(item.stok, displayUnit));
+        const minDisplay = formatQty(fromBase(item.minStok, displayUnit));
+
         if (isKosong) emptyStockCount++;
         else if (isTipis) lowStockCount++;
 
@@ -73,12 +123,12 @@ function initInventoryAppLogic() {
           <tr class="hover:bg-stone-50/80 transition-colors">
             <td class="py-3.5 px-4">
               <div class="font-bold text-gray-800">${item.nama}</div>
-              <div class="text-[11px] text-gray-400">Min. Alert: ${item.minStok} Unit</div>
+              <div class="text-[11px] text-gray-400">Min. Alert: ${minDisplay} ${displayUnit}</div>
             </td>
             <td class="py-3.5 px-4 text-xs font-medium text-gray-600">${item.kategori}</td>
             <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${formatRupiah(item.harga)}</td>
             <td class="py-3.5 px-4 text-center">
-              <div class="font-black text-base text-gray-900">${item.stok}</div>
+              <div class="font-black text-base text-gray-900">${stokDisplay} <span class="text-xs font-medium text-gray-400">${displayUnit}</span></div>
               <div class="mt-1">${statusBadge}</div>
             </td>
             <td class="py-3.5 px-4 text-center space-x-2">
@@ -105,7 +155,7 @@ function initInventoryAppLogic() {
 
             <div>
               <h4 class="text-base font-bold text-gray-900">${item.nama}</h4>
-              <p class="text-[11px] text-gray-400">Min. Alert Stok: ${item.minStok} Unit</p>
+              <p class="text-[11px] text-gray-400">Min. Alert Stok: ${minDisplay} ${displayUnit}</p>
             </div>
 
             <div class="border-t border-gray-100 pt-2 space-y-2 text-xs">
@@ -115,7 +165,7 @@ function initInventoryAppLogic() {
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Stok saat ini</span>
-                <span class="font-black text-sm text-gray-900">${item.stok} Unit</span>
+                <span class="font-black text-sm text-gray-900">${stokDisplay} ${displayUnit}</span>
               </div>
             </div>
 
@@ -145,6 +195,7 @@ function initInventoryAppLogic() {
     document.getElementById("invEmptyStockItems").textContent = `${emptyStockCount} Item`;
 
     // Bind Stock Adjustment (+1 / -1) for both desktop and mobile buttons
+    // Step = 1 displayUnit (user-friendly), dikonversi ke base sebelum apply
     document.querySelectorAll(".adjustStokBtn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -153,7 +204,9 @@ function initInventoryAppLogic() {
         const item = currentData.find((it) => it.id === id);
         if (!item) return;
 
-        item.stok = Math.max(0, item.stok + change);
+        const displayUnit = item.displayUnit || item.satuan || "pcs";
+        const stepBase = toBase(Math.abs(change), displayUnit) || 1;
+        item.stok = Math.max(0, U.round2(item.stok + Math.sign(change) * stepBase));
         saveInventoryData(currentData);
         renderTable();
       });
@@ -194,13 +247,18 @@ function initInventoryAppLogic() {
 
       if (!nama || harga < 0 || stok < 0) return;
 
+      const satuan = document.getElementById("invSatuan")?.value || "pcs";
+
       const newItem = {
         id: Date.now(),
         nama,
         kategori,
+        satuan, // kompatibilitas: sama dengan displayUnit
+        displayUnit: satuan,
+        baseUnit: U.getBaseUnit(satuan) || satuan,
         harga,
-        stok,
-        minStok,
+        stok: toBase(stok, satuan),       // simpan dalam satuan dasar
+        minStok: toBase(minStok, satuan), // simpan dalam satuan dasar
       };
 
       const currentData = loadInventoryData();
