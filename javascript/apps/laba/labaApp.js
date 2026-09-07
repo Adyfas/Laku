@@ -1,5 +1,5 @@
 /**
- * labaApp.js - Template UI Simulasi Proyeksi Laba Rugi
+ * labaApp.js — Template UI Cek Untung Rugi Bulanan UMKM
  */
 function getLabaAppUI() {
   return `
@@ -7,11 +7,11 @@ function getLabaAppUI() {
   <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
         <div class="flex items-center gap-3 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Simulasi Proyeksi</span>
+          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Cek Bisnis</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">Simulasi Proyeksi Laba Rugi</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Cek Untung Rugi Bulanan</h2>
         <p class="text-white/80 text-sm leading-relaxed">
-        Hitung estimasi omzet bulanan, beban biaya operasional, dan titik balik modal (BEP) bisnis UMKM Anda.
+        Lihat kira-kira kamu untung atau rugi tiap bulan, dan kapan balik modal.
         </p>
       </div>
       <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-6">

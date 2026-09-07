@@ -1,5 +1,10 @@
 /**
- * promoAppClient.js - Logika Interaktif AI Generator Promo WA & Sosmed
+ * promoClient.js — Logika AI Generator Promo WA UMKM
+ */
+
+/**
+ * Mengambil API key Groq dari window global.
+ * @returns {string} API key atau string kosong jika tidak tersedia.
  */
 function initPromoAppLogic() {
   const getApiKey = () => {
@@ -9,6 +14,15 @@ function initPromoAppLogic() {
     return "";
   };
 
+  /**
+   * Generate teks promosi WA berdasarkan input user.
+   * Prioritas: AI Groq API → fallback template lokal sesuai tone.
+   * @param {string} nama - Nama produk/usaha
+   * @param {string} kategori - Kategori produk
+   * @param {string} tone - Gaya bahasa (ramah/heboh/profesional/lucu)
+   * @param {string} detail - Detail promo/keunggulan
+   * @returns {{ text: string, source: string }} Teks promosi dan label sumber
+   */
   const generateAiCaption = async (nama, kategori, tone, detail) => {
 
 
@@ -73,6 +87,11 @@ function initPromoAppLogic() {
     };
   };
 
+  /**
+   * Pasang event listener form submit & tombol salin.
+   * Handle submit → generate caption → tampilkan hasil.
+   * Handle copy → salin teks ke clipboard.
+   */
   const promoForm = document.getElementById("promoForm");
   if (promoForm) {
     promoForm.addEventListener("submit", async (e) => {
@@ -120,6 +139,10 @@ function initPromoAppLogic() {
   }
 }
 
+/**
+ * Entry point: render UI promo ke container lalu pasang logika interaktif.
+ * @param {HTMLElement} container - Elemen DOM target
+ */
 function renderPromoApp(container) {
   if (!container) return;
   container.innerHTML = getPromoAppUI();

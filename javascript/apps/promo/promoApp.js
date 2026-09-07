@@ -1,5 +1,5 @@
 /**
- * promoApp.js - Template UI AI Generator Promo WA & Sosmed LAKU
+ * promoApp.js — Template UI Buat Teks Promo WA
  */
 function getPromoAppUI() {
   return `
@@ -9,13 +9,13 @@ function getPromoAppUI() {
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71 1.1-1.38 1.4-2h0a18.2 18.2 0 0 0 7.85-7.85c.62-.3 1.29-.69 2-1.4 1.5-1.5 2-5 2-5s-3.5.5-5 2c-.71.71-1.1 1.38-1.4 2A18.2 18.2 0 0 0 6.5 15.1c-.3.62-.69 1.29-1.4 2Z"/><path d="M12 15l-3-3"/><path d="M15 12l-3-3"/></svg>
-            <span class="text-xs font-bold tracking-widest uppercase text-lime-300">AI Copywriter UMKM</span>
+            <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Promo & Iklan</span>
           </div>
           <!-- <span class="bg-lime-400 text-[#274c43] text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-xs">AI Powered</span> -->
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">AI Generator Promo WA</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Buat Teks Promo WA</h2>
         <p class="text-white/80 text-sm leading-relaxed">
-          Buat draf pesan promosi jualan otomatis berteknologi AI yang persuasif, menarik, dan siap copas untuk WhatsApp & Media Sosial usahamu.
+          Bikin teks promosi jualan buat WhatsApp dan sosmed. Tinggal copas, gampang!
         </p>
       </div>
 

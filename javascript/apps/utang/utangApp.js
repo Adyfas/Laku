@@ -1,6 +1,5 @@
-/**
- * utangApp.js - Template UI Catatan Utang & Piutang UMKM
- */
+/** @file utangApp.js — Template UI Catat Utang & Piutang UMKM */
+
 function getUtangAppUI() {
   return `
     <div class="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
@@ -8,11 +7,11 @@ function getUtangAppUI() {
       <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
         <div class="flex items-center gap-3 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Manajemen Kas Bon</span>
+          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Utang Piutang</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">Buku Utang & Piutang UMKM</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Catat Utang & Piutang</h2>
         <p class="text-white/80 text-sm leading-relaxed">
-          Catat kas bon pelanggan, pantau utang ke supplier, terima notifikasi otomatis saat jatuh tempo, dan kirim pengingat WhatsApp sekali klik.
+          Catat siapa yang utang ke kamu dan siapa kamu utang. Nanti ada pengingat kalau sudah jatuh tempo.
         </p>
       </div>
 

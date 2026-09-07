@@ -1,6 +1,12 @@
 /**
  * hppApp.js — Template UI Kalkulator HPP & Harga Jual (Recipe-Based)
  * Multi-step wizard: Info Produk → Bahan dari Stok → Biaya Tambahan → Margin & Hasil
+ *
+ * Changes from monolithic version:
+ * - Removed mode toggle (📋 Pakai Stok / ⚡ Hitung Cepat)
+ * - Removed hppManualIngredientArea (cepat mode deleted)
+ * - Removed hppJumlahPakaiSatuan span (replaced by hppJumlahPakaiUnit select)
+ * - Added hppOnboarding div (shown when inventory is empty)
  */
 function getHppAppUI() {
   return `
@@ -9,26 +15,32 @@ function getHppAppUI() {
       <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
         <div class="flex items-center gap-3 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Keuangan UMKM</span>
+          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Hitung Uang</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">Kalkulator HPP &amp; Harga Jual</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Hitung Modal &amp; Harga Jual</h2>
         <p class="text-white/80 text-sm leading-relaxed">
           Hitung modal kamu per produk dengan cara masak: catat bahan, tenaga, dan biaya lain. Biar tahu harga jual yang aman dan nggak rugi.
         </p>
       </div>
 
-      <!-- Mode Toggle -->
-      <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-2 flex gap-1">
-        <button type="button" id="hppModeResep" class="flex-1 py-2.5 px-4 rounded-2xl text-sm font-bold transition-all cursor-pointer">
-          📋 Pakai Stok
-        </button>
-        <button type="button" id="hppModeCepat" class="flex-1 py-2.5 px-4 rounded-2xl text-sm font-bold transition-all cursor-pointer">
-          ⚡ Hitung Cepat
+      <!-- Onboarding (shown when inventory is empty) -->
+      <div id="hppOnboarding" class="hidden text-center py-12 bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
+        <span class="text-5xl">🎯</span>
+        <h3 class="text-xl font-bold text-gray-800 mt-2">Langkah 1: Catat Bahan Dulu</h3>
+        <p class="text-gray-500 text-sm leading-relaxed max-w-md mx-auto">
+          Sebelum hitung modal, kamu perlu catat bahan-bahan yang biasa kamu pakai untuk jualan.
+        </p>
+        <p class="text-gray-400 text-xs">
+          Misalnya: beras, minyak, telur, gula, kemasan, dll.<br>
+          Nanti bahan-bahan itu otomatis muncul di sini saat kamu mau hitung modal.
+        </p>
+        <button type="button" id="hppGoToInventoryOnboarding" class="inline-flex items-center gap-2 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 px-8 rounded-2xl transition-all shadow-md text-base cursor-pointer">
+          → Buka Stok Inventaris
         </button>
       </div>
 
       <!-- Step Indicator -->
-      <div class="flex items-center justify-center gap-2 sm:gap-4">
+      <div id="hppStepIndicator" class="flex items-center justify-center gap-2 sm:gap-4">
         <div class="flex items-center gap-2">
           <div id="stepDot1" class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-[#274c43] text-white transition-all">1</div>
           <span class="text-xs text-gray-500 hidden sm:inline">Info</span>
@@ -93,7 +105,7 @@ function getHppAppUI() {
           <p class="text-gray-500 text-sm" id="hppStep2Desc">Pilih bahan dari stok yang sudah kamu catat.</p>
         </div>
 
-        <!-- Empty State (resep mode, no inventory) -->
+        <!-- Empty State (no inventory items) -->
         <div id="hppInventoryEmpty" class="hidden text-center py-8 bg-stone-50 rounded-2xl space-y-3">
           <span class="text-4xl">📦</span>
           <p class="text-gray-600 font-medium">Kamu belum punya bahan di stok.</p>
@@ -106,7 +118,7 @@ function getHppAppUI() {
         <!-- Ingredient List -->
         <div id="hppIngredientList" class="space-y-3"></div>
 
-        <!-- Add Ingredient (Resep Mode) -->
+        <!-- Add Ingredient (from Stock) -->
         <div id="hppAddIngredientArea" class="hidden space-y-3">
           <select id="hppInventorySelect" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm">
             <option value="">— Pilih bahan dari stok —</option>
@@ -119,33 +131,6 @@ function getHppAppUI() {
             </button>
           </div>
           <p class="text-[11px] text-gray-400">💡 Pilih satuan bebas — otomatis dikonversi ke satuan stok (mis. 500 gram = 0.5 kg).</p>
-        </div>
-
-        <!-- Add Ingredient Manual (Cepat Mode) -->
-        <div id="hppManualIngredientArea" class="hidden space-y-3">
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="hppManualNama" placeholder="Nama bahan" class="bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
-            <input type="text" inputmode="numeric" id="hppManualHarga" placeholder="Harga beli" oninput="window.formatNumberInput(this)" class="bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
-          </div>
-          <div class="flex gap-2">
-            <input type="number" id="hppManualJumlah" placeholder="Jumlah pakai" step="0.01" min="0.01" class="flex-1 bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
-            <select id="hppManualSatuan" class="w-28 bg-[#f5f5f5] text-black-main font-medium py-3 px-2 rounded-2xl outline-none border border-transparent focus:border-[#274c43] text-sm cursor-pointer">
-              <option value="pcs">Pcs</option>
-              <option value="kg">Kg</option>
-              <option value="gram">Gram</option>
-              <option value="liter">Liter</option>
-              <option value="ml">Ml</option>
-              <option value="butir">Butir</option>
-              <option value="bungkus">Bungkus</option>
-              <option value="pack">Pack</option>
-              <option value="botol">Botol</option>
-              <option value="lusin">Lusin</option>
-              <option value="dosin">Dosin</option>
-            </select>
-            <button type="button" id="hppAddManualBtn" class="bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3 px-5 rounded-2xl transition-all shadow-sm text-sm cursor-pointer whitespace-nowrap">
-              + Tambah
-            </button>
-          </div>
         </div>
 
         <!-- Subtotal Bahan -->

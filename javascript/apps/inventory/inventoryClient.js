@@ -1,18 +1,18 @@
 /**
- * inventoryAppClient.js - Logika Interaktif Sistem Inventory (Stok Barang) UMKM
+ * inventoryClient.js — Logika Inventory UMKM (CRUD stok, migrasi satuan, alert)
  */
 function initInventoryAppLogic() {
   const INV_STORAGE_KEY = "laku_inventory_data";
 
   const U = window.LakuUnits;
 
-  // Tampilkan angka rapi: max 2 desimal, buang nol di belakang (4.50 → 4.5)
+  /** Format angka kuantitas: max 2 desimal, buang trailing zero (4.50 → 4.5) */
   const formatQty = (num) => {
     const n = U.round2(num);
     return parseFloat(n.toFixed(2)).toString();
   };
 
-  // Konversi qty dari displayUnit → baseUnit (untuk simpan)
+  /** Konversi qty dari displayUnit → baseUnit (untuk penyimpanan) */
   const toBase = (qty, displayUnit) => {
     const base = U.getBaseUnit(displayUnit);
     if (!base || base === displayUnit) return U.round2(qty);
@@ -20,7 +20,7 @@ function initInventoryAppLogic() {
     return converted === null ? U.round2(qty) : converted;
   };
 
-  // Konversi qty dari baseUnit → displayUnit (untuk tampil)
+  /** Konversi qty dari baseUnit → displayUnit (untuk tampilan) */
   const fromBase = (qty, displayUnit) => {
     const base = U.getBaseUnit(displayUnit);
     if (!base || base === displayUnit) return U.round2(qty);
@@ -28,7 +28,7 @@ function initInventoryAppLogic() {
     return converted === null ? U.round2(qty) : converted;
   };
 
-  // MIGRASI SEKALI JALAN: data lama (stok dalam displayUnit) → stok dalam baseUnit
+  /** Migrasi sekali jalan: data lama (stok dalam displayUnit) → stok dalam baseUnit */
   const migrateInventoryData = (data) => {
     let changed = false;
     const migrated = data.map((item) => {
@@ -49,23 +49,18 @@ function initInventoryAppLogic() {
     return migrated;
   };
 
-  const formatRupiah = (num) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(num);
-  };
-
+  /** Ambil data inventory dari localStorage, jalankan migrasi jika perlu */
   const loadInventoryData = () => {
     const raw = localStorage.getItem(INV_STORAGE_KEY);
     return raw ? migrateInventoryData(JSON.parse(raw)) : [];
   };
 
+  /** Simpan data inventory ke localStorage */
   const saveInventoryData = (data) => {
     localStorage.setItem(INV_STORAGE_KEY, JSON.stringify(data));
   };
 
+  /** Render seluruh tabel desktop & kartu mobile, serta update overview cards */
   const renderTable = () => {
     const data = loadInventoryData();
     const tbody = document.getElementById("inventoryTableBody");
@@ -126,7 +121,7 @@ function initInventoryAppLogic() {
               <div class="text-[11px] text-gray-400">Min. Alert: ${minDisplay} ${displayUnit}</div>
             </td>
             <td class="py-3.5 px-4 text-xs font-medium text-gray-600">${item.kategori}</td>
-            <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${formatRupiah(item.harga)}</td>
+            <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${window.formatRupiah(item.harga)}</td>
             <td class="py-3.5 px-4 text-center">
               <div class="font-black text-base text-gray-900">${stokDisplay} <span class="text-xs font-medium text-gray-400">${displayUnit}</span></div>
               <div class="mt-1">${statusBadge}</div>
@@ -161,7 +156,7 @@ function initInventoryAppLogic() {
             <div class="border-t border-gray-100 pt-2 space-y-2 text-xs">
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Harga Modal / Unit</span>
-                <span class="font-bold text-gray-800 text-sm">${formatRupiah(item.harga)}</span>
+                <span class="font-bold text-gray-800 text-sm">${window.formatRupiah(item.harga)}</span>
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Stok saat ini</span>
@@ -234,7 +229,7 @@ function initInventoryAppLogic() {
     });
   };
 
-  // Form Submit Handler
+  // Form Submit Handler — tambah barang baru ke inventaris
   const form = document.getElementById("inventoryForm");
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -273,6 +268,7 @@ function initInventoryAppLogic() {
   renderTable();
 }
 
+/** Entry point: pasang template UI lalu jalankan logika inventory */
 function renderInventoryApp(container) {
   if (!container) return;
   container.innerHTML = getInventoryAppUI();

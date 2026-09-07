@@ -1,26 +1,22 @@
 /**
- * kasAppClient.js - Logika Interaktif Buku Kas Digital UMKM
+ * kasClient.js — Logika Interaktif Buku Kas Digital UMKM
+ * Pencatatan pemasukan & pengeluaran harian.
  */
 function initKasAppLogic() {
   const KAS_STORAGE_KEY = "laku_cashbook_data";
 
-  const formatRupiah = (num) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(num);
-  };
-
+  /** Muat data kas dari localStorage */
   const loadKasData = () => {
     const raw = localStorage.getItem(KAS_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   };
 
+  /** Simpan data kas ke localStorage */
   const saveKasData = (data) => {
     localStorage.setItem(KAS_STORAGE_KEY, JSON.stringify(data));
   };
 
+  /** Render tabel desktop + kartu mobile */
   const renderTable = () => {
     const data = loadKasData();
     const tbody = document.getElementById("kasTableBody");
@@ -69,7 +65,7 @@ function initKasAppLogic() {
             <td class="py-3.5 px-4 font-semibold text-gray-800">${item.note}</td>
             <td class="py-3.5 px-4">${badge}</td>
             <td class="py-3.5 px-4 text-right font-bold ${amountColor}">
-              ${sign} ${formatRupiah(item.amount)}
+              ${sign} ${window.formatRupiah(item.amount)}
             </td>
             <td class="py-3.5 px-4 text-center">
               <button data-id="${item.id}" class="deleteKasBtn text-xs text-stone-400 hover:text-rose-600 font-semibold cursor-pointer">
@@ -79,23 +75,20 @@ function initKasAppLogic() {
           </tr>
         `;
 
-        // Mobile Card List (Matches reference screenshot layout)
+        // Mobile Card
         mobileHtml += `
           <div class="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-xs space-y-3">
             <div class="flex items-center justify-between text-xs">
               <span class="text-gray-400 font-medium font-mono text-[11px]">${item.date}</span>
               ${badge}
             </div>
-
             <div>
               <h4 class="text-base font-bold text-gray-900">${item.note}</h4>
             </div>
-
             <div class="border-t border-gray-100 pt-2 flex items-center justify-between text-xs">
               <span class="text-gray-500 font-medium">Nominal Transaksi</span>
-              <span class="font-extrabold text-sm ${amountColor}">${sign} ${formatRupiah(item.amount)}</span>
+              <span class="font-extrabold text-sm ${amountColor}">${sign} ${window.formatRupiah(item.amount)}</span>
             </div>
-
             <div class="pt-2 flex items-center justify-end border-t border-gray-100">
               <button data-id="${item.id}" class="deleteKasBtn text-xs text-stone-400 hover:text-rose-600 font-semibold cursor-pointer">
                 Hapus
@@ -110,9 +103,9 @@ function initKasAppLogic() {
     }
 
     const saldoAkhir = totalMasuk - totalKeluar;
-    document.getElementById("kasTotalMasuk").textContent = formatRupiah(totalMasuk);
-    document.getElementById("kasTotalKeluar").textContent = formatRupiah(totalKeluar);
-    document.getElementById("kasSaldoAkhir").textContent = formatRupiah(saldoAkhir);
+    document.getElementById("kasTotalMasuk").textContent = window.formatRupiah(totalMasuk);
+    document.getElementById("kasTotalKeluar").textContent = window.formatRupiah(totalKeluar);
+    document.getElementById("kasSaldoAkhir").textContent = window.formatRupiah(saldoAkhir);
 
     // Bind Delete Event (Desktop & Mobile)
     document.querySelectorAll(".deleteKasBtn").forEach((btn) => {
@@ -191,6 +184,7 @@ function initKasAppLogic() {
   renderTable();
 }
 
+/** Entry point: render template + init logic */
 function renderKasApp(container) {
   if (!container) return;
   container.innerHTML = getKasAppUI();

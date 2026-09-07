@@ -1,26 +1,21 @@
-/**
- * utangAppClient.js - Logika Interaktif Catatan Utang & Piutang UMKM
- */
+/** @file utangClient.js — Logika Utang Piutang UMKM (CRUD, notifikasi, WA deep-link) */
+
+/** Menginisialisasi seluruh logika interaktif halaman utang/piutang */
 function initUtangAppLogic() {
   const UTANG_STORAGE_KEY = "laku_utang_data";
 
-  const formatRupiah = (num) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(num);
-  };
-
+  /** Mengambil data utang/piutang dari localStorage */
   const loadUtangData = () => {
     const raw = localStorage.getItem(UTANG_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   };
 
+  /** Menyimpan data utang/piutang ke localStorage */
   const saveUtangData = (data) => {
     localStorage.setItem(UTANG_STORAGE_KEY, JSON.stringify(data));
   };
 
+  /** Mengirim notifikasi browser untuk catatan yang jatuh tempo hari ini */
   const checkDueNotifications = () => {
     if (!("Notification" in window) || Notification.permission !== "granted") return;
     const data = loadUtangData();
@@ -32,7 +27,7 @@ function initUtangAppLogic() {
     if (dueTodayItems.length > 0) {
       dueTodayItems.forEach((item) => {
         const notifTitle = `Pengingat Tagihan: ${item.nama}`;
-        const notifBody = `Sisa tagihan ${formatRupiah(item.totalAmount - item.paidAmount)} untuk "${item.note}" jatuh tempo hari ini!`;
+        const notifBody = `Sisa tagihan ${window.formatRupiah(item.totalAmount - item.paidAmount)} untuk "${item.note}" jatuh tempo hari ini!`;
         new Notification(notifTitle, {
           body: notifBody,
           icon: "/favicon.ico",
@@ -41,6 +36,7 @@ function initUtangAppLogic() {
     }
   };
 
+  /** Me-render ulang tabel desktop, kartu mobile, dan ringkasan overview */
   const renderTable = () => {
     const data = loadUtangData();
     const tbody = document.getElementById("utangTableBody");
@@ -98,12 +94,12 @@ function initUtangAppLogic() {
           ? `<span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg text-xs">PIUTANG</span>`
           : `<span class="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg text-xs">UTANG</span>`;
 
-        // Format WA message link
+        // Membuat tombol deep-link WhatsApp untuk pengingat tagihan
         let waBtn = "";
         if (item.wa && !isLunas) {
           const cleanWa = item.wa.replace(/[^0-9]/g, "").replace(/^0/, "62");
           const msg = encodeURIComponent(
-            `Halo Kak ${item.nama}, sekadar mengingatkan untuk sisa tagihan ${item.note} sebesar ${formatRupiah(remaining)} (Jatuh tempo: ${item.dueDate}). Terima kasih!`
+            `Halo Kak ${item.nama}, sekadar mengingatkan untuk sisa tagihan ${item.note} sebesar ${window.formatRupiah(remaining)} (Jatuh tempo: ${item.dueDate}). Terima kasih!`
           );
           waBtn = `
             <a href="https://wa.me/${cleanWa}?text=${msg}" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-3 rounded-xl transition-all shadow-xs">
@@ -126,8 +122,8 @@ function initUtangAppLogic() {
               <div class="mt-1">${statusBadge}</div>
             </td>
             <td class="py-3.5 px-4 text-right">
-              <div class="font-bold text-[#274c43]">${formatRupiah(remaining)}</div>
-              <div class="text-[11px] text-gray-400">Total: ${formatRupiah(item.totalAmount)}</div>
+              <div class="font-bold text-[#274c43]">${window.formatRupiah(remaining)}</div>
+              <div class="text-[11px] text-gray-400">Total: ${window.formatRupiah(item.totalAmount)}</div>
             </td>
             <td class="py-3.5 px-4 text-center space-x-2">
               ${
@@ -160,11 +156,11 @@ function initUtangAppLogic() {
             <div class="border-t border-gray-100 pt-2 space-y-1.5 text-xs">
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Total Catatan</span>
-                <span class="font-semibold text-gray-700">${formatRupiah(item.totalAmount)}</span>
+                <span class="font-semibold text-gray-700">${window.formatRupiah(item.totalAmount)}</span>
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Sisa Tagihan</span>
-                <span class="font-extrabold text-sm text-[#274c43]">${formatRupiah(remaining)}</span>
+                <span class="font-extrabold text-sm text-[#274c43]">${window.formatRupiah(remaining)}</span>
               </div>
             </div>
 
@@ -189,11 +185,12 @@ function initUtangAppLogic() {
       if (mobileList) mobileHtml ? (mobileList.innerHTML = mobileHtml) : null;
     }
 
-    document.getElementById("utangTotalPiutang").textContent = formatRupiah(totalPiutang);
-    document.getElementById("utangTotalUtang").textContent = formatRupiah(totalUtang);
+    // Memperbarui kartu ringkasan (overview) di atas halaman
+    document.getElementById("utangTotalPiutang").textContent = window.formatRupiah(totalPiutang);
+    document.getElementById("utangTotalUtang").textContent = window.formatRupiah(totalUtang);
     document.getElementById("utangTotalDueToday").textContent = `${dueTodayCount} Catatan`;
 
-    // Bind Payment Event (Desktop & Mobile)
+    // Mengikat event handler tombol "Cicil / Bayar" (desktop & mobile)
     document.querySelectorAll(".payUtangBtn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -204,7 +201,7 @@ function initUtangAppLogic() {
         const remaining = item.totalAmount - item.paidAmount;
         const bayarStr = await window.showCustomPrompt({
           title: `Bayar Tagihan (${item.nama})`,
-          message: `Sisa tagihan: ${formatRupiah(remaining)}. Masukkan nominal pembayaran:`,
+          message: `Sisa tagihan: ${window.formatRupiah(remaining)}. Masukkan nominal pembayaran:`,
           placeholder: "Nominal pembayaran (Rp)",
           defaultValue: remaining.toString(),
           inputType: "number",
@@ -222,7 +219,7 @@ function initUtangAppLogic() {
       });
     });
 
-    // Bind Delete Event (Desktop & Mobile)
+    // Mengikat event handler tombol "Hapus" (desktop & mobile)
     document.querySelectorAll(".deleteUtangBtn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -244,7 +241,7 @@ function initUtangAppLogic() {
     });
   };
 
-  // Notification Button Listener
+  // Menangani permintaan izin notifikasi browser
   const enableNotifBtn = document.getElementById("enableNotifBtn");
   if (enableNotifBtn) {
     if ("Notification" in window && Notification.permission === "granted") {
@@ -265,7 +262,7 @@ function initUtangAppLogic() {
     }
   }
 
-  // Form Submit Handler
+  // Menangani submit form tambah catatan utang/piutang baru
   const form = document.getElementById("utangForm");
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -304,6 +301,7 @@ function initUtangAppLogic() {
   checkDueNotifications();
 }
 
+/** Entry point: memasang template UI dan logika ke container yang diberikan */
 function renderUtangApp(container) {
   if (!container) return;
   container.innerHTML = getUtangAppUI();

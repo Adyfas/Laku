@@ -1,5 +1,5 @@
 /**
- * inventoryApp.js - Template UI Sistem Inventory (Stok Barang) UMKM
+ * inventoryApp.js — Template UI Stok Barang & Bahan UMKM
  */
 function getInventoryAppUI() {
   return `
@@ -8,11 +8,11 @@ function getInventoryAppUI() {
       <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
         <div class="flex items-center gap-3 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-lime-300"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Manajemen Stok</span>
+          <span class="text-xs font-bold tracking-widest uppercase text-lime-300">Bahan & Barang</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">Sistem Inventory & Stok Barang</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Stok Barang & Bahan</h2>
         <p class="text-white/80 text-sm leading-relaxed">
-          Pantau stok produk dan bahan baku usaha Anda secara real-time, terima peringatan saat barang hampir habis, dan atur penambahan barang dengan mudah.
+          Catat barang dan bahan jualan kamu. Nanti ada peringatan kalau stok hampir habis.
         </p>
       </div>
 
@@ -119,7 +119,7 @@ function getInventoryAppUI() {
         <!-- Mobile Card View (block lg:hidden) -->
         <div id="inventoryMobileList" class="block lg:hidden space-y-3.5">
           <!-- Rendered dynamically -->
-        </div> 
+        </div>
       </div>
     </div>
   `;

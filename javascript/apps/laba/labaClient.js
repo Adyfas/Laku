@@ -1,17 +1,10 @@
 /**
- * labaAppClient.js - Logika Interaktif Simulasi Proyeksi Laba Rugi
+ * labaClient.js — Logika Interaktif Cek Untung Rugi Bulanan UMKM
+ * Menggunakan window.formatRupiah() dari core/appUtils.js
  */
 function initLabaAppLogic() {
   const form = document.getElementById("labaForm");
   if (!form) return;
-
-  const formatRupiah = (num) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(num);
-  };
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -33,10 +26,10 @@ function initLabaAppLogic() {
       bepUnit = "N/A (Harga < HPP Variabel)";
     }
 
-    document.getElementById("resTotalOmzet").textContent = formatRupiah(totalOmzet);
-    document.getElementById("resTotalVariabel").textContent = formatRupiah(totalBiayaVariabel);
-    document.getElementById("resTotalTetap").textContent = formatRupiah(totalBiayaTetap);
-    document.getElementById("resLabaBersih").textContent = formatRupiah(labaBersih);
+    document.getElementById("resTotalOmzet").textContent = window.formatRupiah(totalOmzet);
+    document.getElementById("resTotalVariabel").textContent = window.formatRupiah(totalBiayaVariabel);
+    document.getElementById("resTotalTetap").textContent = window.formatRupiah(totalBiayaTetap);
+    document.getElementById("resLabaBersih").textContent = window.formatRupiah(labaBersih);
     document.getElementById("resBepUnit").textContent = typeof bepUnit === "number" ? `${bepUnit} Unit` : bepUnit;
 
     const statusBox = document.getElementById("labaStatusBox");
@@ -65,6 +58,7 @@ function initLabaAppLogic() {
   });
 }
 
+/** Entry point: render template + init logic */
 function renderLabaApp(container) {
   if (!container) return;
   container.innerHTML = getLabaAppUI();
