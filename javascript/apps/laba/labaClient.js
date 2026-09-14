@@ -23,7 +23,7 @@ function initLabaAppLogic() {
     if (marginPerUnit > 0) {
       bepUnit = Math.ceil(totalBiayaTetap / marginPerUnit);
     } else {
-      bepUnit = "N/A (Harga < HPP Variabel)";
+      bepUnit = "N/A (harga jual lebih murah dari modal bahan)";
     }
 
     document.getElementById("resTotalOmzet").textContent = window.formatRupiah(totalOmzet);
@@ -39,22 +39,39 @@ function initLabaAppLogic() {
     if (labaBersih > 0) {
       statusBox.className = "p-6 rounded-2xl border border-emerald-200 bg-emerald-50 text-center";
       statusBadge.className = "text-2xl font-extrabold text-emerald-700 my-1";
-      statusBadge.textContent = "USAHA PROSPEKTIF / UNTUNG";
-      advice.textContent = `Bagus! Target ${totalQty} unit/bulan menghasilkan keuntungan bersih yang memadai.`;
+      statusBadge.textContent = "USAHA UNTUNG";
+      advice.textContent = `Bagus! Jualan ${totalQty} sebulan bisa dapat untung yang lumayan.`;
     } else if (labaBersih === 0) {
       statusBox.className = "p-6 rounded-2xl border border-amber-200 bg-amber-50 text-center";
       statusBadge.className = "text-2xl font-extrabold text-amber-700 my-1";
-      statusBadge.textContent = "BEP / BALIK MODAL";
-      advice.textContent = `Usaha Anda berada di titik impas. Tingkatkan penjualan atau kurangi biaya tetap untuk mendapatkan profit.`;
+      statusBadge.textContent = "BALIK MODAL SAJA";
+      advice.textContent = `Jualan pas balik modal. Mesti jual lebih banyak atau kurangi biaya biar untung.`;
     } else {
       statusBox.className = "p-6 rounded-2xl border border-rose-200 bg-rose-50 text-center";
       statusBadge.className = "text-2xl font-extrabold text-rose-700 my-1";
-      statusBadge.textContent = "PROYEKSI RUGI";
-      advice.textContent = `Perhatian! Hasil menunjukkan pengeluaran melampaui omzet. Evaluasi modal bahan atau harga jual Anda.`;
+      statusBadge.textContent = "RUGI";
+      advice.textContent = `Waduh, pengeluaran lebih besar dari uang masuk. Coba turunkan modal bahan atau naikkan harga jual.`;
     }
 
     const resultBox = document.getElementById("labaResult");
     if (resultBox) resultBox.classList.remove("hidden");
+
+    try {
+      const historyRaw = localStorage.getItem("laku_laba_data");
+      const history = historyRaw ? JSON.parse(historyRaw) : [];
+      const cleanHistory = Array.isArray(history) ? history : [];
+      cleanHistory.unshift({
+        totalQty,
+        hargaJual,
+        biayaVariabelPerUnit,
+        totalBiayaTetap,
+        totalOmzet,
+        totalBiayaKeseluruhan,
+        labaBersih,
+        createdAt: new Date().toISOString(),
+      });
+      localStorage.setItem("laku_laba_data", JSON.stringify(cleanHistory.slice(0, 50)));
+    } catch (saveErr) {}
   });
 }
 

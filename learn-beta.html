@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar</title>
+            <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+      <style type="text/tailwindcss">
+        @theme {
+          --color-clifford: #da373d;
+          --color-green-main: #0f4c5c;
+          --color-black-main: #2a2b2f;
+          --color-white-main: #fafaf7;
+          --color-lime-main: #e2ffc8;
+          --color-backdrop: #e2ffc8;
+          --animate-fade-in-one: fade-in-one 1s ease forwards;
+          --animate-bounce-smooth: float 4s ease-in-out infinite;
+          --animate-marquee: marquee 25s linear infinite;
+          --animate-marquee-reverse: marquee-reverse 25s linear infinite;
+        }
+      </style>
+      <link rel="stylesheet" href="./css/global.css">
+</head>
+<body>
+    
+    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
+              <!-- Navbar -->
+      <div
+        id="nav-overlay"
+        class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450"
+      ></div>
+
+      <nav
+         data-delay="0.9"
+         data-direction="down"
+         id="navbar"
+         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"
+       >
+           <div class="h-[72px] flex items-center justify-between px-[22px]">
+           <a
+             href="/"
+             class="text-xl font-bold tracking-[3px] text-black-main no-underline"
+           >
+             LAKU
+           </a>
+ 
+           <button
+             id="nav-menu-btn"
+             class="relative w-[42px] h-[42px] cursor-pointer"
+             aria-label="Toggle menu"
+             aria-expanded="false"
+           >
+             <span
+               class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+             <span
+               class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
+             ></span>
+           </button>
+         </div>
+         <div
+           id="nav-content"
+           class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10"
+         >
+              <div class="flex flex-col gap-[18px]" id="items-nav">
+
+
+              </div>
+              <div class="flex flex-col justify-between">
+          <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+              <source src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" type="video/mp4" />
+            </video>
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
+            <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
+              <a
+                href="./learn.html"
+                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform"
+                >Mulai Belajar →</a
+              >
+            </div>
+          </div>
+          </div>
+       </nav>
+      <!-- End Navbar -->
+    </div>
+
+
+      <!-- Hero Section -->
+      <section class="relative w-full h-[600px] overflow-hidden mt-0">
+        <img src="https://cdn.prod.website-files.com/65714325eccfb2f1cfb88235/685624e824d7a39b7b819ac2_HD%20BAWANG-01.png" class="absolute inset-0 w-full h-full object-cover" alt="Hero background">
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div class="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-center px-6 lg:px-10">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mt-20">
+            <div>
+              <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">Belajar UMKM dari Dasar, Mulai dari Hari Ini</h1>
+            </div>
+            <div class="flex flex-col items-start lg:items-end lg:text-right">
+              <p class="text-white/90 text-sm md:text-base max-w-md mb-6 leading-relaxed">Pusat edukasi UMKM Indonesia. Temukan panduan, tips, dan trik untuk membangun dan mengembangkan usaha Anda dari nol hingga sukses.</p>
+              <button class="bg-white text-black-main px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors shadow-lg">Selengkapnya</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Apa itu UMKM -->
+      <section class="w-full bg-[#355246] py-24 px-6 rounded-t-[40px] -mt-10 relative z-20 shadow-xl">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <!-- Kiri -->
+          <div class="flex flex-col-reverse lg:flex-col gap-8 order-2 lg:order-1">
+            <img src="https://chub.fisipol.ugm.ac.id/wp-content/uploads/sites/10/2021/01/Pasar.jpg" class="w-full lg:w-[85%] aspect-[3/4] object-cover rounded-[2rem] shadow-lg" alt="Gunung">
+            <div class="lg:w-[85%] text-white">
+              <h3 class="text-2xl font-bold mb-4 leading-snug">UMKM Hadir Dekat dengan Kehidupan Sehari-hari</h3>
+              <p class="text-white/80 text-sm leading-relaxed">Dari warung kopi di ujung jalan hingga pengrajin tas lokal, UMKM adalah tulang punggung ekonomi yang selalu ada di sekitar kita, memenuhi kebutuhan harian masyarakat.</p>
+            </div>
+          </div>
+          <!-- Kanan -->
+          <div class="flex flex-col gap-8 pt-0 lg:pt-32 order-1 lg:order-2">
+            <div class="text-white">
+              <span class="text-[10px] font-bold tracking-widest uppercase mb-3 block text-[#a7f3d0]">BARU</span>
+              <h3 class="text-2xl lg:text-4xl font-bold mb-6 leading-snug">Apa itu UMKM (Usaha Mikro, Kecil, dan Menengah)</h3>
+              <p class="text-white/80 text-sm leading-relaxed">UMKM adalah singkatan dari Usaha Mikro, Kecil, dan Menengah. Ini adalah pilar penggerak ekonomi Indonesia yang dijalankan oleh individu maupun badan usaha kecil dengan kriteria pendapatan tertentu.</p>
+            </div>
+            <img src="https://amartha.com/_next/image?url=https%3A%2F%2Fcontent-hub.amartha.com%2Fuploads%2Fusaha_rumahan_modal_kecil_1bd0d55b23.jpg&w=3840&q=75" class="w-full aspect-[4/3] lg:aspect-video object-cover rounded-[2rem] shadow-lg" alt="Kota">
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Apa yang harus disiapkan -->
+      <section class="w-full bg-white py-24 lg:py-32 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <!-- Kiri: Grid Gambar -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:h-[500px]">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8GYR_nV-8qHYulUFaIDBgTAdYtxcUoxpUCiLW7gBXD_teCZ8NS4I2R4g&s=10" class="w-full aspect-[4/3] md:aspect-video lg:aspect-auto lg:h-full object-cover rounded-3xl shadow-sm" alt="Pura">
+            <div class="hidden lg:grid grid-rows-2 gap-4 h-full">
+              <img src="https://img.magnific.com/foto-premium/pelayan-wanita-muslim-tionghoa-asia-tenggara-indonesia-berhijab-menyajikan-makanan-kepada-pelanggan-usaha-kecil-di-atas-truk_9083-30454.jpg" class="w-full h-full object-cover rounded-3xl shadow-sm" alt="Pemandangan">
+              <img src="https://asset.kompas.com/crops/-ivIBWha9XFK3K2UxAH8_eEPq7o=/0x0:1599x1066/1200x800/data/photo/2025/12/03/692fc8236026c.jpeg" class="w-full h-full object-cover rounded-3xl shadow-sm" alt="Candi">
+            </div>
+          </div>
+          <!-- Kanan: Teks -->
+          <div class="flex flex-col lg:pl-10">
+            <span class="text-xs font-bold tracking-widest text-gray-400 uppercase mb-3">MULAI</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-black-main mb-8 leading-[1.2]">Apa yang Harus Disiapkan Sebelum Berjualan?</h2>
+            <p class="text-gray-600 mb-6 leading-relaxed text-[15px]">Sebelum mulai berjualan, pastikan Anda memahami produk yang dijual, target pelanggan, dan modal awal yang dibutuhkan. Rencana yang matang adalah kunci utama keberhasilan.</p>
+            <p class="text-gray-600 leading-relaxed text-[15px]">Selain modal materi, persiapan mental juga penting. Dunia bisnis penuh dengan tantangan, mulai dari persaingan hingga manajemen keuangan. Pastikan Anda siap belajar dan beradaptasi dengan perubahan pasar.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Kategori & Artikel Tips -->
+      <section class="w-full bg-white pb-24 lg:pb-32 px-6">
+        <div class="max-w-7xl mx-auto">
+          <!-- Filter/Pills -->
+          <!-- Marquee Container -->
+          <div class="relative w-full overflow-hidden flex flex-col gap-4 mb-16 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
+            <!-- Row 1: Left to Right (Reverse) -->
+            <div class="flex w-max min-w-full animate-marquee-reverse gap-4 hover:[animation-play-state:paused]" id="marquee-row-1">
+            </div>
+
+            <!-- Row 2: Right to Left -->
+            <div class="flex w-max min-w-full animate-marquee gap-4 hover:[animation-play-state:paused]" id="marquee-row-2">
+            </div>
+          </div>
+
+          <!-- Cards Artikel -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+            <div class="border-t border-gray-200 pt-8">
+              <span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-3 block">TIPS</span>
+              <h3 class="text-2xl font-bold text-black-main mb-4 leading-snug">Bagaimana Berdagang di Era Digital?</h3>
+              <p class="text-gray-600 text-[15px] leading-relaxed">Manfaatkan media sosial dan e-commerce untuk menjangkau lebih banyak pelanggan. Pelajari cara foto produk yang menarik dan buat deskripsi yang jelas agar pembeli semakin yakin dengan produk Anda.</p>
+            </div>
+            <div class="border-t border-gray-200 pt-8">
+              <span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-3 block">KEUANGAN</span>
+              <h3 class="text-2xl font-bold text-black-main mb-4 leading-snug">Bagaimana Mengelola Keuangan dari Penjualan?</h3>
+              <p class="text-gray-600 text-[15px] leading-relaxed">Pisahkan uang pribadi dan usaha. Catat setiap pemasukan dan pengeluaran sekecil apapun. Ini membantu Anda melihat apakah usaha benar-benar untung atau rugi di akhir bulan.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Banner Uji Pemahaman -->
+         <!-- Section: Kuis / Uji Pemahaman -->
+      <section class="w-full bg-white px-6 pb-24 lg:pb-32">
+        <div class="max-w-7xl mx-auto lg:rounded-[40px] overflow-hidden relative lg:shadow-2xl min-h-[400px] lg:h-[550px] flex items-center justify-center py-10 lg:py-0">
+          <!-- Background Image -->
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDL3ekK1N9MtpTV5MVUyDSzt9NDPGykZPLFfQT4av9RbjrDygN3x-toP8&s=10" class="hidden lg:block absolute inset-0 w-full h-full object-cover" alt="Sawah">
+          <!-- Overlay to slightly darken -->
+          <div class="hidden lg:block absolute inset-0 bg-black/10"></div>
+          
+          <!-- White Card -->
+          <div class="relative z-10 bg-[#f8f9fa] rounded-[32px] w-[90%] max-w-4xl p-10 md:p-16 shadow-xl overflow-hidden">
+            <!-- Decorative SVGs (stars) -->
+            <!-- Top Right Star -->
+            <svg class="absolute -top-12 -right-8 w-64 h-64 text-gray-200/60 rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+            <!-- Bottom Left Star -->
+            <svg class="absolute -bottom-16 -left-16 w-72 h-72 text-gray-200/60 -rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+
+            <!-- Content -->
+            <div class="relative z-20 max-w-2xl">
+              <p class="text-gray-500 text-[15px] mb-4 font-medium">siap praktik</p>
+              <h3 class="text-3xl md:text-[34px] font-bold text-black-main mb-4 leading-[1.3]">Sudah Belajar? Saatnya Uji Pemahamanmu</h3>
+              <p class="text-gray-600 text-[15px] leading-relaxed mb-8">Setiap penjualan perlu dicatat agar pelaku usaha tahu uang masuk, biaya keluar, dan keuntungan yang didapat. Pengelolaan keuangan yang rapi membantu UMKM memahami apakah usahanya benar-benar untung, bukan hanya terlihat ramai.</p>
+              <button class="px-8 py-3 rounded-full border border-gray-400 text-black-main font-semibold hover:bg-gray-100 transition-colors bg-white shadow-sm text-sm">Mulai Kuis</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Accordion FAQ -->
+      <section class="w-full bg-white pb-32 px-6">
+        <div class="max-w-3xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl lg:text-4xl font-bold text-black-main mb-4">Pertanyaan Seputar UMKM</h2>
+            <p class="text-gray-500">Temukan jawaban atas pertanyaan yang paling sering diajukan oleh pelaku usaha pemula.</p>
+          </div>
+
+          <div class="space-y-4">
+            <!-- FAQ 1 -->
+            <details class="group bg-[#f9fafb] rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-6 font-semibold text-black-main text-lg select-none">
+                <span>Bagaimana cara menentukan harga jual produk yang tepat?</span>
+                <span class="transition-transform duration-300 group-open:-rotate-180 bg-white shadow-sm p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </span>
+              </summary>
+              <div class="px-6 pb-6 text-gray-600 text-[15px] leading-relaxed pt-2 border-t border-gray-100 mt-2 mx-6">
+                Hitung seluruh biaya modal (Bahan baku, tenaga kerja, operasional seperti listrik/kemasan). Setelah itu, tambahkan margin keuntungan yang Anda inginkan (misalnya 20-30%). Jangan lupa untuk melakukan riset harga kompetitor di sekitar Anda agar harga tetap bersaing.
+              </div>
+            </details>
+
+            <!-- FAQ 2 -->
+            <details class="group bg-[#f9fafb] rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-6 font-semibold text-black-main text-lg select-none">
+                <span>Apakah UMKM wajib memiliki Nomor Induk Berusaha (NIB)?</span>
+                <span class="transition-transform duration-300 group-open:-rotate-180 bg-white shadow-sm p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </span>
+              </summary>
+              <div class="px-6 pb-6 text-gray-600 text-[15px] leading-relaxed pt-2 border-t border-gray-100 mt-2 mx-6">
+                Sangat disarankan. NIB adalah identitas resmi pelaku usaha. Dengan memiliki NIB, UMKM Anda tercatat secara legal, lebih mudah mengakses program bantuan pemerintah, ikut pameran, dan mengajukan modal ke bank (seperti KUR). Pendaftarannya kini gratis dan mudah secara online melalui sistem OSS (Online Single Submission).
+              </div>
+            </details>
+
+            <!-- FAQ 3 -->
+            <details class="group bg-[#f9fafb] rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-6 font-semibold text-black-main text-lg select-none">
+                <span>Apa perbedaan antara Usaha Mikro, Kecil, dan Menengah?</span>
+                <span class="transition-transform duration-300 group-open:-rotate-180 bg-white shadow-sm p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </span>
+              </summary>
+              <div class="px-6 pb-6 text-gray-600 text-[15px] leading-relaxed pt-2 border-t border-gray-100 mt-2 mx-6">
+                Berdasarkan aturan pemerintah, perbedaannya terletak pada modal usaha dan hasil penjualan tahunan.<br><br>
+                <b>• Usaha Mikro</b>: Modal maksimal Rp1 Miliar, penjualan tahunan maksimal Rp2 Miliar.<br>
+                <b>• Usaha Kecil</b>: Modal Rp1-5 Miliar, penjualan tahunan Rp2-15 Miliar.<br>
+                <b>• Usaha Menengah</b>: Modal Rp5-10 Miliar, penjualan tahunan Rp15-50 Miliar.
+              </div>
+            </details>
+
+            <!-- FAQ 4 -->
+            <details class="group bg-[#f9fafb] rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-6 font-semibold text-black-main text-lg select-none">
+                <span>Bagaimana cara melakukan promosi dengan budget minim?</span>
+                <span class="transition-transform duration-300 group-open:-rotate-180 bg-white shadow-sm p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </span>
+              </summary>
+              <div class="px-6 pb-6 text-gray-600 text-[15px] leading-relaxed pt-2 border-t border-gray-100 mt-2 mx-6">
+                Manfaatkan media sosial (Instagram, TikTok, WhatsApp Business) yang bisa digunakan secara gratis. Buat foto produk yang terang dan menarik. Minta pelanggan pertama Anda (keluarga, teman, tetangga) untuk memberikan ulasan yang baik. Anda juga disarankan mendaftar ke Google Profil Bisnis agar toko Anda muncul di Google Maps.
+              </div>
+            </details>
+          </div>
+          
+          <div class="flex justify-center mt-12">
+            <button class="bg-black-main text-white px-10 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors shadow-lg">Lihat Semua Pertanyaan</button>
+          </div>
+        </div>
+      </section>
+
+   
+      <!-- Footer  -->
+      <footer
+        class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen"
+      >
+        <div
+          class="absolute -left-72 top-1/2 -translate-y-1/2 w-175 h-175 rounded-full bg-backdrop opacity-20 blur-[180px]"
+        ></div>
+        <div
+          class="absolute -right-72 top-1/2 -translate-y-1/2 w-175] h-175 rounded-full bg-backdrop opacity-20 blur-[180px]"
+        ></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+            <div class="lg:col-span-2">
+              <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+                Footer
+              <span class="text-lime-600 text-xl">✦</span>
+            </p> -->
+              <h2 class="text-4xl font-semibold leading-tight">
+                Bersama Laku,
+                <br />
+                UMKM Tumbuh
+                <br />
+                Lebih Mudah.
+              </h2>
+              <div class="mt-12 text-sm text-black-main/60 space-y-3">
+                <p>© Copyright 2026 Laku.</p>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-semibold mb-5">Menu</h3>
+              <ul class="space-y-3 text-black-main/60">
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#">Tentang</a></li>
+                <li><a href="#">Belajar</a></li>
+                <li><a href="#">Kontak</a></li>
+              </ul>
+            </div>
+            <!-- Product -->
+            <div>
+              <h3 class="font-semibold mb-5">Aplikasi</h3>
+              <ul class="space-y-3 text-black-main/60">
+                <li><a href="#">Aplikasi Laku</a></li>
+                <li><a href="#">Edukasi</a></li>
+              </ul>
+            </div>
+            <div></div>
+          </div>
+        </div>
+        <h2
+          class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none"
+        >
+          Laku
+        </h2>
+      </footer>
+
+
+<script src="./javascript/core/navbar.js"></script>
+<script src="./javascript/core/animations.js"></script>
+<script src="./javascript/pages/learn.js"></script>
+
+</body>
+</html>

@@ -25,7 +25,7 @@ window.LakuHpp.renderOverhead = function () {
               <span class="text-sm font-medium text-gray-700">${item.nama}</span>
               <span class="text-sm font-bold text-amber-800">${window.formatRupiah(item.biaya)}</span>
             </div>
-            <button data-remove-ovh="${i}" class="text-rose-400 hover:text-rose-600 font-bold text-xs cursor-pointer transition-colors" title="Hapus">✕</button>
+            <button data-remove-ovh="${i}" class="text-rose-400 hover:text-rose-600 font-bold text-xs cursor-pointer transition-colors" title="Hapus">${window.LakuIcons.svg("closeCircle", "0.85em")}</button>
           </div>
         `
       )

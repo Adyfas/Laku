@@ -1,0 +1,289 @@
+/* ================================================================
+   tour.css — Guided Tour styles for app.html
+   ================================================================
+   
+   Only loaded by app.html.
+   ================================================================ */
+
+@keyframes lakuTourPulse {
+  0% { transform: scale(1); opacity: 0.85; }
+  70% { transform: scale(1.04); opacity: 0; }
+  100% { transform: scale(1.04); opacity: 0; }
+}
+
+.laku-tour-root {
+  font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.laku-tour-spotlight-frame {
+  box-sizing: border-box;
+}
+
+.laku-tour-pulse-glow {
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 2px solid rgba(132, 204, 22, 0.75);
+  animation: lakuTourPulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+.laku-tour-popover {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  padding: 22px 24px;
+  box-sizing: border-box;
+  font-family: inherit;
+  max-width: 380px;
+  width: calc(100vw - 28px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.laku-tour-popover-content {
+  position: relative;
+  z-index: 2;
+}
+
+.laku-tour-arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.laku-tour-arrow-bottom {
+  top: -7px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.laku-tour-arrow-top {
+  bottom: -7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.laku-tour-arrow-right {
+  left: -7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.laku-tour-arrow-left {
+  right: -7px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.laku-tour-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.laku-tour-badge-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #e8f3ef;
+  color: #274c43;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.laku-tour-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #274c43;
+}
+
+.laku-tour-btn-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.laku-tour-btn-close:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.laku-tour-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.laku-tour-desc {
+  font-size: 13.5px;
+  color: #4b5563;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.laku-tour-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.laku-tour-footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.laku-tour-btn-skip {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.laku-tour-btn-skip:hover {
+  color: #4b5563;
+  background: #f3f4f6;
+}
+
+.laku-tour-btn-prev {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.laku-tour-btn-prev:hover {
+  background: #e5e7eb;
+}
+
+.laku-tour-btn-next,
+.laku-tour-btn-done {
+  background: #274c43;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 9px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(39, 76, 67, 0.25);
+}
+
+.laku-tour-btn-next:hover,
+.laku-tour-btn-done:hover {
+  background: #1f3d36;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(39, 76, 67, 0.35);
+}
+
+.laku-tour-keyboard-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+  display: block;
+}
+
+.laku-tour-keyboard-hint kbd {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+@media (max-width: 640px) {
+  .laku-tour-keyboard-hint {
+    display: none;
+  }
+  .laku-tour-popover {
+    max-width: calc(100vw - 24px);
+    width: calc(100vw - 24px);
+    padding: 16px 18px;
+    max-height: calc(100vh - 32px);
+    border-radius: 20px;
+  }
+  .laku-tour-title {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .laku-tour-desc {
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .laku-tour-card-header {
+    margin-bottom: 10px;
+  }
+  .laku-tour-badge-step {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+  .laku-tour-btn-close {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+  .laku-tour-btn-skip {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+  .laku-tour-btn-prev {
+    font-size: 12px;
+    padding: 7px 14px;
+  }
+  .laku-tour-btn-next,
+  .laku-tour-btn-done {
+    font-size: 12px;
+    padding: 7px 16px;
+  }
+  .laku-tour-footer {
+    gap: 6px;
+  }
+  .laku-tour-footer-nav {
+    gap: 6px;
+  }
+}

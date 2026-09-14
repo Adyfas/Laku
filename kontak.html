@@ -4,7 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kontak - Laku</title>
-    <link rel="stylesheet" href="./styles/output.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+        --color-green-main: #0f4c5c;
+        --color-black-main: #2a2b2f;
+        --color-white-main: #fafaf7;
+        --color-lime-main: #e2ffc8;
+        --color-backdrop: #e2ffc8;
+        --animate-fade-in-one: fade-in-one 1s ease forwards;
+        --animate-bounce-smooth: float 4s ease-in-out infinite;
+        --animate-marquee: marquee 25s linear infinite;
+        --animate-marquee-reverse: marquee-reverse 25s linear infinite;
+      }
+    </style>
+    <link rel="stylesheet" href="./css/global.css">
   </head>
   <body class="bg-white-main">
     <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">

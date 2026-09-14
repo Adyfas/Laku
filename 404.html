@@ -1,6 +1,92 @@
-<div class="app py-20 text-center">
-    <h1 class="text-6xl font-bold text-red-500">404</h1>
-    <h2 class="text-2xl font-semibold mt-4">Halaman Tidak Ditemukan</h2>
-    <p class="text-gray-500 mt-2">Halaman yang Anda cari tidak dapat ditemukan.</p>
-    <a href="/" class="mt-6 inline-block bg-lime-600 text-white px-6 py-3 rounded-full">Kembali ke Beranda</a>
-</div>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About | Laku</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+        --color-green-main: #0f4c5c;
+        --color-black-main: #2a2b2f;
+        --color-white-main: #fafaf7;
+        --color-lime-main: #e2ffc8;
+        --color-backdrop: #e2ffc8;
+        --animate-fade-in-one: fade-in-one 1s ease forwards;
+        --animate-bounce-smooth: float 4s ease-in-out infinite;
+        --animate-marquee: marquee 25s linear infinite;
+        --animate-marquee-reverse: marquee-reverse 25s linear infinite;
+      }
+    </style>
+    <link rel="stylesheet" href="./css/global.css">
+</head>
+
+<body>
+    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
+        <!-- Navbar -->
+        <div id="nav-overlay"
+            class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450">
+        </div>
+
+        <nav data-delay="0.9" data-direction="down" id="navbar"
+            class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in">
+            <div class="h-[72px] flex items-center justify-between px-[22px]">
+                <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
+                    LAKU
+                </a>
+
+                <button id="nav-menu-btn" class="relative w-[42px] h-[42px] cursor-pointer" aria-label="Toggle menu"
+                    aria-expanded="false">
+                    <span
+                        class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+                    <span
+                        class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+                    <span
+                        class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+                </button>
+            </div>
+            <div id="nav-content" class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10">
+                <div class="flex flex-col gap-[18px]" id="items-nav">
+
+
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
+                        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+                            <source
+                                src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov"
+                                type="video/mp4" />
+                        </video>
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
+                        <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
+                            <a href="./learn.html"
+                                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform">Mulai
+                                Belajar →</a>
+                        </div>
+                    </div>
+                </div>
+        </nav>
+        <!-- End Navbar -->
+
+
+        <!-- Konten -->
+        <div class="app py-20 text-center flex items-center justify-center h-screen flex-col">
+            <h1 class="text-6xl font-bold text-red-500">404</h1>
+            <h2 class="text-2xl font-semibold mt-4">Halaman Tidak Ditemukan</h2>
+            <p class="text-gray-500 mt-2">Halaman yang Anda cari tidak dapat ditemukan.</p>
+            <a href="/" class="mt-6 inline-block bg-black-main text-white px-6 py-3 rounded-full">Kembali ke Beranda</a>
+        </div>
+
+        <!-- End Konten -->
+
+
+
+
+    </div>
+    <script src="./javascript/core/navbar.js"></script>
+    <script src="./javascript/core/animations.js"></script>
+</body>
+
+</html>

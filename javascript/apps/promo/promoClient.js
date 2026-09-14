@@ -83,7 +83,7 @@ function initPromoAppLogic() {
 
     return {
       text: templateText,
-      source: "✨ Smart Local Copywriter Engine",
+      source: window.LakuIcons.svg("sparkle", "0.9em") + " Smart Local Copywriter Engine",
     };
   };
 
@@ -110,6 +110,20 @@ function initPromoAppLogic() {
       const result = await generateAiCaption(nama, kategori, tone, detail);
 
       document.getElementById("promoTextOutput").textContent = result.text;
+      try {
+        const historyRaw = localStorage.getItem("laku_promo_data");
+        const history = historyRaw ? JSON.parse(historyRaw) : [];
+        const cleanHistory = Array.isArray(history) ? history : [];
+        cleanHistory.unshift({
+          nama,
+          kategori,
+          tone,
+          detail,
+          text: result.text,
+          createdAt: new Date().toISOString(),
+        });
+        localStorage.setItem("laku_promo_data", JSON.stringify(cleanHistory.slice(0, 50)));
+      } catch (saveErr) {}
       const aiBadge = document.getElementById("aiBadgeStatus");
       if (aiBadge) aiBadge.textContent = result.source;
 
@@ -129,7 +143,7 @@ function initPromoAppLogic() {
       copyBtn.addEventListener("click", () => {
         const text = document.getElementById("promoTextOutput").textContent;
         navigator.clipboard.writeText(text).then(() => {
-          copyBtn.innerHTML = `✓ Teks Berhasil Disalin!`;
+          copyBtn.innerHTML = window.LakuIcons.svg("check", "0.9em") + ` Teks Berhasil Disalin!`;
           setTimeout(() => {
             copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Salin Teks Promosi`;
           }, 2500);

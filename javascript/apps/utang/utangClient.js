@@ -26,8 +26,8 @@ function initUtangAppLogic() {
 
     if (dueTodayItems.length > 0) {
       dueTodayItems.forEach((item) => {
-        const notifTitle = `Pengingat Tagihan: ${item.nama}`;
-        const notifBody = `Sisa tagihan ${window.formatRupiah(item.totalAmount - item.paidAmount)} untuk "${item.note}" jatuh tempo hari ini!`;
+        const notifTitle = `Pengingat: ${item.nama}`;
+        const notifBody = `Sisa belum dibayar ${window.formatRupiah(item.totalAmount - item.paidAmount)} untuk "${item.note}" harus dibayar hari ini!`;
         new Notification(notifTitle, {
           body: notifBody,
           icon: "/favicon.ico",
@@ -52,7 +52,7 @@ function initUtangAppLogic() {
         tbody.innerHTML = `
           <tr>
             <td colspan="5" class="py-8 text-center text-gray-400 text-sm">
-              Belum ada catatan utang/piutang. Tambahkan catatan pertama Anda di atas!
+              Belum ada catatan utang/piutang. Tambahkan catatan pertamamu di atas!
             </td>
           </tr>
         `;
@@ -60,7 +60,7 @@ function initUtangAppLogic() {
       if (mobileList) {
         mobileList.innerHTML = `
           <div class="py-8 text-center text-gray-400 text-sm bg-stone-50 rounded-2xl">
-            Belum ada catatan utang/piutang. Tambahkan catatan pertama Anda di atas!
+            Belum ada catatan utang/piutang. Tambahkan catatan pertamamu di atas!
           </div>
         `;
       }
@@ -143,7 +143,7 @@ function initUtangAppLogic() {
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center gap-2">
                 ${typeBadge}
-                <span class="text-gray-400 font-medium font-mono text-[11px]">Jatuh Tempo: ${item.dueDate}</span>
+                <span class="text-gray-400 font-medium font-mono text-[11px]">Harus dibayar: ${item.dueDate}</span>
               </div>
               ${statusBadge}
             </div>
@@ -155,11 +155,11 @@ function initUtangAppLogic() {
 
             <div class="border-t border-gray-100 pt-2 space-y-1.5 text-xs">
               <div class="flex items-center justify-between">
-                <span class="text-gray-500 font-medium">Total Catatan</span>
+                <span class="text-gray-500 font-medium">Total uang</span>
                 <span class="font-semibold text-gray-700">${window.formatRupiah(item.totalAmount)}</span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-gray-500 font-medium">Sisa Tagihan</span>
+                <span class="text-gray-500 font-medium">Sisa belum dibayar</span>
                 <span class="font-extrabold text-sm text-[#274c43]">${window.formatRupiah(remaining)}</span>
               </div>
             </div>
@@ -200,9 +200,9 @@ function initUtangAppLogic() {
 
         const remaining = item.totalAmount - item.paidAmount;
         const bayarStr = await window.showCustomPrompt({
-          title: `Bayar Tagihan (${item.nama})`,
-          message: `Sisa tagihan: ${window.formatRupiah(remaining)}. Masukkan nominal pembayaran:`,
-          placeholder: "Nominal pembayaran (Rp)",
+          title: `Bayar Utang (${item.nama})`,
+          message: `Sisa belum dibayar: ${window.formatRupiah(remaining)}. Masukkan jumlah yang mau dibayar:`,
+          placeholder: "Jumlah pembayaran (Rp)",
           defaultValue: remaining.toString(),
           inputType: "number",
           confirmText: "Simpan Pembayaran",

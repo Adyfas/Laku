@@ -9,6 +9,7 @@
  * - Added hppOnboarding div (shown when inventory is empty)
  */
 function getHppAppUI() {
+  var I = window.LakuIcons;
   return `
     <div class="max-w-2xl mx-auto space-y-8 animate-fade-in-up">
       <!-- Header -->
@@ -25,7 +26,7 @@ function getHppAppUI() {
 
       <!-- Onboarding (shown when inventory is empty) -->
       <div id="hppOnboarding" class="hidden text-center py-12 bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
-        <span class="text-5xl">🎯</span>
+        <span class="text-5xl">${I.svg("target", "2.5em")}</span>
         <h3 class="text-xl font-bold text-gray-800 mt-2">Langkah 1: Catat Bahan Dulu</h3>
         <p class="text-gray-500 text-sm leading-relaxed max-w-md mx-auto">
           Sebelum hitung modal, kamu perlu catat bahan-bahan yang biasa kamu pakai untuk jualan.
@@ -65,7 +66,7 @@ function getHppAppUI() {
       <!-- STEP 1: Info Produk -->
       <div id="hppStep1" class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
         <div class="text-center mb-2">
-          <span class="text-3xl">📝</span>
+          <span class="text-3xl">${I.svg("memo", "1.75em")}</span>
           <h3 class="text-lg font-bold text-gray-800 mt-2">Kamu lagi jualan apa hari ini?</h3>
           <p class="text-gray-500 text-sm">Isi dulu nama produk dan berapa banyak yang kamu buat.</p>
         </div>
@@ -100,14 +101,14 @@ function getHppAppUI() {
       <!-- STEP 2: Bahan dari Stok -->
       <div id="hppStep2" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
         <div class="text-center mb-2">
-          <span class="text-3xl">🛒</span>
+          <span class="text-3xl">${I.svg("shoppingBag", "1.75em")}</span>
           <h3 class="text-lg font-bold text-gray-800 mt-2">Bahan apa aja yang kamu pakai?</h3>
           <p class="text-gray-500 text-sm" id="hppStep2Desc">Pilih bahan dari stok yang sudah kamu catat.</p>
         </div>
 
         <!-- Empty State (no inventory items) -->
         <div id="hppInventoryEmpty" class="hidden text-center py-8 bg-stone-50 rounded-2xl space-y-3">
-          <span class="text-4xl">📦</span>
+          <span class="text-4xl">${I.svg("package", "2em")}</span>
           <p class="text-gray-600 font-medium">Kamu belum punya bahan di stok.</p>
           <p class="text-gray-400 text-sm">Yuk tambahkan dulu bahan-bahan yang biasa kamu pakai untuk jualan.</p>
           <button type="button" id="hppGoToInventory" class="inline-flex items-center gap-2 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-md text-sm cursor-pointer">
@@ -130,7 +131,7 @@ function getHppAppUI() {
               + Tambah
             </button>
           </div>
-          <p class="text-[11px] text-gray-400">💡 Pilih satuan bebas — otomatis dikonversi ke satuan stok (mis. 500 gram = 0.5 kg).</p>
+          <p class="text-[11px] text-gray-400">${I.svg("lightbulb", "0.9em")} Pilih satuan bebas — otomatis dikonversi ke satuan stok (mis. 500 gram = 0.5 kg).</p>
         </div>
 
         <!-- Subtotal Bahan -->
@@ -152,7 +153,7 @@ function getHppAppUI() {
       <!-- STEP 3: Biaya Tambahan -->
       <div id="hppStep3" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
         <div class="text-center mb-2">
-          <span class="text-3xl">👷</span>
+          <span class="text-3xl">${I.svg("worker", "1.75em")}</span>
           <h3 class="text-lg font-bold text-gray-800 mt-2">Ada biaya lain selain bahan?</h3>
           <p class="text-gray-500 text-sm">Kayak ongkos kerja kamu, gas, listrik, atau kemasan. Isi aja yang kamu ingat.</p>
         </div>
@@ -160,7 +161,7 @@ function getHppAppUI() {
         <!-- Tenaga Kerja -->
         <div class="bg-emerald-50 p-5 rounded-2xl space-y-3">
           <div class="flex items-center gap-2">
-            <span class="text-lg">👷</span>
+            <span class="text-lg">${I.svg("worker", "1.1em")}</span>
             <span class="text-sm font-bold text-emerald-800">Ongkos Kerja Kamu</span>
           </div>
           <div class="grid grid-cols-2 gap-3">
@@ -181,7 +182,7 @@ function getHppAppUI() {
         <!-- Overhead -->
         <div class="bg-amber-50 p-5 rounded-2xl space-y-3">
           <div class="flex items-center gap-2">
-            <span class="text-lg">⚡</span>
+            <span class="text-lg">${I.svg("lightning", "1.1em")}</span>
             <span class="text-sm font-bold text-amber-800">Biaya Lain-lain (Gas, Listrik, dll)</span>
           </div>
           <div id="hppOverheadList" class="space-y-2">
@@ -199,11 +200,11 @@ function getHppAppUI() {
         <!-- Kemasan -->
         <div class="bg-blue-50 p-5 rounded-2xl space-y-3">
           <div class="flex items-center gap-2">
-            <span class="text-lg">📦</span>
+            <span class="text-lg">${I.svg("package", "1.1em")}</span>
             <span class="text-sm font-bold text-blue-800">Biaya Kemasan &amp; Label</span>
           </div>
           <input type="text" inputmode="numeric" id="hppBiayaKemasan" placeholder="Contoh: 50.000 (total semua kemasan)" oninput="window.formatNumberInput(this)" class="w-full bg-white text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-blue-500 text-sm" />
-          <p class="text-xs text-blue-600">💡 Total biaya semua kemasan, stiker, atau plastik untuk sekali produksi.</p>
+          <p class="text-xs text-blue-600">${I.svg("lightbulb", "0.9em")} Total biaya semua kemasan, stiker, atau plastik untuk sekali produksi.</p>
         </div>
 
         <div class="flex gap-3 pt-2">
@@ -219,7 +220,7 @@ function getHppAppUI() {
       <!-- STEP 4: Margin & Hasil -->
       <div id="hppStep4" class="hidden bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-5">
         <div class="text-center mb-2">
-          <span class="text-3xl">🏷️</span>
+          <span class="text-3xl">${I.svg("tag", "1.75em")}</span>
           <h3 class="text-lg font-bold text-gray-800 mt-2">Mau untung berapa?</h3>
           <p class="text-gray-500 text-sm">Geser untuk tentukan keuntungan yang kamu mau.</p>
         </div>
@@ -236,7 +237,7 @@ function getHppAppUI() {
             <span>30% (Wajar)</span>
             <span>100% (Banyak)</span>
           </div>
-          <p class="text-xs text-gray-400">💡 Kebanyakan UMKM pakai margin 20-30%.</p>
+          <p class="text-xs text-gray-400">${I.svg("lightbulb", "0.9em")} Kebanyakan UMKM pakai margin 20-30%.</p>
         </div>
 
         <!-- Ringkasan -->
@@ -244,27 +245,27 @@ function getHppAppUI() {
           <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider text-center">Ringkasan Modal Kamu</h4>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span class="text-gray-500">🛒 Total belanja bahan</span>
+              <span class="text-gray-500">${I.svg("shoppingBag", "1em")} Total belanja bahan</span>
               <span id="hppRingkasanBahan" class="font-bold text-gray-800">Rp 0</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-500">👷 Ongkos kerja</span>
+              <span class="text-gray-500">${I.svg("worker", "1em")} Ongkos kerja</span>
               <span id="hppRingkasanTenaga" class="font-bold text-gray-800">Rp 0</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-500">⚡ Biaya lain-lain</span>
+              <span class="text-gray-500">${I.svg("lightning", "1em")} Biaya lain-lain</span>
               <span id="hppRingkasanOverhead" class="font-bold text-gray-800">Rp 0</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-500">📦 Kemasan</span>
+              <span class="text-gray-500">${I.svg("package", "1em")} Kemasan</span>
               <span id="hppRingkasanKemasan" class="font-bold text-gray-800">Rp 0</span>
             </div>
             <div class="pt-2 border-t border-gray-200 flex justify-between">
-              <span class="font-bold text-gray-700">💰 Total modal</span>
+              <span class="font-bold text-gray-700">${I.svg("wallet", "1em")} Total modal</span>
               <span id="hppRingkasanTotal" class="text-lg font-extrabold text-[#274c43]">Rp 0</span>
             </div>
             <div class="flex justify-between">
-              <span class="font-bold text-gray-700">📦 Modal per <span id="hppRingkasanSatuan">unit</span></span>
+              <span class="font-bold text-gray-700">${I.svg("package", "1em")} Modal per <span id="hppRingkasanSatuan">unit</span></span>
               <span id="hppRingkasanHpp" class="text-lg font-extrabold text-amber-700">Rp 0</span>
             </div>
           </div>
@@ -283,16 +284,16 @@ function getHppAppUI() {
             ← Kembali
           </button>
           <button type="button" id="hppSimpanResep" class="flex-1 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
-            💾 Simpan Resep
+            ${I.svg("save", "1em")} Simpan Resep
           </button>
         </div>
       </div>
 
       <!-- DAFTAR RESEP TERSIMPAN -->
-      <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-4">
+      <div id="hppRecipeListSection" class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-4">
         <div class="flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-800">📄 Resep Tersimpan</h3>
-          <span class="text-xs text-gray-400">Bisa diedit atau diduplikat</span>
+          <h3 class="text-lg font-bold text-gray-800">${I.svg("document", "1.1em")} Resep Tersimpan</h3>
+          <span class="text-xs text-gray-400">Bisa diubah atau disalin</span>
         </div>
 
         <!-- Desktop Table View -->
@@ -302,9 +303,9 @@ function getHppAppUI() {
               <tr>
                 <th class="py-3 px-4 rounded-l-xl">Produk</th>
                 <th class="py-3 px-4 text-center">Produksi</th>
-                <th class="py-3 px-4 text-right">HPP/Unit</th>
+                <th class="py-3 px-4 text-right">Modal/satuan</th>
                 <th class="py-3 px-4 text-right">Harga Jual</th>
-                <th class="py-3 px-4 text-center">Margin</th>
+                <th class="py-3 px-4 text-center">Untung</th>
                 <th class="py-3 px-4 rounded-r-xl text-center">Aksi</th>
               </tr>
             </thead>

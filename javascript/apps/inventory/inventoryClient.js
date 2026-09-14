@@ -118,7 +118,7 @@ function initInventoryAppLogic() {
           <tr class="hover:bg-stone-50/80 transition-colors">
             <td class="py-3.5 px-4">
               <div class="font-bold text-gray-800">${item.nama}</div>
-              <div class="text-[11px] text-gray-400">Min. Alert: ${minDisplay} ${displayUnit}</div>
+              <div class="text-[11px] text-gray-400">Stok aman di atas: ${minDisplay} ${displayUnit}</div>
             </td>
             <td class="py-3.5 px-4 text-xs font-medium text-gray-600">${item.kategori}</td>
             <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${window.formatRupiah(item.harga)}</td>
@@ -150,12 +150,12 @@ function initInventoryAppLogic() {
 
             <div>
               <h4 class="text-base font-bold text-gray-900">${item.nama}</h4>
-              <p class="text-[11px] text-gray-400">Min. Alert Stok: ${minDisplay} ${displayUnit}</p>
+              <p class="text-[11px] text-gray-400">Stok aman di atas: ${minDisplay} ${displayUnit}</p>
             </div>
 
             <div class="border-t border-gray-100 pt-2 space-y-2 text-xs">
               <div class="flex items-center justify-between">
-                <span class="text-gray-500 font-medium">Harga Modal / Unit</span>
+                <span class="text-gray-500 font-medium">Harga modal per satuan</span>
                 <span class="font-bold text-gray-800 text-sm">${window.formatRupiah(item.harga)}</span>
               </div>
               <div class="flex items-center justify-between">

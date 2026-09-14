@@ -80,7 +80,7 @@ function getInventoryAppUI() {
               <input type="number" id="invStok" placeholder="Contoh: 20" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Batas Stok Minimum (Alert)</label>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Batas stok terendah (biar dapat peringatan)</label>
               <input type="number" id="invMinStok" placeholder="Contoh: 5" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
           </div>
@@ -105,7 +105,7 @@ function getInventoryAppUI() {
               <tr>
                 <th class="py-3 px-4 rounded-l-xl">Nama Barang</th>
                 <th class="py-3 px-4">Kategori</th>
-                <th class="py-3 px-4 text-right">Modal/Unit</th>
+                <th class="py-3 px-4 text-right">Modal/satuan</th>
                 <th class="py-3 px-4 text-center">Stok</th>
                 <th class="py-3 px-4 rounded-r-xl text-center">Atur Stok & Aksi</th>
               </tr>

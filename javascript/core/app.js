@@ -126,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 4. Update Workspace Dashboard Info
+  var _dashboardTourPending = false;
   const updateDashboardState = () => {
     const rawStatus = localStorage.getItem("status");
     if (rawStatus) {
@@ -209,6 +210,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (dashPromoStatus) {
           dashPromoStatus.textContent = "Siap Buat Caption";
         }
+
+        // 5. Trigger dashboard tour on first visit
+        if (!_dashboardTourPending && window.LakuTour && !window.LakuTour.isCompleted("dashboard")) {
+          _dashboardTourPending = true;
+          setTimeout(function () {
+            window.LakuTour.start("dashboard");
+            _dashboardTourPending = false;
+          }, 800);
+        }
       } catch (e) {
         console.error("Error parsing user status:", e);
       }
@@ -286,6 +296,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const learnReturn = (() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return { page: params.get("return"), scenario: params.get("scenario") };
+    } catch (err) {
+      return { page: null, scenario: null };
+    }
+  })();
+
+  const renderLearnReturnBar = (appKey) => {
+    const oldBar = document.getElementById("learnReturnBar");
+    if (oldBar) oldBar.remove();
+    if (!modalAppContent || learnReturn.page !== "learn") return;
+    const scenarios = { s1: true, s2: true, s3: true, s4: true, s5: true, s6: true };
+    const validScenario = scenarios[learnReturn.scenario] ? learnReturn.scenario : "";
+    const bar = document.createElement("div");
+    bar.id = "learnReturnBar";
+    bar.className = "max-w-3xl mx-auto mb-6 flex flex-col sm:flex-row sm:items-center gap-2 justify-between rounded-2xl border border-emerald-200 bg-emerald-50 p-3";
+    bar.innerHTML = `
+      <p class="text-xs sm:text-sm font-semibold text-emerald-800">Kamu datang dari Learn. Setelah mencoba ${appKey}, kembali untuk lanjut cerita.</p>
+      <button type="button" id="learnReturnBtn" class="bg-[#274c43] hover:bg-[#1f3d36] text-white text-xs sm:text-sm font-bold py-2.5 px-4 rounded-xl transition-colors cursor-pointer">← Kembali ke Belajar</button>
+    `;
+    modalAppContent.prepend(bar);
+    const backBtn = document.getElementById("learnReturnBtn");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.location.href = validScenario ? `learn.html?scenario=${validScenario}` : "learn.html";
+      });
+    }
+  };
+
   // 8. Global Modal App Launcher & Dismiss Functions
   window.openAppModal = (appKey) => {
     if (!appModalOverlay || !modalAppContent) return;
@@ -334,6 +375,15 @@ document.addEventListener("DOMContentLoaded", () => {
         modalAppTitle.textContent = "Buat Teks Promo WA";
       if (typeof renderPromoApp === "function") renderPromoApp(modalAppContent);
     }
+
+    renderLearnReturnBar(appKey);
+
+    // Trigger per-module tour on first visit
+    if (window.LakuTour && !window.LakuTour.isCompleted(appKey)) {
+      setTimeout(function () {
+        window.LakuTour.start(appKey);
+      }, 600);
+    }
   };
 
   window.closeAppModal = () => {
@@ -367,4 +417,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Highlight default active tab
   updateActiveNavState("home");
+
+  // Deep link handler: ?open=moduleKey → auto-open modal
+  var urlParams = new URLSearchParams(window.location.search);
+  var openKey = urlParams.get("open");
+  if (openKey) {
+    var validKeys = ["hpp", "kas", "utang", "inventory", "laba", "promo"];
+    if (validKeys.indexOf(openKey) !== -1) {
+      setTimeout(function () {
+        window.openAppModal(openKey);
+      }, 500);
+    }
+  }
 });

@@ -17,15 +17,15 @@ window.LakuHpp.saveCurrentRecipe = function () {
     document.getElementById("hppSatuanProduksi")?.value || "porsi";
 
   if (!namaProduk) {
-    alert("Isi nama produk dulu ya!");
+    window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi nama produk dulu ya!" });
     return;
   }
   if (jumlahProduksi <= 0) {
-    alert("Isi jumlah produksi dulu ya!");
+    window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi jumlah produksi dulu ya!" });
     return;
   }
   if (window.LakuHpp.ingredients.length === 0) {
-    alert("Tambahkan minimal satu bahan!");
+    window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Tambahkan minimal satu bahan!" });
     return;
   }
 
@@ -95,7 +95,7 @@ window.LakuHpp.saveCurrentRecipe = function () {
     const recipes = loadRecipes();
     const idx = recipes.findIndex((r) => r.id === window.LakuHpp.editingRecipeId);
     if (idx === -1) {
-      alert("Resep tidak ditemukan!");
+      window.showAlert({ type: "error", title: "Gagal Menyimpan", message: "Resep tidak ditemukan!" });
       return;
     }
     recipes[idx] = {
@@ -117,11 +117,11 @@ window.LakuHpp.saveCurrentRecipe = function () {
   // Visual feedback
   const simpanBtn = document.getElementById("hppSimpanResep");
   if (simpanBtn) {
-    simpanBtn.textContent = "✅ Tersimpan!";
+    simpanBtn.innerHTML = window.LakuIcons.svg("checkCircle", "1em") + " Tersimpan!";
     simpanBtn.className =
       "flex-1 bg-emerald-600 text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer";
     setTimeout(() => {
-      simpanBtn.textContent = "💾 Simpan Resep";
+      simpanBtn.innerHTML = window.LakuIcons.svg("save", "1em") + " Simpan Resep";
       simpanBtn.className =
         "flex-1 bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer";
     }, 2000);
@@ -190,7 +190,7 @@ window.LakuHpp.renderRecipeList = function () {
         </div>
         <div class="text-[11px] text-gray-400">${tgl} • ${r.jumlahProduksi} ${r.satuanProduksi} • ${r.bahanBaku?.length || 0} bahan</div>
         <div class="border-t border-gray-100 pt-2 flex items-center justify-between text-xs">
-          <span class="text-gray-500 font-medium">HPP/unit</span>
+          <span class="text-gray-500 font-medium">Modal/satuan</span>
           <span class="font-semibold text-gray-800">${window.formatRupiah(r.hppPerUnit)}</span>
         </div>
         <div class="flex items-center justify-between text-xs">

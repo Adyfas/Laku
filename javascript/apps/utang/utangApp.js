@@ -18,15 +18,15 @@ function getUtangAppUI() {
       <!-- Overview Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white shadow-xl p-5 rounded-2xl text-center">
-          <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block">Total Piutang (Tagihan Ke Orang)</span>
+          <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block">Total uang yang belum dibayar ke kamu</span>
           <span id="utangTotalPiutang" class="text-xl font-extrabold text-emerald-800 mt-1 block">Rp 0</span>
         </div>
         <div class="bg-white shadow-xl p-5 rounded-2xl text-center">
-          <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block">Total Utang (Tanggungan Saya)</span>
+          <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block">Total utang kamu yang belum dibayar</span>
           <span id="utangTotalUtang" class="text-xl font-extrabold text-rose-800 mt-1 block">Rp 0</span>
         </div>
         <div class="bg-white shadow-xl p-5 rounded-2xl text-center">
-          <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block">Jatuh Tempo Hari Ini</span>
+          <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block">Yang harus dibayar hari ini</span>
           <span id="utangTotalDueToday" class="text-xl font-extrabold text-amber-800 mt-1 block">0 Catatan</span>
         </div>
       </div>
@@ -35,7 +35,7 @@ function getUtangAppUI() {
       <div id="utangNotifBanner" class="bg-stone-50 border border-stone-200/80 p-4 rounded-2xl flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-[#274c43]"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-          <span class="text-xs text-gray-700 font-medium">Aktifkan pengingat browser agar sistem otomatis memberi pengingat saat utang jatuh tempo.</span>
+          <span class="text-xs text-gray-700 font-medium">Nyalakan pengingat di HP biar dapat notif kalau utang sudah waktunya dibayar.</span>
         </div>
         <button id="enableNotifBtn" class="bg-[#274c43] hover:bg-[#1f3d36] text-white text-xs font-bold py-2 px-4 rounded-xl transition-all shadow-xs shrink-0 cursor-pointer">
           Aktifkan Notifikasi
@@ -48,14 +48,14 @@ function getUtangAppUI() {
         <form id="utangForm" class="space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Kategori Catatan</label>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Jenis catatan</label>
               <select id="utangType" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm">
-                <option value="piutang">Piutang (Pelanggan Utang Ke Saya)</option>
-                <option value="utang">Utang (Saya Utang Ke Supplier)</option>
+                <option value="piutang">Orang utang ke saya</option>
+                <option value="utang">Saya utang ke orang</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Pihak (Pelanggan / Supplier)</label>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Nama orangnya</label>
               <input type="text" id="utangNama" placeholder="Contoh: Pak Budi / Toko Sembako Jaya" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
           </div>
@@ -66,11 +66,11 @@ function getUtangAppUI() {
               <input type="tel" id="utangWa" placeholder="Contoh: 08123456789" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Total Nominal (Rp)</label>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah uang (Rp)</label>
               <input type="text" inputmode="numeric" id="utangTotalAmount" placeholder="Contoh: 150.000" oninput="window.formatNumberInput(this)" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Tanggal Jatuh Tempo</label>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Tanggal harus dibayar</label>
               <input type="date" id="utangDueDate" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
           </div>
@@ -89,8 +89,8 @@ function getUtangAppUI() {
       <!-- Records Container -->
       <div class="bg-white border border-gray-100 shadow-xl rounded-3xl p-6 md:p-8 space-y-4">
         <div class="flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-800">Daftar Tagihan & Kas Bon</h3>
-          <span class="text-xs text-gray-400">Tersimpan otomatis di browser</span>
+          <h3 class="text-lg font-bold text-gray-800">Daftar utang & piutang</h3>
+          <span class="text-xs text-gray-400">Tersimpan otomatis di HP kamu</span>
         </div>
 
         <!-- Desktop Table View (lg:block) -->
@@ -100,9 +100,9 @@ function getUtangAppUI() {
               <tr>
                 <th class="py-3 px-4 rounded-l-xl">Tipe</th>
                 <th class="py-3 px-4">Nama & Keterangan</th>
-                <th class="py-3 px-4">Jatuh Tempo</th>
-                <th class="py-3 px-4 text-right">Sisa Tagihan</th>
-                <th class="py-3 px-4 rounded-r-xl text-center">Aksi & Bayar</th>
+                <th class="py-3 px-4">Tanggal dibayar</th>
+                <th class="py-3 px-4 text-right">Sisa belum dibayar</th>
+                <th class="py-3 px-4 rounded-r-xl text-center">Bayar / Hapus</th>
               </tr>
             </thead>
             <tbody id="utangTableBody" class="divide-y divide-gray-100">

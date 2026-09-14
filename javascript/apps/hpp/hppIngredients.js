@@ -127,7 +127,7 @@ window.LakuHpp.renderIngredients = function () {
               </div>
             </div>
             <button data-remove-ing="${ing.id}" class="text-rose-400 hover:text-rose-600 font-bold text-sm ml-3 cursor-pointer shrink-0 transition-colors" title="Hapus bahan">
-              ✕
+              ${window.LakuIcons.svg("closeCircle", "0.85em")}
             </button>
           </div>
         `;
@@ -182,9 +182,11 @@ window.LakuHpp.addIngredientFromInventory = function () {
 
   // 3. Validate: unit must be compatible
   if (qtyBase === null || qtyDisplay === null) {
-    alert(
-      `Satuan "${inputUnit}" tidak kompatibel dengan satuan stok "${displayUnit}".`
-    );
+    window.showAlert({
+      type: "error",
+      title: "Satuan Tidak Cocok",
+      message: `Satuan "${inputUnit}" tidak kompatibel dengan satuan stok "${displayUnit}".`,
+    });
     return;
   }
 
@@ -194,9 +196,11 @@ window.LakuHpp.addIngredientFromInventory = function () {
       baseUnit === displayUnit
         ? window.LakuUnits.round2(item.stok)
         : window.LakuUnits.convertUnit(item.stok, baseUnit, displayUnit);
-    alert(
-      `Stok tidak cukup!\n\n${item.nama} tersedia: ${stokDisplay} ${displayUnit}\nKamu butuh: ${qtyDisplay} ${displayUnit}`
-    );
+    window.showAlert({
+      type: "error",
+      title: "Stok Tidak Cukup",
+      message: `${item.nama} tersedia: ${stokDisplay} ${displayUnit} — Kamu butuh: ${qtyDisplay} ${displayUnit}`,
+    });
     return;
   }
 

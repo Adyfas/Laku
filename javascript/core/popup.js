@@ -3,6 +3,67 @@
  * Replaces native browser alert(), confirm(), and prompt() with custom styled UI.
  */
 
+/**
+ * showAlert — Reusable toast/inline alert (warning or error).
+ * Warning: for validation reminders (field belum diisi, data kurang, dll).
+ * Error: for fatal/unexpected problems (data hilang, operasi gagal, dll).
+ *
+ * Usage:
+ *   window.showAlert({ type: "warning", title: "Perhatian", message: "Isi nama dulu ya!" });
+ *   window.showAlert({ type: "error",   title: "Gagal",      message: "Data tidak ditemukan." });
+ */
+window.showAlert = function ({
+  type = "warning",
+  title = "",
+  message = "",
+  duration = 3500,
+}) {
+  const isWarning = type === "warning";
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[300] max-w-md w-[92%] animate-fade-in-up";
+
+  const iconSvg = isWarning
+    ? `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`
+    : `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`;
+
+  const bgClass = isWarning
+    ? "bg-amber-50 border-amber-200"
+    : "bg-rose-50 border-rose-200";
+  const iconClass = isWarning
+    ? "text-amber-600 bg-amber-100"
+    : "text-rose-600 bg-rose-100";
+  const titleClass = isWarning
+    ? "text-amber-800"
+    : "text-rose-800";
+  const msgClass = isWarning
+    ? "text-amber-700"
+    : "text-rose-700";
+
+  overlay.innerHTML = `
+    <div class="flex items-start gap-3 ${bgClass} border rounded-2xl p-4 shadow-lg backdrop-blur-sm">
+      <div class="w-9 h-9 rounded-xl ${iconClass} flex items-center justify-center shrink-0 mt-0.5">
+        ${iconSvg}
+      </div>
+      <div class="flex-1 min-w-0 space-y-0.5">
+        ${title ? `<h4 class="text-sm font-bold ${titleClass}">${title}</h4>` : ""}
+        <p class="text-sm ${msgClass} leading-relaxed">${message}</p>
+      </div>
+      <button class="shrink-0 mt-0.5 opacity-50 hover:opacity-100 transition-opacity cursor-pointer ${isWarning ? "text-amber-600" : "text-rose-600"}" onclick="this.closest('[class*=fixed]').remove()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Auto-dismiss
+  setTimeout(() => {
+    overlay.classList.add("opacity-0", "transition-opacity", "duration-300");
+    setTimeout(() => overlay.remove(), 300);
+  }, duration);
+};
+
 window.showCustomConfirm = function ({
   title = "Konfirmasi Tindakan",
   message = "Apakah Anda yakin ingin melanjutkan?",

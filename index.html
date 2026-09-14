@@ -4,7 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laku</title>
-    <link rel="stylesheet" href="./styles/output.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+        --color-green-main: #0f4c5c;
+        --color-black-main: #2a2b2f;
+        --color-white-main: #fafaf7;
+        --color-lime-main: #e2ffc8;
+        --color-backdrop: #e2ffc8;
+        --animate-fade-in-one: fade-in-one 1s ease forwards;
+        --animate-bounce-smooth: float 4s ease-in-out infinite;
+        --animate-marquee: marquee 25s linear infinite;
+        --animate-marquee-reverse: marquee-reverse 25s linear infinite;
+      }
+    </style>
+    <link rel="stylesheet" href="./css/global.css">
   </head>
   <body class="md:lined-grid-bg">
     <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
@@ -90,7 +105,7 @@
                 alt=""
                 class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
               /> -->
-              Hari Ini <span class="font-bold text-green-main text-5xl">✦</span>
+              Hari Ini <span class="font-bold text-green-main text-5xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
             <!-- </span> -->
           </h1>
             <p
@@ -309,7 +324,7 @@
                 <p
                   class="uppercase tracking-[5px] text-lime-main text-[10px] lg:text-sm font-semibold"
                 >
-                  Dokumenter <span class="font-bold text-lime-main text-xl">✦</span>
+                  Dokumenter <span class="font-bold text-lime-main text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
                 </p>
 
                 <h2
@@ -330,7 +345,7 @@
                   id="follback"
                   class="w-16 h-16 lg:w-24 lg:h-24 rounded-full border border-white/60 bg-white/10 hover:bg-white hover:text-black transition flex items-center justify-center cursor-pointer text-white-main"
                 >
-                  ▶
+                  <img src="./assets/icons/akar-icons--play.svg" alt="play" class="inline-block align-middle" style="width:1.5em;height:1.5em">
                 </button>
               </div>
 
@@ -357,7 +372,7 @@
               class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
             >
               Mengenal UMKM
-              <span class="text-lime-600 text-xl">✦</span>
+              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
             </p>
 
             <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
@@ -394,7 +409,7 @@
               class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
             >
               Tentang UMKM Indonesia
-              <span class="text-lime-600 text-xl">✦</span>
+              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
             </p>
 
             <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
@@ -482,7 +497,7 @@
               class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
             >
               LAKU Hadir
-              <span class="text-lime-600 text-xl">✦</span>
+              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
             </p>
           <h2 class="text-5xl font-bold tracking-wide">Laku membantu usaha kecil belajar, mencatat, menghitung, dan siap digital.</h2>
           <p class="my-5 ">Teman Tumbuh UMKM Indonesia
@@ -500,7 +515,7 @@ Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
       >
         <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
           Tentang Laku
-          <span class="text-lime-600 text-xl">✦</span>
+          <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
         </p>
 
         <h2 class="font-bold text-3xl lg:text-5xl my-3 text-center">
@@ -514,40 +529,45 @@ Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
 
     <!-- Call to action --> 
      <section class="w-full bg-white py-24 px-6 min-h-screen">
-        <div class="max-w-5xl mx-auto text-center">
-           <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
-          Aplikasi
-          <span class="text-lime-600 text-xl">✦</span>
-        </p>
-          <h2
-            class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight"
-          >
-            Saatnya Mengelola UMKM
-            <br />
-            Dengan Lebih Mudah
-          </h2>
-          <p
-            class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed"
-          >
-            Gunakan
-            <span class="font-semibold text-black-main">Aplikasi Laku</span>
-            untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
-            belajar lebih praktis dalam satu tempat.
-          </p>
+        <div class="max-w-5xl mx-auto center flex-col flex ">
+            <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 md:text-center text-start">
+                Aplikasi
+                <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
+            </p>
+            <h2
+                class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
+                Saatnya Mengelola UMKM
+                <br />
+                Dengan Lebih Mudah
+            </h2>
+            <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
+                Gunakan
+                <span class="font-semibold text-black-main">Aplikasi Laku</span>
+                untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
+                belajar lebih praktis dalam satu tempat.
+            </p>
 
-          <div class="flex flex-col sm:flex-row justify-center gap-4 mt-12">
-            <a
-              href="#"
-              class="bg-lime-main transition-all duration-300 text-black-main font-semibold px-10 py-4 rounded-full flex items-center group"
-            >
-              Buka Aplikasi <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform rotate-180">
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
-            </a>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
+                <div class="flex items-start relative group">
+                    <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
+                            href="app.html">Aplikasi</a></button>
+                    <button
+                        class="rounded-full p-3 text-center bg-black-main relative transform group-hover:translate-x-3 transition-all duration-450">
+                        <a href="app.html" class="text-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
+                                class="transform rotate-45">
+                                <path d="M0 0h16v16H0z" fill="none" />
+                                <path fill="white"
+                                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
+                            </svg>
+                        </a>
 
-          </div>
+                    </button>
+                </div>
+
+            </div>
         </div>
-      </section>
+    </section>
      
     <!-- End Call to action -->
 
@@ -567,7 +587,7 @@ Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
             <div class="lg:col-span-2">
                <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
                 Footer
-              <span class="text-lime-600 text-xl">✦</span>
+              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
             </p> -->
               <h2 class="text-4xl font-semibold leading-tight">
                 Bersama Laku,
@@ -622,6 +642,7 @@ Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
   //   updateCarousel();
   // }, 5000);
 </script>
+   <script src="./javascript/core/icons.js"></script>
    <script src="./javascript/pages/landingpage.js"></script>
   <script src="./javascript/core/navbar.js"></script>
   <script src="./javascript/core/animations.js"></script>

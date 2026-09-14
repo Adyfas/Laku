@@ -91,18 +91,22 @@ function toggleOnboardingVisibility() {
   const step3 = document.getElementById("hppStep3");
   const step4 = document.getElementById("hppStep4");
 
+  const recipeListSection = document.getElementById("hppRecipeListSection");
+
   if (bahanInv.length === 0) {
-    // Inventory empty → show onboarding, hide wizard
+    // Inventory empty → show onboarding, hide everything else
     if (onboarding) onboarding.classList.remove("hidden");
     if (stepIndicator) stepIndicator.classList.add("hidden");
     if (step1) step1.classList.add("hidden");
     if (step2) step2.classList.add("hidden");
     if (step3) step3.classList.add("hidden");
     if (step4) step4.classList.add("hidden");
+    if (recipeListSection) recipeListSection.classList.add("hidden");
   } else {
     // Inventory has items → hide onboarding, show wizard normally
     if (onboarding) onboarding.classList.add("hidden");
     if (stepIndicator) stepIndicator.classList.remove("hidden");
+    if (recipeListSection) recipeListSection.classList.remove("hidden");
     // Show current step
     goToStep(window.LakuHpp.currentStep);
   }
@@ -117,11 +121,19 @@ function initHppAppLogic() {
   window.LakuHpp.renderOverhead();
   window.LakuHpp.renderRecipeList();
 
-  // Check onboarding visibility
+  // Check onboarding visibility (also handles goToStep when inventory exists)
   toggleOnboardingVisibility();
 
-  // Start at step 1
-  goToStep(1);
+  // If inventory is empty, onboarding is shown — wizard stays hidden, don't goToStep
+  const inv = loadInventory();
+  const bahanInv = inv.filter(
+    (item) =>
+      item.kategori === "Bahan Baku Utama" ||
+      item.kategori === "Kemasan / Packaging"
+  );
+  if (bahanInv.length > 0) {
+    goToStep(1);
+  }
 
   // --- Event Binding ---
   const el = (id) => document.getElementById(id);
@@ -131,11 +143,11 @@ function initHppAppLogic() {
     const nama = el("hppNamaProduk")?.value.trim();
     const jumlah = parseInt(el("hppJumlahProduksi")?.value);
     if (!nama) {
-      alert("Isi nama produk dulu ya!");
+      window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi nama produk dulu ya!" });
       return;
     }
     if (!jumlah || jumlah <= 0) {
-      alert("Isi jumlah produksi dulu ya!");
+      window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi jumlah produksi dulu ya!" });
       return;
     }
     goToStep(2);
@@ -145,7 +157,7 @@ function initHppAppLogic() {
   el("hppStep2Back")?.addEventListener("click", () => goToStep(1));
   el("hppStep2Next")?.addEventListener("click", () => {
     if (window.LakuHpp.ingredients.length === 0) {
-      alert("Tambahkan minimal satu bahan ya!");
+      window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Tambahkan minimal satu bahan ya!" });
       return;
     }
     goToStep(3);
