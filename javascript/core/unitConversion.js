@@ -144,6 +144,11 @@ function formatUnitLabel(unit) {
   return map[u] || unit;
 }
 
+/** Dapatkan semua satuan hitungan (count) */
+function getCountUnits() {
+  return Object.keys(UNIT_DEFINITIONS.count.units);
+}
+
 // Expose ke window agar bisa dipakai semua app script
 window.LakuUnits = {
   UNIT_DEFINITIONS,
@@ -155,4 +160,5 @@ window.LakuUnits = {
   isUnitCompatible,
   getCompatibleUnits,
   formatUnitLabel,
+  getCountUnits,
 };

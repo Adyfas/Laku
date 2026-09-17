@@ -87,16 +87,42 @@
 }
 
 .learn-siti-frame {
+  position: relative;
   flex-shrink: 0;
   width: min(250px, 72%);
+  height: 235px;
 }
 
-.learn-siti-frame img {
+/* Base character image (BU-Siti.svg) */
+.siti-char-base {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 235px;
   object-fit: contain;
   user-select: none;
   transform-origin: 50% 90%;
+}
+
+/* Transparent overlay SVG — eyes, mouth, arms untuk animasi interaktif */
+.siti-char-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 235px;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+}
+
+.siti-char-base,
+.siti-char-overlay {
+  /* Mood animations apply to both layers together */
+  transition: filter 0.3s ease;
+}
+
+/* Hide fallback image when SVG is active */
+#learnSitiImage[class*="hidden"] {
+  display: none;
 }
 
 .learn-mood-chip {
@@ -126,29 +152,52 @@
   flex-shrink: 0;
 }
 
-/* ── Mood-based Image States ── */
+/* ── Mood-based character animations (target both img + overlay) ── */
 
-#learnStage[data-mood="happy"] #learnSitiImage,
-#learnStage[data-mood="proud"] #learnSitiImage {
+#learnStage[data-mood="happy"] .learn-siti-frame,
+#learnStage[data-mood="proud"] .learn-siti-frame,
+#learnStage[data-mood="relieved"] .learn-siti-frame {
   animation: sitiBounce 0.7s ease-in-out;
 }
 
-#learnStage[data-mood="worried"] #learnSitiImage {
+#learnStage[data-mood="worried"] .learn-siti-frame {
   filter: saturate(0.82) brightness(0.99);
   animation: sitiShake 0.55s ease-in-out;
 }
 
-#learnStage[data-mood="thinking"] #learnSitiImage {
+#learnStage[data-mood="thinking"] .learn-siti-frame {
   filter: saturate(1.05);
 }
 
-#learnStage[data-mood="relieved"] #learnSitiImage,
-#learnStage[data-mood="surprised"] #learnSitiImage {
+#learnStage[data-mood="surprised"] .learn-siti-frame {
   animation: sitiWave 1.2s ease-in-out;
+}
+
+/* ── Arm gesture animations (overlay SVG elements) ── */
+
+.siti-left-arm.waving {
+  animation: sitiWave 1.5s ease-in-out infinite;
+}
+
+.siti-right-arm.cooking {
+    animation: sitiWave 2s ease-in-out infinite;
+}
+
+/* ── Overlay eye blink fallback (CSS, when SMIL not supported) ── */
+
+.siti-eyes ellipse[ry] {
+  animation: sitiBlinkCSS 5s ease-in-out infinite;
+}
+
+@keyframes sitiBlinkCSS {
+  0%, 100% { transform: scaleY(1); }
+  4.5% { transform: scaleY(0.05); }
 }
 
 /* ── Responsive ── */
 
 @media (min-width: 1024px) {
-  .learn-siti-frame img { height: 270px; }
+  .learn-siti-frame { height: 270px; }
+  .siti-char-base,
+  .siti-char-overlay { height: 270px; }
 }

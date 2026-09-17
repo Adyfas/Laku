@@ -228,7 +228,7 @@ function getHppAppUI() {
         <!-- Margin Slider -->
         <div class="bg-stone-50 p-6 rounded-2xl space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-sm font-bold text-gray-600">Margin keuntungan</span>
+            <span class="text-sm font-bold text-gray-600">Keuntungan di atas modal (Margin)</span>
             <span id="hppMarginDisplay" class="text-2xl font-extrabold text-[#274c43]">30%</span>
           </div>
           <input type="range" id="hppMarginSlider" min="5" max="100" value="30" step="5" class="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-[#274c43]" />
@@ -237,7 +237,7 @@ function getHppAppUI() {
             <span>30% (Wajar)</span>
             <span>100% (Banyak)</span>
           </div>
-          <p class="text-xs text-gray-400">${I.svg("lightbulb", "0.9em")} Kebanyakan UMKM pakai margin 20-30%.</p>
+          <p class="text-xs text-gray-400">${I.svg("lightbulb", "0.9em")} Ini margin bersih: keuntungan di atas harga jual. Jadi jika diskon 20%, harga jual masih aman.</p>
         </div>
 
         <!-- Ringkasan -->

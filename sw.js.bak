@@ -112,19 +112,23 @@ self.addEventListener("fetch", function (event) {
   if (url.origin !== self.location.origin) return;
 
   // 3) app.html: stale-while-revalidate + ignoreSearch (dukung ?open=... / ?return=...)
-  if (url.pathname === "/app.html") {
+ if (url.pathname === "/app.html" || url.pathname === "/") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function (cache) {
-        return cache.match(req, { ignoreSearch: true }).then(function (cached) {
+        // Gunakan "/app.html" sebagai fallback cache utama
+        var cacheKey = url.pathname === "/" ? "/app.html" : req;
+
+        return cache.match(cacheKey, { ignoreSearch: true }).then(function (cached) {
           var network = fetch(req).then(function (response) {
             if (response && response.status === 200) {
+              // Selalu simpan versi terbaru ke cache "/app.html"
               cache.put("/app.html", response.clone());
             }
             return response;
           });
 
           if (cached && cached.ok) {
-            network.catch(function () {});
+            network.catch(function () {}); // abaikan error network di latar belakang
             return cached;
           }
           return network;

@@ -85,6 +85,14 @@ function getInventoryAppUI() {
             </div>
           </div>
 
+          <!-- Nesting Levels (Opsional) -->
+          <div id="invNestingSection" class="col-span-2 sm:col-span-4 space-y-2">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Isi Kemasan (Opsional)</label>
+            <p class="text-[11px] text-gray-400">Tambah jika barang punya isi di dalamnya (misal: 1 pack = 10 bungkus). Biarkan kosong jika tidak ada.</p>
+            <div id="invNestingLevels" class="space-y-2"></div>
+            <button type="button" id="invAddNestingLevel" class="text-xs text-[#274c43] font-bold cursor-pointer hover:text-[#1f3d36] transition-colors">+ Tambah Level Isi</button>
+          </div>
+
           <button type="submit" class="w-full bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-3.5 rounded-xl transition-all shadow-md text-sm cursor-pointer">
             + Simpan Barang Ke Stok
           </button>

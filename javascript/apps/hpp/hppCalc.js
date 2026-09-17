@@ -114,7 +114,7 @@ window.LakuHpp.calculateAll = function () {
     parseInt(document.getElementById("hppMarginSlider")?.value) || 30;
 
   // Harga jual
-  const hargaJual = hppPerUnit * (1 + margin / 100);
+  const hargaJual = (margin >= 100) ? Infinity : hppPerUnit / (1 - margin / 100);
   const hargaBulat = window.roundToNearest(hargaJual, 100);
 
   // Update summary displays

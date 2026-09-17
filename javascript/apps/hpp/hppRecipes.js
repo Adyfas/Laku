@@ -53,7 +53,7 @@ window.LakuHpp.saveCurrentRecipe = function () {
     jumlahProduksi > 0 ? totalBiaya / jumlahProduksi : 0;
   const margin =
     parseInt(document.getElementById("hppMarginSlider")?.value) || 30;
-  const hargaJual = hppPerUnit * (1 + margin / 100);
+  const hargaJual = (margin >= 100) ? Infinity : hppPerUnit / (1 - margin / 100);
   const hargaBulat = window.roundToNearest(hargaJual, 100);
 
   const recipe = {
@@ -68,6 +68,8 @@ window.LakuHpp.saveCurrentRecipe = function () {
       jumlahPakai: ing.jumlahPakai,
       satuan: ing.satuan,
       biayaTerhitung: ing.jumlahPakai * ing.hargaBeli,
+      // Nesting levels for auto-calculation on restore
+      ...(ing.nestedLevels ? { nestedLevels: ing.nestedLevels } : {}),
       // Conversion data (for restoring original input & stock deduct):
       ...(ing._qtyBase !== undefined ? { _qtyBase: ing._qtyBase } : {}),
       ...(ing._baseUnit ? { _baseUnit: ing._baseUnit } : {}),
@@ -262,6 +264,8 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
       hargaBeli: ing.hargaBeli,
       jumlahPakai: ing.jumlahPakai,
       satuan: ing.satuan || "unit",
+      // Restore nesting levels for auto-calculation
+      ...(ing.nestedLevels ? { nestedLevels: ing.nestedLevels } : {}),
     };
     if (ing._inputQty !== undefined && ing._inputUnit) {
       restored._inputQty = ing._inputQty;

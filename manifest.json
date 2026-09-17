@@ -3,7 +3,7 @@
   "short_name": "Laku",
   "description": "Aplikasi kelola usaha UMKM: catat keuangan, hitung modal, stok barang, dan promo.",
   "start_url": "/app.html",
-  "scope": "/app.html",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fafaf7",

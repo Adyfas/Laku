@@ -2,11 +2,31 @@
  * hppIngredients.js — Ingredient management for HPP Kalkulator
  * Handles populating the inventory dropdown, rendering ingredient cards,
  * and adding ingredients from stock with unit conversion.
+ * Supports nested packaging levels (e.g., pack → bungkus → pcs).
  *
  * All functions attach to window.LakuHpp namespace.
  * Uses window.formatRupiah() from appUtils.js (no local formatRupiah).
  * Removed: addManualIngredient() (cepat mode deleted).
  */
+
+/** Helper: get cumulative isi from nestedLevels */
+function getCumulativeIsi(item) {
+  if (!item.nestedLevels || item.nestedLevels.length === 0) return 1;
+  return item.nestedLevels.reduce((prod, level) => prod * (level.isi || 1), 1);
+}
+
+/** Helper: get innermost unit from nestedLevels */
+function getInnermostUnit(item) {
+  if (!item.nestedLevels || item.nestedLevels.length === 0) return item.displayUnit || item.satuan || "pcs";
+  const last = item.nestedLevels[item.nestedLevels.length - 1];
+  return last.unit;
+}
+
+/** Helper: get innermost unit label */
+function getInnermostUnitLabel(item) {
+  const unit = getInnermostUnit(item);
+  return window.LakuUnits.formatUnitLabel(unit);
+}
 
 /** Populate inventory dropdown, toggle empty state, update unit selector */
 window.LakuHpp.refreshIngredientUI = function () {
@@ -14,6 +34,7 @@ window.LakuHpp.refreshIngredientUI = function () {
   const addArea = document.getElementById("hppAddIngredientArea");
   const step2Desc = document.getElementById("hppStep2Desc");
   const select = document.getElementById("hppInventorySelect");
+  const unitLabel = document.getElementById("hppJumlahPakaiUnitLabel");
 
   // Always show inventory mode UI (cepat mode removed)
   if (step2Desc) step2Desc.textContent = "Pilih bahan dari stok yang sudah kamu catat.";
@@ -50,7 +71,14 @@ window.LakuHpp.refreshIngredientUI = function () {
                 ) ?? item.stok
               )
             : item.stok;
-          select.innerHTML += `<option value="${item.id}">${item.nama} — ${window.formatRupiah(item.harga)}/${displayUnit} (Stok: ${stokDisplay} ${displayUnit})</option>`;
+          // Show nesting info in dropdown if present
+          let nestedText = "";
+          if (item.nestedLevels && item.nestedLevels.length > 0) {
+            const innermostLabel = getInnermostUnitLabel(item);
+            const cumulativeIsi = getCumulativeIsi(item);
+            nestedText = ` (1 ${displayUnit} = ${cumulativeIsi} ${innermostLabel})`;
+          }
+          select.innerHTML += `<option value="${item.id}">${item.nama} — ${window.formatRupiah(item.harga)}/${displayUnit} (Stok: ${stokDisplay} ${displayUnit})${nestedText}</option>`;
         }
       });
 
@@ -63,23 +91,38 @@ window.LakuHpp.refreshIngredientUI = function () {
         if (!selId) {
           unitSel.innerHTML = '<option value="">—</option>';
           unitSel.disabled = true;
+          if (unitLabel) unitLabel.textContent = "Satuan";
           return;
         }
         const selItem = bahanInv.find((it) => it.id === selId);
         if (!selItem) {
           unitSel.innerHTML = '<option value="">—</option>';
           unitSel.disabled = true;
+          if (unitLabel) unitLabel.textContent = "Satuan";
           return;
         }
-        const displayUnit = selItem.displayUnit || selItem.satuan || "pcs";
-        const compatible = window.LakuUnits.getCompatibleUnits(displayUnit);
-        unitSel.disabled = false;
-        unitSel.innerHTML = compatible
-          .map(
-            (u) =>
-              `<option value="${u}" ${u === displayUnit ? "selected" : ""}>${window.LakuUnits.formatUnitLabel(u)}</option>`
-          )
-          .join("");
+
+        // Check if item has nested levels
+        if (selItem.nestedLevels && selItem.nestedLevels.length > 0) {
+          // For nested items, only allow innermost unit
+          const innermostUnit = getInnermostUnit(selItem);
+          const innermostLabel = getInnermostUnitLabel(selItem);
+          unitSel.innerHTML = `<option value="${innermostUnit}" selected>${innermostLabel}</option>`;
+          unitSel.disabled = true; // User can't change unit for nested items
+          if (unitLabel) unitLabel.textContent = `Jumlah ${innermostLabel}`;
+        } else {
+          // Normal item: show compatible units
+          const displayUnit = selItem.displayUnit || selItem.satuan || "pcs";
+          const compatible = window.LakuUnits.getCompatibleUnits(displayUnit);
+          unitSel.disabled = false;
+          unitSel.innerHTML = compatible
+            .map(
+              (u) =>
+                `<option value="${u}" ${u === displayUnit ? "selected" : ""}>${window.LakuUnits.formatUnitLabel(u)}</option>`
+            )
+            .join("");
+          if (unitLabel) unitLabel.textContent = "Satuan";
+        }
       };
 
       // Remove old handler before adding new one
@@ -165,58 +208,100 @@ window.LakuHpp.addIngredientFromInventory = function () {
   const item = inv.find((i) => i.id === invId);
   if (!item) return;
 
-  const displayUnit = item.displayUnit || item.satuan || "pcs";
-  const baseUnit = item.baseUnit || window.LakuUnits.getBaseUnit(displayUnit) || displayUnit;
+  // Check if item has nested levels
+  if (item.nestedLevels && item.nestedLevels.length > 0) {
+    // Nested item: price is per outermost unit, calculate per innermost unit
+    const cumulativeIsi = getCumulativeIsi(item);
+    const innermostUnit = getInnermostUnit(item);
+    const innermostLabel = getInnermostUnitLabel(item);
 
-  // 1. Convert user input → baseUnit (for stock check & deduct)
-  const qtyBase =
-    inputUnit === baseUnit
-      ? window.LakuUnits.round2(jumlah)
-      : window.LakuUnits.convertUnit(jumlah, inputUnit, baseUnit);
+    // User inputs quantity in innermost unit
+    const qtyDisplay = window.LakuUnits.round2(jumlah);
+    const hargaBeli = window.LakuUnits.round2(item.harga / cumulativeIsi);
 
-  // 2. Convert user input → displayUnit (for price calculation per displayUnit)
-  const qtyDisplay =
-    inputUnit === displayUnit
-      ? window.LakuUnits.round2(jumlah)
-      : window.LakuUnits.convertUnit(jumlah, inputUnit, displayUnit);
+    // For nested items, stok is stored in innermost units (total innermost available)
+    // User inputs in innermost unit, so direct comparison
+    if (qtyDisplay > item.stok) {
+      window.showAlert({
+        type: "error",
+        title: "Stok Tidak Cukup",
+        message: `${item.nama} tersedia: ${item.stok} ${innermostLabel} — Kamu butuh: ${qtyDisplay} ${innermostLabel}`,
+      });
+      return;
+    }
 
-  // 3. Validate: unit must be compatible
-  if (qtyBase === null || qtyDisplay === null) {
-    window.showAlert({
-      type: "error",
-      title: "Satuan Tidak Cocok",
-      message: `Satuan "${inputUnit}" tidak kompatibel dengan satuan stok "${displayUnit}".`,
+    // For stock deduction later: qty in innermost units = qtyDisplay
+    const qtyBase = qtyDisplay;
+
+    window.LakuHpp.ingredients.push({
+      id: nextUid(),
+      inventoryId: item.id,
+      nama: item.nama,
+      hargaBeli, // per innermost unit
+      jumlahPakai: qtyDisplay, // dalam innermost unit
+      satuan: innermostUnit,
+      nestedLevels: item.nestedLevels, // save for recipe storage
+      // Internal data for stock deduct & conversion during edit:
+      _qtyBase: qtyBase,
+      _baseUnit: innermostUnit,
+      _inputQty: jumlah,
+      _inputUnit: inputUnit,
     });
-    return;
-  }
+  } else {
+    // Normal item (no nesting)
+    const displayUnit = item.displayUnit || item.satuan || "pcs";
+    const baseUnit = item.baseUnit || window.LakuUnits.getBaseUnit(displayUnit) || displayUnit;
 
-  // 4. Validate stock sufficient (compare base vs base)
-  if (qtyBase > item.stok) {
-    const stokDisplay =
-      baseUnit === displayUnit
-        ? window.LakuUnits.round2(item.stok)
-        : window.LakuUnits.convertUnit(item.stok, baseUnit, displayUnit);
-    window.showAlert({
-      type: "error",
-      title: "Stok Tidak Cukup",
-      message: `${item.nama} tersedia: ${stokDisplay} ${displayUnit} — Kamu butuh: ${qtyDisplay} ${displayUnit}`,
+    // 1. Convert user input → baseUnit (for stock check & deduct)
+    const qtyBase =
+      inputUnit === baseUnit
+        ? window.LakuUnits.round2(jumlah)
+        : window.LakuUnits.convertUnit(jumlah, inputUnit, baseUnit);
+
+    // 2. Convert user input → displayUnit (for price calculation per displayUnit)
+    const qtyDisplay =
+      inputUnit === displayUnit
+        ? window.LakuUnits.round2(jumlah)
+        : window.LakuUnits.convertUnit(jumlah, inputUnit, displayUnit);
+
+    // 3. Validate: unit must be compatible
+    if (qtyBase === null || qtyDisplay === null) {
+      window.showAlert({
+        type: "error",
+        title: "Satuan Tidak Cocok",
+        message: `Satuan "${inputUnit}" tidak kompatibel dengan satuan stok "${displayUnit}".`,
+      });
+      return;
+    }
+
+    // 4. Validate stock sufficient (compare base vs base)
+    if (qtyBase > item.stok) {
+      const stokDisplay =
+        baseUnit === displayUnit
+          ? window.LakuUnits.round2(item.stok)
+          : window.LakuUnits.convertUnit(item.stok, baseUnit, displayUnit);
+      window.showAlert({
+        type: "error",
+        title: "Stok Tidak Cukup",
+        message: `${item.nama} tersedia: ${stokDisplay} ${displayUnit} — Kamu butuh: ${qtyDisplay} ${displayUnit}`,
+      });
+      return;
+    }
+
+    window.LakuHpp.ingredients.push({
+      id: nextUid(),
+      inventoryId: item.id,
+      nama: item.nama,
+      hargaBeli: item.harga, // per displayUnit
+      jumlahPakai: qtyDisplay, // dalam displayUnit (match with price)
+      satuan: displayUnit,
+      // Internal data for stock deduct & conversion during edit:
+      _qtyBase: qtyBase,
+      _baseUnit: baseUnit,
+      _inputQty: jumlah,
+      _inputUnit: inputUnit,
     });
-    return;
   }
-
-  window.LakuHpp.ingredients.push({
-    id: nextUid(),
-    inventoryId: item.id,
-    nama: item.nama,
-    hargaBeli: item.harga, // per displayUnit
-    jumlahPakai: qtyDisplay, // dalam displayUnit (match with price)
-    satuan: displayUnit,
-    // Internal data for stock deduct & conversion during edit:
-    _qtyBase: qtyBase,
-    _baseUnit: baseUnit,
-    _inputQty: jumlah,
-    _inputUnit: inputUnit,
-  });
 
   select.value = "";
   jumlahInput.value = "";

@@ -40,7 +40,9 @@
     </div>
 
     <nav data-delay="0.2" data-direction="down" data-once="true" id="navbar"
-      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in">
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
+    <!-- <nav data-delay="0.2" data-direction="down" data-once="true" id="navbar"
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
       <div class="h-[72px] flex items-center justify-between px-[22px]">
         <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
           LAKU
@@ -516,7 +518,7 @@
         <button type="button" onclick="window.closeAppModal()"
           class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center transition-colors cursor-pointer text-lg"
           aria-label="Tutup Aplikasi">
-          <img src="./assets/icons/ant-design--close-circle-filled.svg" alt="close" class="inline-block align-middle" style="width:1.1em;height:1.1em">
+          <span data-laku-icon="closeCircle" data-laku-icon-size="1.1em"></span>
         </button>
       </div>
 
@@ -620,44 +622,6 @@
   <script src="./javascript/core/app.js"></script>
   <script src="./javascript/core/navbar.js"></script>
   <script src="./javascript/core/animations.js"></script>
-
-  <!-- PWA: Service Worker Registration + Install Prompt -->
-  <script>
-    (function () {
-      // Register Service Worker
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js").catch(function () { });
-      }
-
-      // Install Prompt
-      var deferredPrompt = null;
-      var installBtn = document.getElementById("installAppBtn");
-
-      window.addEventListener("beforeinstallprompt", function (e) {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.classList.remove("hidden");
-      });
-
-      if (installBtn) {
-        installBtn.addEventListener("click", function () {
-          if (!deferredPrompt) return;
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then(function (choiceResult) {
-            if (choiceResult.outcome === "accepted") {
-              installBtn.classList.add("hidden");
-            }
-            deferredPrompt = null;
-          });
-        });
-      }
-
-      window.addEventListener("appinstalled", function () {
-        if (installBtn) installBtn.classList.add("hidden");
-        deferredPrompt = null;
-      });
-    })();
-  </script>
 </body>
 
 </html>

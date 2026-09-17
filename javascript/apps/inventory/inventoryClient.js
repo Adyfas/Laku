@@ -60,6 +60,97 @@ function initInventoryAppLogic() {
     localStorage.setItem(INV_STORAGE_KEY, JSON.stringify(data));
   };
 
+  /** Render nesting levels fields in the form */
+  const renderNestingFields = (levels = []) => {
+    const container = document.getElementById("invNestingLevels");
+    const addBtn = document.getElementById("invAddNestingLevel");
+    if (!container || !addBtn) return;
+
+    const countUnits = window.LakuUnits.getCountUnits ? window.LakuUnits.getCountUnits() : ["pcs", "bungkus", "pack", "botol", "roll", "lembar", "dosin", "lusin"];
+
+    const createLevelRow = (unit = "", isi = "") => {
+      const row = document.createElement("div");
+      row.className = "nesting-row flex gap-2 items-center";
+      row.innerHTML = `
+        <select class="nesting-unit w-1/2 bg-[#f5f5f5] text-black-main font-medium py-2 px-3 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required>
+          <option value="">— Pilih Satuan —</option>
+          ${countUnits.map(u => `<option value="${u}" ${u === unit ? "selected" : ""}>${window.LakuUnits.formatUnitLabel(u)}</option>`).join("")}
+        </select>
+        <input type="number" class="nesting-isi w-1/2 bg-[#f5f5f5] text-black-main font-medium py-2 px-3 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" placeholder="Isi (angka)" min="1" value="${isi}" required />
+        <button type="button" class="remove-nesting text-rose-400 hover:text-rose-600 font-bold text-sm cursor-pointer" title="Hapus level">${window.LakuIcons.svg("closeCircle", "0.9em")}</button>
+      `;
+      row.querySelector(".remove-nesting").addEventListener("click", () => {
+        row.remove();
+      });
+      return row;
+    };
+
+    // Render existing levels
+    levels.forEach(l => container.appendChild(createLevelRow(l.unit, l.isi)));
+
+    // Add level button
+    addBtn.addEventListener("click", () => {
+      container.appendChild(createLevelRow());
+    });
+  };
+
+  // Form Submit Handler — tambah barang baru ke inventaris
+  const form = document.getElementById("inventoryForm");
+  if (form) {
+    // Initialize nesting fields (empty for new items)
+    renderNestingFields([]);
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nama = document.getElementById("invNama").value.trim();
+      const kategori = document.getElementById("invKategori").value;
+      const harga = window.getRawNumber(document.getElementById("invHarga"));
+      const stok = parseInt(document.getElementById("invStok").value) || 0;
+      const minStok = parseInt(document.getElementById("invMinStok").value) || 0;
+
+      if (!nama || harga < 0 || stok < 0) return;
+
+      const satuan = document.getElementById("invSatuan")?.value || "pcs";
+
+      // Collect nesting levels
+      const nestedLevels = [];
+      document.querySelectorAll("#invNestingLevels .nesting-row").forEach(row => {
+        const unit = row.querySelector(".nesting-unit").value;
+        const isi = parseInt(row.querySelector(".nesting-isi").value);
+        if (unit && isi && isi > 0) nestedLevels.push({ unit, isi });
+      });
+
+      // Calculate cumulative isi for stock conversion
+      const cumulativeIsi = nestedLevels.length > 0
+        ? nestedLevels.reduce((prod, l) => prod * (l.isi || 1), 1)
+        : 1;
+
+      const newItem = {
+        id: Date.now(),
+        nama,
+        kategori,
+        satuan, // kompatibilitas: sama dengan displayUnit
+        displayUnit: satuan,
+        baseUnit: U.getBaseUnit(satuan) || satuan,
+        harga,
+        // If nested, user enters stok in outermost unit; convert to base by multiplying with cumulativeIsi
+        stok: toBase(stok * cumulativeIsi, satuan),       // simpan dalam satuan dasar
+        minStok: toBase(minStok * cumulativeIsi, satuan), // simpan dalam satuan dasar
+        ...(nestedLevels.length > 0 ? { nestedLevels } : {}),
+      };
+
+      const currentData = loadInventoryData();
+      currentData.unshift(newItem);
+      saveInventoryData(currentData);
+
+      form.reset();
+      // Reset nesting fields
+      const container = document.getElementById("invNestingLevels");
+      if (container) container.innerHTML = "";
+      renderTable();
+    });
+  }
+
   /** Render seluruh tabel desktop & kartu mobile, serta update overview cards */
   const renderTable = () => {
     const data = loadInventoryData();
@@ -98,8 +189,13 @@ function initInventoryAppLogic() {
 
         // Nilai display: konversi dari baseUnit → displayUnit
         const displayUnit = item.displayUnit || item.satuan || "pcs";
-        const stokDisplay = formatQty(fromBase(item.stok, displayUnit));
-        const minDisplay = formatQty(fromBase(item.minStok, displayUnit));
+        
+        // For nested items, stok is stored in innermost units; convert to outermost for display
+        const cumulativeIsi = item.nestedLevels && item.nestedLevels.length > 0
+          ? item.nestedLevels.reduce((prod, l) => prod * (l.isi || 1), 1)
+          : 1;
+        const stokDisplay = formatQty(item.stok / cumulativeIsi);
+        const minDisplay = formatQty(item.minStok / cumulativeIsi);
 
         if (isKosong) emptyStockCount++;
         else if (isTipis) lowStockCount++;
@@ -113,12 +209,18 @@ function initInventoryAppLogic() {
           statusBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Aman</span>`;
         }
 
+        // Nesting info for display
+        const nestingInfo = item.nestedLevels && item.nestedLevels.length > 0
+          ? item.nestedLevels.map(l => `1 ${window.LakuUnits.formatUnitLabel(l.unit)} = ${l.isi} ${window.LakuUnits.formatUnitLabel(l.unit)}`).join(" → ")
+          : null;
+
         // Desktop Table Row
         desktopHtml += `
           <tr class="hover:bg-stone-50/80 transition-colors">
             <td class="py-3.5 px-4">
               <div class="font-bold text-gray-800">${item.nama}</div>
               <div class="text-[11px] text-gray-400">Stok aman di atas: ${minDisplay} ${displayUnit}</div>
+              ${nestingInfo ? `<div class="text-[11px] text-indigo-600 font-medium mt-1">Isi: ${nestingInfo}</div>` : ""}
             </td>
             <td class="py-3.5 px-4 text-xs font-medium text-gray-600">${item.kategori}</td>
             <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${window.formatRupiah(item.harga)}</td>
@@ -151,6 +253,7 @@ function initInventoryAppLogic() {
             <div>
               <h4 class="text-base font-bold text-gray-900">${item.nama}</h4>
               <p class="text-[11px] text-gray-400">Stok aman di atas: ${minDisplay} ${displayUnit}</p>
+              ${nestingInfo ? `<p class="text-[11px] text-indigo-600 font-medium mt-1">Isi: ${nestingInfo}</p>` : ""}
             </div>
 
             <div class="border-t border-gray-100 pt-2 space-y-2 text-xs">
@@ -200,7 +303,11 @@ function initInventoryAppLogic() {
         if (!item) return;
 
         const displayUnit = item.displayUnit || item.satuan || "pcs";
-        const stepBase = toBase(Math.abs(change), displayUnit) || 1;
+        // For nested items, 1 displayUnit = cumulativeIsi base units
+        const cumulativeIsi = item.nestedLevels && item.nestedLevels.length > 0
+          ? item.nestedLevels.reduce((prod, l) => prod * (l.isi || 1), 1)
+          : 1;
+        const stepBase = (toBase(Math.abs(change), displayUnit) || 1) * cumulativeIsi;
         item.stok = Math.max(0, U.round2(item.stok + Math.sign(change) * stepBase));
         saveInventoryData(currentData);
         renderTable();
@@ -226,42 +333,6 @@ function initInventoryAppLogic() {
           renderTable();
         }
       });
-    });
-  };
-
-  // Form Submit Handler — tambah barang baru ke inventaris
-  const form = document.getElementById("inventoryForm");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nama = document.getElementById("invNama").value.trim();
-      const kategori = document.getElementById("invKategori").value;
-      const harga = window.getRawNumber(document.getElementById("invHarga"));
-      const stok = parseInt(document.getElementById("invStok").value) || 0;
-      const minStok = parseInt(document.getElementById("invMinStok").value) || 0;
-
-      if (!nama || harga < 0 || stok < 0) return;
-
-      const satuan = document.getElementById("invSatuan")?.value || "pcs";
-
-      const newItem = {
-        id: Date.now(),
-        nama,
-        kategori,
-        satuan, // kompatibilitas: sama dengan displayUnit
-        displayUnit: satuan,
-        baseUnit: U.getBaseUnit(satuan) || satuan,
-        harga,
-        stok: toBase(stok, satuan),       // simpan dalam satuan dasar
-        minStok: toBase(minStok, satuan), // simpan dalam satuan dasar
-      };
-
-      const currentData = loadInventoryData();
-      currentData.unshift(newItem);
-      saveInventoryData(currentData);
-
-      form.reset();
-      renderTable();
     });
   }
 

@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   navbarItemsSection.innerHTML = `
   ${navbarItemsSectionMapping}
   <div class="mt-2 pt-1 nav-link">
-    <a href="./learn.html" class="rounded-2xl py-3 px-5 bg-lime-main hover:bg-lime-200 transition-all duration-300 text-black-main font-semibold w-full flex items-center justify-between gap-4 text-base no-underline cursor-pointer shadow-xs">
+    <a href="./app.html" class="rounded-2xl py-3 px-5 bg-lime-main hover:bg-lime-200 transition-all duration-300 text-black-main font-semibold w-full flex items-center justify-between gap-4 text-base no-underline cursor-pointer shadow-xs">
       <span>Aplikasi</span> 
       <svg
         xmlns="http://www.w3.org/2000/svg"

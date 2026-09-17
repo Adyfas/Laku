@@ -1,12 +1,21 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laku</title>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laku</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#274c43">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
         --color-clifford: #da373d;
         --color-green-main: #0f4c5c;
         --color-black-main: #2a2b2f;
@@ -19,463 +28,355 @@
         --animate-marquee-reverse: marquee-reverse 25s linear infinite;
       }
     </style>
-    <link rel="stylesheet" href="./css/global.css">
-  </head>
-  <body class="md:lined-grid-bg">
-    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
-     <!-- Navbar -->
-       <div
-         id="nav-overlay"
-         class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450"
-       ></div>
- 
-       <nav
-         data-delay="0.9"
-         data-direction="down"
-         id="navbar"
-         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"
-       >
-           <div class="h-[72px] flex items-center justify-between px-[22px]">
-           <a
-             href="/"
-             class="text-xl font-bold tracking-[3px] text-black-main no-underline"
-           >
-             LAKU
-           </a>
- 
-           <button
-             id="nav-menu-btn"
-             class="relative w-[42px] h-[42px] cursor-pointer"
-             aria-label="Toggle menu"
-             aria-expanded="false"
-           >
-             <span
-               class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-             <span
-               class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-             <span
-               class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-           </button>
-         </div>
-         <div
-           id="nav-content"
-           class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10"
-         >
-              <div class="flex flex-col gap-[18px]" id="items-nav">
+  <link rel="stylesheet" href="./css/global.css">
+</head>
 
-              </div>
-              <div class="flex flex-col justify-between">
+<body class="md:lined-grid-bg">
+  <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
+    <!-- Navbar -->
+    <div id="nav-overlay"
+      class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450">
+    </div>
+
+    <nav data-delay="0.9" data-direction="down" id="navbar"
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
+    <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
+      <div class="h-[72px] flex items-center justify-between px-[22px]">
+        <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
+          LAKU
+        </a>
+
+        <button id="nav-menu-btn" class="relative w-[42px] h-[42px] cursor-pointer" aria-label="Toggle menu"
+          aria-expanded="false">
+          <span class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+          <span class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+          <span class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+        </button>
+      </div>
+      <div id="nav-content" class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10">
+        <div class="flex flex-col gap-[18px]" id="items-nav">
+
+        </div>
+        <div class="flex flex-col justify-between">
           <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
             <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
-              <source src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" type="video/mp4" />
+              <source
+                src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov"
+                type="video/mp4" />
             </video>
             <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
             <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
-              <a
-                href="./learn.html"
-                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform"
-                >Mulai Belajar →</a
-              >
+              <a href="./learn.html"
+                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform">Mulai
+                Belajar →</a>
             </div>
           </div>
-          </div>
-       </nav>
-       <!-- End Navbar -->
-      <!-- Intro page -->
-      <section
-        class="relative flex flex-col items-center justify-center w-full min-h-screen p-6 pb-20 mt-26"
-      >
-        <div class="lg:p-6 p-2 flex flex-col items-center justify-center">
-          <!-- Text intro -->
-          <div class="text-center">
-        <h1
-            class="text-4xl text-center lg:text-6xl font-extrabold leading-tight fade-in"
-            data-once="true"
-          >
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <!-- Intro page -->
+    <section class="relative flex flex-col items-center justify-center w-full min-h-screen p-6 pb-20 mt-26">
+      <div class="lg:p-6 p-2 flex flex-col items-center justify-center">
+        <!-- Text intro -->
+        <div class="text-center">
+          <h1 class="text-4xl text-center lg:text-6xl font-extrabold leading-tight fade-in" data-once="true">
             Masa Depan
             <span class="text-green-main">UMKM</span>
             Dimulai
 
             <!-- <span class="relative inline-block p-4.5 right-5"> -->
-              <!-- <a
+            <!-- <a
                 src="./assets/images/green-main.png"
                 alt=""
                 class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
               /> -->
-              Hari Ini <span class="font-bold text-green-main text-5xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
+            Hari Ini <span class="font-bold text-green-main text-5xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
             <!-- </span> -->
           </h1>
-            <p
-              class="text-lg lg:text-xl text-gray-500 mt-6 max-w-3xl mx-auto fade-in"
-              data-once="true"
-            >
-              Belajar, kelola, dan kembangkan usahamu dalam satu platform.
-            </p>
-          </div>
+          <p class="text-lg lg:text-xl text-gray-500 mt-6 max-w-3xl mx-auto fade-in" data-once="true">
+            Belajar, kelola, dan kembangkan usahamu dalam satu platform.
+          </p>
+        </div>
 
-          <!-- buttons -->
-          <div class="flex gap-5 mt-10">
+        <!-- buttons -->
+        <div class="flex gap-5 mt-10">
+          <a href="/app">
             <button
-              class="bg-green-main text-white-main px-10 py-4 rounded-full font-semibold hover:bg-green-main/90 transition-all duration-300 cursor-pointer fade-in"
-              data-direction="down"
-              data-once="true"
-            >
+              class="bg-green-main text-white-main w-[150px]  px-10 py-4 rounded-full font-semibold hover:bg-green-main/90 transition-all duration-300 cursor-pointer fade-in"
+              data-direction="down" data-once="true">
+
               Mulai
             </button>
+          </a>
+          <a href="/learn">
             <button
-              class="border border-gray-300 px-10 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 cursor-pointer fade-in"
-              data-direction="down"
-              data-once="true"
-            >
-              Aplikasi
+              class="border border-gray-300 px-10 w-[150px] py-4 rounded-full hover:bg-gray-100 transition-all duration-300 cursor-pointer fade-in"
+              data-direction="down" data-once="true">
+              Belajar
             </button>
-          </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Info box -->
+      <div class="items-end gap-2 lg:flex hidden mt-10">
+        <div class="w-65 h-96 rounded-3xl overflow-hidden shadow-lg fade-in" data-once="true">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcctgCW2wjGkiZ9G-nUbnUoCH1Xn2Z2HVJbX_tZO8GTQ&s=10"
+            class="w-full h-full object-cover" />
+        </div>
+        <div class="bg-[#123B43] text-white rounded-3xl p-8 w-45 h-64 flex flex-col justify-end fade-in"
+          data-once="true">
+          <h2 class="text-3xl font-bold text-count" data-from="0" data-to="66" data-suffix="Jt+" data-duration="10"
+            data-once="true"></h2>
+          <p class="mt-3">UMKM Indonesia</p>
+        </div>
+        <div class="bg-white rounded-3xl shadow-lg p-8 w-45 h-52 fade-in flex items-center justify-end flex-col"
+          data-once="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"
+            class="absolute top-10 right-4 opacity-20">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path fill="currentColor"
+              d="M8.1 21.213q-1.825-.788-3.175-2.138T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22t-3.9-.788m9.575-3.537Q20 15.35 20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20t5.675-2.325M7.75 16.25Q6 14.5 6 12t1.75-4.25T12 6t4.25 1.75T18 12t-1.75 4.25T12 18t-4.25-1.75m7.075-1.425Q16 13.65 16 12t-1.175-2.825T12 8T9.175 9.175T8 12t1.175 2.825T12 16t2.825-1.175m-4.237-1.412Q10 12.825 10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14t-1.412-.587" />
+          </svg>
+
+          <!-- <p class="text-gray-500">Target UMKM Digitalisasi</p> -->
+          <h2 class="text-3xl font-bold mt-3 text-count" data-from="0" data-to="40" data-duration="8" data-suffix="Jt"
+            data-once="true"></h2>
+          <p class="text-green-500 mt-4">Target UMKM Digitalisasi</p>
+        </div>
+        <div class="bg-lime-200 rounded-3xl p-8 w-45 h-72 flex flex-col justify-center items-center fade-in"
+          data-once="true">
+          <h2 class="text-3xl font-bold text-count" data-from="0" data-to="27" data-duration="8" data-suffix="Jt+"
+            data-once="true"></h2>
+          <p class="text-center mt-3">UMKM Digitalisasi</p>
+        </div>
+        <div class="bg-[#123B43] text-white rounded-3xl p-8 w-64 h-96 flex items-end fade-in flex-col justify-end"
+          data-once="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 14 14"
+            class="relative bottom-15 opacity-20">
+            <path d="M0 0h14v14H0z" fill="none" />
+            <path fill="white" fill-rule="evenodd"
+              d="M7.94.66c-.32-.877-1.56-.877-1.88 0L4.62 4.62L.66 6.06c-.877.32-.877 1.56 0 1.88l3.96 1.44l1.44 3.96c.32.877 1.56.877 1.88 0l1.44-3.96l3.96-1.44c.877-.32.877-1.56 0-1.88L9.38 4.62z"
+              clip-rule="evenodd" />
+          </svg>
+
+          <p class="text-3xl leading-relaxed">
+            Solusi Digital untuk UMKM Indonesia
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- section mobile -->
+    <section
+      class="min-h-screen lg:hidden flex items-center flex-col px-6 py-20 w-full xl:hidden bg-lime-main rounded-t-4xl">
+      <!-- Mobile -->
+      <div class="lg:hidden w-full mt-10">
+        <div class="border-b border-black/20 py-10">
+          <h2 class="text-4xl font-bold text-black-main text-count" data-from="0" data-to="66" data-suffix="Jt+"
+            data-duration="10" data-once="true"></h2>
+
+          <h3 class="mt-6 text-2xl font-semibold text-black-main">
+            UMKM Indonesia
+          </h3>
+
+          <p class="mt-3 text-black-main/70 leading-relaxed">
+            Diperkirakan terdapat lebih dari 66 juta UMKM yang menjadi tulang
+            punggung perekonomian Indonesia.
+          </p>
         </div>
 
-        <!-- Info box -->
-        <div class="items-end gap-2 lg:flex hidden mt-10">
-          <div
-            class="w-65 h-96 rounded-3xl overflow-hidden shadow-lg fade-in"
-            data-once="true"
-          >
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcctgCW2wjGkiZ9G-nUbnUoCH1Xn2Z2HVJbX_tZO8GTQ&s=10"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div
-            class="bg-[#123B43] text-white rounded-3xl p-8 w-45 h-64 flex flex-col justify-end fade-in"
-            data-once="true"
-          >
-            <h2
-              class="text-3xl font-bold text-count"
-              data-from="0"
-              data-to="66"
-              data-suffix="Jt+"
-              data-duration="10"
-              data-once="true"
-            ></h2>
-            <p class="mt-3">UMKM Indonesia</p>
-          </div>
-          <div
-            class="bg-white rounded-3xl shadow-lg p-8 w-45 h-52 fade-in flex items-center justify-end flex-col"
-            data-once="true"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2em"
-              height="2em"
-              viewBox="0 0 24 24"
-              class="absolute top-10 right-4 opacity-20"
-            >
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path
-                fill="currentColor"
-                d="M8.1 21.213q-1.825-.788-3.175-2.138T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22t-3.9-.788m9.575-3.537Q20 15.35 20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20t5.675-2.325M7.75 16.25Q6 14.5 6 12t1.75-4.25T12 6t4.25 1.75T18 12t-1.75 4.25T12 18t-4.25-1.75m7.075-1.425Q16 13.65 16 12t-1.175-2.825T12 8T9.175 9.175T8 12t1.175 2.825T12 16t2.825-1.175m-4.237-1.412Q10 12.825 10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14t-1.412-.587"
-              />
-            </svg>
+        <div class="border-b border-black/20 py-10">
+          <h2 class="text-4xl font-bold text-black-main text-count" data-from="0" data-to="40" data-suffix="Jt"
+            data-duration="8" data-once="true"></h2>
 
-            <!-- <p class="text-gray-500">Target UMKM Digitalisasi</p> -->
-            <h2
-              class="text-3xl font-bold mt-3 text-count"
-              data-from="0"
-              data-to="40"
-              data-duration="8"
-              data-suffix="Jt"
-              data-once="true"
-            ></h2>
-            <p class="text-green-500 mt-4">Target UMKM Digitalisasi</p>
-          </div>
-          <div
-            class="bg-lime-200 rounded-3xl p-8 w-45 h-72 flex flex-col justify-center items-center fade-in"
-            data-once="true"
-          >
-            <h2
-              class="text-3xl font-bold text-count"
-              data-from="0"
-              data-to="27"
-              data-duration="8"
-              data-suffix="Jt+"
-              data-once="true"
-            ></h2>
-            <p class="text-center mt-3">UMKM Digitalisasi</p>
-          </div>
-          <div
-            class="bg-[#123B43] text-white rounded-3xl p-8 w-64 h-96 flex items-end fade-in flex-col justify-end"
-            data-once="true"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2em"
-              height="2em"
-              viewBox="0 0 14 14"
-              class="relative bottom-15 opacity-20"
-            >
-              <path d="M0 0h14v14H0z" fill="none" />
-              <path
-                fill="white"
-                fill-rule="evenodd"
-                d="M7.94.66c-.32-.877-1.56-.877-1.88 0L4.62 4.62L.66 6.06c-.877.32-.877 1.56 0 1.88l3.96 1.44l1.44 3.96c.32.877 1.56.877 1.88 0l1.44-3.96l3.96-1.44c.877-.32.877-1.56 0-1.88L9.38 4.62z"
-                clip-rule="evenodd"
-              />
-            </svg>
+          <h3 class="mt-6 text-2xl font-semibold text-black-main">
+            Target Digitalisasi
+          </h3>
 
-            <p class="text-3xl leading-relaxed">
-              Solusi Digital untuk UMKM Indonesia
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- section mobile -->
-      <section
-        class="min-h-screen lg:hidden flex items-center flex-col px-6 py-20 w-full xl:hidden bg-lime-main rounded-t-4xl"
-      >
-        <!-- Mobile -->
-        <div class="lg:hidden w-full mt-10">
-          <div class="border-b border-black/20 py-10">
-            <h2
-              class="text-4xl font-bold text-black-main text-count"
-              data-from="0"
-              data-to="66"
-              data-suffix="Jt+"
-              data-duration="10"
-              data-once="true"
-            ></h2>
-
-            <h3 class="mt-6 text-2xl font-semibold text-black-main">
-              UMKM Indonesia
-            </h3>
-
-            <p class="mt-3 text-black-main/70 leading-relaxed">
-              Diperkirakan terdapat lebih dari 66 juta UMKM yang menjadi tulang
-              punggung perekonomian Indonesia.
-            </p>
-          </div>
-
-          <div class="border-b border-black/20 py-10">
-            <h2
-              class="text-4xl font-bold text-black-main text-count"
-              data-from="0"
-              data-to="40"
-              data-suffix="Jt"
-              data-duration="8"
-              data-once="true"
-            ></h2>
-
-            <h3 class="mt-6 text-2xl font-semibold text-black-main">
-              Target Digitalisasi
-            </h3>
-
-            <p class="mt-3 text-black-main/70 leading-relaxed">
-              Pemerintah menargetkan sekitar 40 juta UMKM telah memanfaatkan
-              teknologi digital pada tahun 2026.
-            </p>
-          </div>
-
-          <div class="py-10">
-            <h2
-              class="text-4xl font-bold text-black-main text-count"
-              data-from="0"
-              data-to="27"
-              data-suffix="Jt+"
-              data-duration="8"
-              data-once="true"
-            ></h2>
-
-            <h3 class="mt-6 text-2xl font-semibold text-black-main">
-              UMKM Digital
-            </h3>
-
-            <p class="mt-3 text-black-main/70 leading-relaxed">
-              Jutaan UMKM telah mulai bertransformasi ke ranah digital untuk
-              memperluas pasar dan meningkatkan daya saing.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Video -->
-      <section
-        class="min-h-screen flex items-center justify-center flex-col px-6 py-20 w-full"
-      >
-        <div
-          class="relative w-full aspect-video rounded-3xl overflow-hidden group"
-          id="followBtn"
-        >
-          <video id="video" class="w-full h-full object-cover" playsinline>
-            <source src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" />
-          </video>
-          <div id="thumbnail" class="absolute inset-0 z-20 cursor-pointer">
-            <img
-              src="https://www.pnm.co.id/files/uploads/resourcefile/attachment/2026/Apr/07/69d4ad55eac2d/apa-itu-umkm-1.webp"
-              class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-            />
-            <div
-              class="absolute inset-0 bg-linear-to-t from-black via-black/30 to-black/40"
-            ></div>
-            <div
-              class="absolute inset-0 flex flex-col justify-between p-5 lg:p-10"
-            >
-              <div>
-                <p
-                  class="uppercase tracking-[5px] text-lime-main text-[10px] lg:text-sm font-semibold"
-                >
-                  Dokumenter <span class="font-bold text-lime-main text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
-                </p>
-
-                <h2
-                  class="mt-2 text-white font-bold leading-tight text-2xl lg:text-5xl"
-                >
-                  UMKM Indonesia
-                </h2>
-
-                <p
-                  class="mt-3 text-white/80 text-xs lg:text-lg max-w-lg leading-relaxed"
-                >
-                  Cerita perjuangan para pelaku usaha dalam membangun bisnis dan
-                  bertahan di era digital.
-                </p>
-              </div>
-              <div class="flex justify-center">
-                <button
-                  id="follback"
-                  class="w-16 h-16 lg:w-24 lg:h-24 rounded-full border border-white/60 bg-white/10 hover:bg-white hover:text-black transition flex items-center justify-center cursor-pointer text-white-main"
-                >
-                  <img src="./assets/icons/akar-icons--play.svg" alt="play" class="inline-block align-middle" style="width:1.5em;height:1.5em">
-                </button>
-              </div>
-
-              <div class="flex justify-between items-center">
-                <span
-                  class="text-white tracking-[5px] font-bold text-sm lg:text-xl"
-                >
-                  LAKU
-                </span>
-                <span class="text-white/70 text-xs lg:text-sm"> 03:25 </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-       <!-- Apa itu UMKM -->
-
-      <section class="w-full px-6 py-24">
-        <div class="max-w-7xl mx-auto">
-          <!-- Heading -->
-          <div class="max-w-4xl mb-20">
-            <p
-              class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
-            >
-              Mengenal UMKM
-              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
-            </p>
-
-            <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
-              Apa Itu UMKM
-            </h2>
-
-            <p class="mt-6 text-lg text-gray-500 leading-relaxed">
-              <span class="text-green-main text-xl">Usaha Mikro, Kecil, dan Menengah (UMKM)</span> adalah usaha yang dijalankan oleh masyarakat, mulai dari pedagang kaki lima, warung makan, toko kelontong, hingga usaha lokal yang berkembang menjadi perusahaan. Jumlahnya mencapai puluhan juta dan menjadi penggerak utama perekonomian Indonesia.
-            </p>
-
-            <p class="mt-6 text-lg text-gray-500 leading-relaxed">
-            Di balik setiap warung, kedai kopi, penjahit, pengrajin, atau toko online lokal, terdapat pelaku UMKM yang terus berinovasi untuk memenuhi kebutuhan masyarakat. Mereka bukan hanya menciptakan produk, tetapi juga membuka lapangan pekerjaan dan menggerakkan ekonomi di berbagai daerah.
-            </p>
-          </div>
+          <p class="mt-3 text-black-main/70 leading-relaxed">
+            Pemerintah menargetkan sekitar 40 juta UMKM telah memanfaatkan
+            teknologi digital pada tahun 2026.
+          </p>
         </div>
 
-        <div id="UMKMAboutSection" class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-10">
-         
+        <div class="py-10">
+          <h2 class="text-4xl font-bold text-black-main text-count" data-from="0" data-to="27" data-suffix="Jt+"
+            data-duration="8" data-once="true"></h2>
+
+          <h3 class="mt-6 text-2xl font-semibold text-black-main">
+            UMKM Digital
+          </h3>
+
+          <p class="mt-3 text-black-main/70 leading-relaxed">
+            Jutaan UMKM telah mulai bertransformasi ke ranah digital untuk
+            memperluas pasar dan meningkatkan daya saing.
+          </p>
         </div>
-      </section>
+      </div>
+    </section>
 
-
-
-            
-    
-
-     
-
-        <section class="w-full px-6 py-24">
-        <div class="max-w-7xl mx-auto">
-          <!-- Heading -->
-          <div class="max-w-4xl mb-20">
-            <p
-              class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
-            >
-              Tentang UMKM Indonesia
-              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
-            </p>
-
-            <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
-              UMKM Indonesia Memiliki Potensi Besar untuk Terus Berkembang
-            </h2>
-
-            <p class="mt-6 text-lg text-gray-500 leading-relaxed">
-              UMKM menjadi tulang punggung perekonomian Indonesia dengan jutaan
-              pelaku usaha yang tersebar di seluruh daerah. Namun masih banyak
-              tantangan dalam pengelolaan usaha, literasi keuangan, hingga
-              pemanfaatan teknologi digital.
-            </p>
-          </div>
-
-          <!-- ROW 1 -->
-          <div class="grid lg:grid-cols-2 gap-14 items-center mb-24">
-            <!-- Text -->
+    <!-- Video -->
+    <section class="min-h-screen flex items-center justify-center flex-col px-6 py-20 w-full">
+      <div class="relative w-full aspect-video rounded-3xl overflow-hidden group" id="followBtn">
+        <video id="video" class="w-full h-full object-cover" playsinline>
+          <source
+            src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" />
+        </video>
+        <div id="thumbnail" class="absolute inset-0 z-20 cursor-pointer">
+          <img
+            src="https://www.pnm.co.id/files/uploads/resourcefile/attachment/2026/Apr/07/69d4ad55eac2d/apa-itu-umkm-1.webp"
+            class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-linear-to-t from-black via-black/30 to-black/40"></div>
+          <div class="absolute inset-0 flex flex-col justify-between p-5 lg:p-10">
             <div>
-              <h3 class="text-4xl lg:text-5xl font-bold leading-tight">
-                Potensi yang Sangat Besar
-              </h3>
+              <p class="uppercase tracking-[5px] text-lime-main text-[10px] lg:text-sm font-semibold">
+                Dokumenter <span class="font-bold text-lime-main text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+              </p>
 
-              <p class="mt-6 text-gray-600 leading-8 text-lg">
-                Meski begitu, masih banyak pelaku UMKM yang menghadapi tantangan
-                dalam pengelolaan usaha, pencatatan keuangan, penetapan harga
-                jual, serta pemanfaatan teknologi digital untuk mengembangkan
-                bisnis secara lebih profesional. Kurangnya literasi digital juga
-                membuat sebagian UMKM belum sepenuhnya siap memanfaatkan peluang
-                di era teknologi saat ini.
+              <h2 class="mt-2 text-white font-bold leading-tight text-2xl lg:text-5xl">
+                UMKM Indonesia
+              </h2>
+
+              <p class="mt-3 text-white/80 text-xs lg:text-lg max-w-lg leading-relaxed">
+                Cerita perjuangan para pelaku usaha dalam membangun bisnis dan
+                bertahan di era digital.
               </p>
             </div>
+            <div class="flex justify-center">
+              <button id="follback"
+                class="w-16 h-16 lg:w-24 lg:h-24 rounded-full border border-white/60 bg-white/10 hover:bg-white hover:text-black transition flex items-center justify-center cursor-pointer text-white-main">
+                <span data-laku-icon="play" data-laku-icon-size="1.5em"></span>
+              </button>
+            </div>
 
-            <!-- Image -->
-            <div>
-              <img
-                src="https://ap-south-1.linodeobjects.com/emitennews-02/uploads/news/image_1643477361.jpg?25119ab"
-                class="w-full h-[520px] rounded-[32px] object-cover shadow-2xl"
-              />
+            <div class="flex justify-between items-center">
+              <span class="text-white tracking-[5px] font-bold text-sm lg:text-xl">
+                LAKU
+              </span>
+              <span class="text-white/70 text-xs lg:text-sm"> 03:25 </span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- ROW 2 -->
-          <div class="grid lg:grid-cols-2 gap-14 items-center">
-            <!-- Image -->
-            <div class="order-2 lg:order-1">
-              <img
-                src="https://ukmindonesia.id/uploads/assets/cover_image/ee389f4409dca5fabaaf0ad105406799.jpg"
-                class="w-full h-[520px] rounded-[32px] object-cover shadow-2xl"
-              />
-            </div>
+    <!-- Apa itu UMKM -->
 
-            <!-- Text -->
-            <div class="order-1 lg:order-2">
-              <!-- <p class="uppercase tracking-[4px] text-lime-600 font-semibold">
+    <section class="w-full px-6 py-24">
+      <div class="max-w-7xl mx-auto">
+        <!-- Heading -->
+        <div class="max-w-4xl mb-20">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+            Mengenal UMKM
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+
+          <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
+            Apa Itu UMKM
+          </h2>
+
+          <p class="mt-6 text-lg text-gray-500 leading-relaxed">
+            <span class="text-green-main text-xl">Usaha Mikro, Kecil, dan Menengah (UMKM)</span> adalah usaha yang
+            dijalankan oleh masyarakat, mulai dari pedagang kaki lima, warung makan, toko kelontong, hingga usaha lokal
+            yang berkembang menjadi perusahaan. Jumlahnya mencapai puluhan juta dan menjadi penggerak utama perekonomian
+            Indonesia.
+          </p>
+
+          <p class="mt-6 text-lg text-gray-500 leading-relaxed">
+            Di balik setiap warung, kedai kopi, penjahit, pengrajin, atau toko online lokal, terdapat pelaku UMKM yang
+            terus berinovasi untuk memenuhi kebutuhan masyarakat. Mereka bukan hanya menciptakan produk, tetapi juga
+            membuka lapangan pekerjaan dan menggerakkan ekonomi di berbagai daerah.
+          </p>
+        </div>
+      </div>
+
+      <div id="UMKMAboutSection" class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-10">
+
+      </div>
+    </section>
+
+
+
+
+
+
+
+
+    <section class="w-full px-6 py-24">
+      <div class="max-w-7xl mx-auto">
+        <!-- Heading -->
+        <div class="max-w-4xl mb-20">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+            Tentang UMKM Indonesia
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+
+          <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
+            UMKM Indonesia Memiliki Potensi Besar untuk Terus Berkembang
+          </h2>
+
+          <p class="mt-6 text-lg text-gray-500 leading-relaxed">
+            UMKM menjadi tulang punggung perekonomian Indonesia dengan jutaan
+            pelaku usaha yang tersebar di seluruh daerah. Namun masih banyak
+            tantangan dalam pengelolaan usaha, literasi keuangan, hingga
+            pemanfaatan teknologi digital.
+          </p>
+        </div>
+
+        <!-- ROW 1 -->
+        <div class="grid lg:grid-cols-2 gap-14 items-center mb-24">
+          <!-- Text -->
+          <div>
+            <h3 class="text-4xl lg:text-5xl font-bold leading-tight">
+              Potensi yang Sangat Besar
+            </h3>
+
+            <p class="mt-6 text-gray-600 leading-8 text-lg">
+              Meski begitu, masih banyak pelaku UMKM yang menghadapi tantangan
+              dalam pengelolaan usaha, pencatatan keuangan, penetapan harga
+              jual, serta pemanfaatan teknologi digital untuk mengembangkan
+              bisnis secara lebih profesional. Kurangnya literasi digital juga
+              membuat sebagian UMKM belum sepenuhnya siap memanfaatkan peluang
+              di era teknologi saat ini.
+            </p>
+          </div>
+
+          <!-- Image -->
+          <div>
+            <img src="https://ap-south-1.linodeobjects.com/emitennews-02/uploads/news/image_1643477361.jpg?25119ab"
+              class="w-full h-[520px] rounded-[32px] object-cover shadow-2xl" />
+          </div>
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+          <!-- Image -->
+          <div class="order-2 lg:order-1">
+            <img src="https://ukmindonesia.id/uploads/assets/cover_image/ee389f4409dca5fabaaf0ad105406799.jpg"
+              class="w-full h-[520px] rounded-[32px] object-cover shadow-2xl" />
+          </div>
+
+          <!-- Text -->
+          <div class="order-1 lg:order-2">
+            <!-- <p class="uppercase tracking-[4px] text-lime-600 font-semibold">
                 Solusi Laku
               </p> -->
 
-              <h3 class="mt-3 text-4xl lg:text-5xl font-bold leading-tight">
-                Usaha Berjalan, Tapi Sulit Bertumbuh
-              </h3>
+            <h3 class="mt-3 text-4xl lg:text-5xl font-bold leading-tight">
+              Usaha Berjalan, Tapi Sulit Bertumbuh
+            </h3>
 
-              <p class="mt-6 text-gray-600 leading-8 text-lg">
-                Tanpa pencatatan yang rapi, pelaku UMKM sulit mengetahui apakah usahanya benar-benar untung atau hanya terlihat ramai. Harga jual yang belum dihitung dengan tepat juga dapat membuat keuntungan tidak sesuai dengan biaya yang dikeluarkan. Di sisi lain, rendahnya literasi digital membuat peluang promosi, pembelajaran, dan pengelolaan usaha secara modern belum dimanfaatkan secara maksimal.
-              </p>
+            <p class="mt-6 text-gray-600 leading-8 text-lg">
+              Tanpa pencatatan yang rapi, pelaku UMKM sulit mengetahui apakah usahanya benar-benar untung atau hanya
+              terlihat ramai. Harga jual yang belum dihitung dengan tepat juga dapat membuat keuntungan tidak sesuai
+              dengan biaya yang dikeluarkan. Di sisi lain, rendahnya literasi digital membuat peluang promosi,
+              pembelajaran, dan pengelolaan usaha secara modern belum dimanfaatkan secara maksimal.
+            </p>
 
-              <!-- <div class="mt-8 flex flex-wrap gap-4">
+            <!-- <div class="mt-8 flex flex-wrap gap-4">
                 <div class="rounded-2xl bg-lime-100 px-5 py-4">
                   <h4 class="font-bold text-2xl">6+</h4>
                   <p class="text-gray-600">Fitur Edukasi</p>
@@ -486,155 +387,145 @@
                   <p class="text-gray-600">Gratis Dipelajari</p>
                 </div>
               </div> -->
-            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="my-10 justify-center flex flex-col items-center px-6 py-20 w-full">
-        <div class="text-center lg:w-[80%] w-full">
-          <p
-              class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
-            >
-              LAKU Hadir
-              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
-            </p>
-          <h2 class="text-5xl font-bold tracking-wide">Laku membantu usaha kecil belajar, mencatat, menghitung, dan siap digital.</h2>
-          <p class="my-5 ">Teman Tumbuh UMKM Indonesia
-Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
-        </div>
-
-      </section>
-
-
-
-
-
-      <section
-        class="min-h-screen flex flex-col items-center px-6 py-20 w-full"
-      >
+    <section class="my-10 justify-center flex flex-col items-center px-6 py-20 w-full">
+      <div class="text-center lg:w-[80%] w-full">
         <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
-          Tentang Laku
-          <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
+          LAKU Hadir
+          <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+        </p>
+        <h2 class="text-5xl font-bold tracking-wide">Laku membantu usaha kecil belajar, mencatat, menghitung, dan siap
+          digital.</h2>
+        <p class="my-5 ">Teman Tumbuh UMKM Indonesia
+          Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
+      </div>
+
+    </section>
+
+
+
+
+
+    <section class="min-h-screen flex flex-col items-center px-6 py-20 w-full">
+      <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+        Tentang Laku
+        <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+      </p>
+
+      <h2 class="font-bold text-3xl lg:text-5xl my-3 text-center">
+        Apa yang bisa kamu lakukan di Laku
+      </h2>
+      <div id="aboutSection" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-5 my-5"></div>
+    </section>
+
+    <!-- Call to action -->
+    <section class="w-full bg-white py-24 px-6 min-h-screen">
+      <div class="max-w-5xl mx-auto center flex-col flex ">
+        <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 md:text-center text-start">
+          Aplikasi
+          <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+        </p>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
+          Saatnya Mengelola UMKM
+          <br />
+          Dengan Lebih Mudah
+        </h2>
+        <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
+          Gunakan
+          <span class="font-semibold text-black-main">Aplikasi Laku</span>
+          untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
+          belajar lebih praktis dalam satu tempat.
         </p>
 
-        <h2 class="font-bold text-3xl lg:text-5xl my-3 text-center">
-          Apa yang bisa kamu lakukan di Laku
-        </h2>
-        <div
-          id="aboutSection"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-5 my-5"
-        ></div>
-      </section>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
+          <div class="flex items-start relative group">
+            <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
+                href="app.html">Aplikasi</a></button>
+            <button
+              class="rounded-full p-3 text-center bg-black-main relative transform group-hover:translate-x-3 transition-all duration-450">
+              <a href="app.html" class="text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
+                  class="transform rotate-45">
+                  <path d="M0 0h16v16H0z" fill="none" />
+                  <path fill="white"
+                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
+                </svg>
+              </a>
 
-    <!-- Call to action --> 
-     <section class="w-full bg-white py-24 px-6 min-h-screen">
-        <div class="max-w-5xl mx-auto center flex-col flex ">
-            <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 md:text-center text-start">
-                Aplikasi
-                <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
-            </p>
-            <h2
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
-                Saatnya Mengelola UMKM
-                <br />
-                Dengan Lebih Mudah
-            </h2>
-            <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
-                Gunakan
-                <span class="font-semibold text-black-main">Aplikasi Laku</span>
-                untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
-                belajar lebih praktis dalam satu tempat.
-            </p>
+            </button>
+          </div>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
-                <div class="flex items-start relative group">
-                    <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
-                            href="app.html">Aplikasi</a></button>
-                    <button
-                        class="rounded-full p-3 text-center bg-black-main relative transform group-hover:translate-x-3 transition-all duration-450">
-                        <a href="app.html" class="text-xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
-                                class="transform rotate-45">
-                                <path d="M0 0h16v16H0z" fill="none" />
-                                <path fill="white"
-                                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
-                            </svg>
-                        </a>
-
-                    </button>
-                </div>
-
-            </div>
         </div>
+      </div>
     </section>
-     
+
     <!-- End Call to action -->
 
 
-<!-- Footer  -->
-     <footer
-        class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen"
-      >
-        <div
-          class="absolute -left-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]"
-        ></div>
-        <div
-          class="absolute -right-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]"
-        ></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-            <div class="lg:col-span-2">
-               <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+    <!-- Footer  -->
+    <footer class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen">
+      <div
+        class="absolute -left-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
+      </div>
+      <div
+        class="absolute -right-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          <div class="lg:col-span-2">
+            <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
                 Footer
-              <span class="text-lime-600 text-xl"><img src="./assets/icons/boxicons--sparkle.svg" alt="sparkle" class="inline-block align-middle" style="width:1.25em;height:1.25em"></span>
+              <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
             </p> -->
-              <h2 class="text-4xl font-semibold leading-tight">
-                Bersama Laku,
-                <br />
-                UMKM Tumbuh
-                <br />
-                Lebih Mudah.
-              </h2>
-              <div class="mt-12 text-sm text-black-main/60 space-y-3">
-                <p>© Copyright 2026 Laku.</p>
-              </div>
-            </div>
-            <div>
-              <h3 class="font-semibold mb-5">Menu</h3>
-              <ul class="space-y-3 text-black-main/60">
-                <li><a href="#">Beranda</a></li>
-                <li><a href="#">Tentang</a></li>
-                <li><a href="#">Belajar</a></li>
-                <li><a href="#">Kontak</a></li>
-              </ul>
-            </div>
-            <!-- Product -->
-            <div>
-              <h3 class="font-semibold mb-5">Aplikasi</h3>
-              <ul class="space-y-3 text-black-main/60">
-                <li><a href="#">Aplikasi Laku</a></li>
-                <li><a href="#">Edukasi</a></li>
-              </ul>
-            </div>
-            <div>
+            <h2 class="text-4xl font-semibold leading-tight">
+              Bersama Laku,
+              <br />
+              UMKM Tumbuh
+              <br />
+              Lebih Mudah.
+            </h2>
+            <div class="mt-12 text-sm text-black-main/60 space-y-3">
+              <p>© Copyright 2026 Laku.</p>
             </div>
           </div>
+          <div>
+            <h3 class="font-semibold mb-5">Menu</h3>
+            <ul class="space-y-3 text-black-main/60">
+              <li><a href="./index.html">Beranda</a></li>
+              <li><a href="./about.html">Tentang</a></li>
+              <li><a href="./learn.html">Belajar</a></li>
+              <li><a href="./kontak.html">Kontak</a></li>
+            </ul>
+          </div>
+          <!-- Product -->
+          <div>
+            <h3 class="font-semibold mb-5">Aplikasi</h3>
+            <ul class="space-y-3 text-black-main/60">
+              <li><a href="./app.html">Aplikasi Laku</a></li>
+              <li><a href="./learn.html">Edukasi</a></li>
+            </ul>
+          </div>
+          <div>
+          </div>
         </div>
-        <h2
-          class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none"
-        >
-          Laku
-        </h2>
-      </footer>
-<!-- ENd Footer  -->
-  </body>
+      </div>
+      <h2
+        class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+        Laku
+      </h2>
+    </footer>
+    <!-- ENd Footer  -->
+</body>
 
-   </div>
+</div>
 
 
 <script>
-  
+
 
   // Auto play (optional)
   // setInterval(() => {
@@ -642,8 +533,9 @@ Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
   //   updateCarousel();
   // }, 5000);
 </script>
-   <script src="./javascript/core/icons.js"></script>
-   <script src="./javascript/pages/landingpage.js"></script>
-  <script src="./javascript/core/navbar.js"></script>
-  <script src="./javascript/core/animations.js"></script>
+<script src="./javascript/core/icons.js"></script>
+<script src="./javascript/pages/landingpage.js"></script>
+<script src="./javascript/core/navbar.js"></script>
+<script src="./javascript/core/animations.js"></script>
+
 </html>

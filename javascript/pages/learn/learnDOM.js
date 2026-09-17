@@ -33,7 +33,9 @@
         I.dom.stage = document.getElementById("learnStage");
         I.dom.sitiFigure = document.getElementById("learnSitiFigure");
         I.dom.sitiImage = document.getElementById("learnSitiImage");
-        I.dom.sitiSvgObj = document.getElementById("learnSitiObject");
+        /* SVG character parts — populated when inline SVG is present */
+        I.dom.svgRoot = document.getElementById("buSitiSvg");
+        I.dom.mouthPath = I.dom.svgRoot ? I.dom.svgRoot.querySelector("#sitiMouthPath") : null;
         I.dom.moodLabel = document.getElementById("learnMood");
         I.dom.speaker = document.getElementById("learnSpeaker");
         I.dom.bubble = document.getElementById("learnBubbleChat");
@@ -60,20 +62,25 @@
 
     function setMood(mood) {
         var value = D.MOOD_LABELS[mood] ? mood : "neutral";
-        if (I.dom.stage) I.dom.stage.setAttribute("data-mood", value);
-        if (I.dom.sitiImage) {
-            I.dom.sitiImage.classList.remove("siti-wave", "siti-bounce", "siti-shake");
-            void I.dom.sitiImage.offsetWidth;
-            if (value === "happy" || value === "proud") I.dom.sitiImage.classList.add("siti-bounce");
-            if (value === "worried") I.dom.sitiImage.classList.add("siti-shake");
+        if (I.dom.stage) {
+            // Remove + re-add data-mood to force CSS animation replay
+            // (handles consecutive same-mood dialogue calls)
+            I.dom.stage.removeAttribute("data-mood");
+            void I.dom.stage.offsetWidth;
+            I.dom.stage.setAttribute("data-mood", value);
         }
         if (I.dom.moodLabel) {
             var ICONS = window.LakuLearnIcons;
             I.dom.moodLabel.innerHTML = ICONS.svg("happy", "1em") + " " + D.MOOD_LABELS[value];
         }
-        // SVG character mood updates
-        var svg = document.getElementById("buSitiSvg");
+        // SVG karakter mood updates — mulut, lengan, dan steam
+        var svg = I.dom.svgRoot || document.getElementById("buSitiSvg");
         if (svg) {
+            // Mouth — ganti path 'd' attribute per mood (CSS tidak bisa animasi SVG path d)
+            var mouthPath = I.dom.mouthPath || svg.querySelector("#sitiMouthPath");
+            if (mouthPath && D.MOOD_MOUTH_PATHS && D.MOOD_MOUTH_PATHS[value]) {
+                mouthPath.setAttribute("d", D.MOOD_MOUTH_PATHS[value]);
+            }
             svg.classList.remove("mouth-happy", "mouth-worried", "mouth-thinking", "mouth-surprised", "mouth-proud");
             if (value === "happy" || value === "relieved") svg.classList.add("mouth-happy");
             else if (value === "worried") svg.classList.add("mouth-worried");
@@ -97,6 +104,9 @@
             } else {
                 if (rightArm) rightArm.classList.add("cooking");
             }
+            // Steam kelapa (hanya muncul saat cooking/thinking — S3 Hitung Modal)
+            var steam = svg.querySelector("#sitiSteam");
+            if (steam) steam.setAttribute("opacity", value === "thinking" || value === "surprised" ? 0.6 : 0);
         }
     }
 

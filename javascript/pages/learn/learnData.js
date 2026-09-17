@@ -27,15 +27,30 @@
         { id: "daftar-pelanggan", text: "Sudah punya daftar pelanggan atau langganan?", app: "Utang Piutang" },
         { id: "nib", text: "Sudah tahu tentang NIB untuk usaha?", app: "Informasi usaha" }
     ];
-    var MOOD_LABELS = {
-        neutral: "Tenang",
-        worried: "Khawatir",
-        thinking: "Berpikir",
-        happy: "Senang",
-        relieved: "Lega",
-        proud: "Bangga",
-        surprised: "Terkejut"
-    };
+var MOOD_LABELS = {
+    neutral: "Tenang",
+    worried: "Khawatir",
+    thinking: "Berpikir",
+    happy: "Senang",
+    relieved: "Lega",
+    proud: "Bangga",
+    surprised: "Terkejut"
+};
+
+/* ── SVG Mouth path data per mood ──
+ * Digunakan oleh learnDOM.js setMood() untuk mengganti 'd' attribute
+ * pada #sitiMouthPath (overlay SVG) agar ekspresi wajah Bu Siti berubah.
+ * Koordinat dalam sistem 1108×1585 (match BU-Siti.svg viewBox).
+ */
+var MOOD_MOUTH_PATHS = {
+    neutral:   "M460 700 Q500 710 540 700",
+    happy:     "M460 700 Q500 740 540 700",
+    proud:     "M460 700 Q500 735 540 700",
+    relieved:  "M460 700 Q500 725 540 700",
+    worried:   "M460 710 Q500 695 540 710",
+    thinking:  "M460 708 Q500 718 540 708",
+    surprised: "M490 710 a8 6 0 1 0 18 0 a8 6 0 1 0 -18 0"
+};
     var SCENARIOS = [
 // SCENARIO S1
 {
@@ -791,8 +806,9 @@
         SCENARIO_ORDER: SCENARIO_ORDER,
         READINESS_ITEMS: READINESS_ITEMS,
         MOOD_LABELS: MOOD_LABELS,
-        SCENARIOS: SCENARIOS,
-        getScenario: getScenario,
-        createEmptyScenarioRecord: createEmptyScenarioRecord
+    SCENARIOS: SCENARIOS,
+    MOOD_MOUTH_PATHS: MOOD_MOUTH_PATHS,
+    getScenario: getScenario,
+    createEmptyScenarioRecord: createEmptyScenarioRecord
     };
 })();
