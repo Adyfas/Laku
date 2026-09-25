@@ -34,20 +34,39 @@ let aboutSectionRaw = [
 
 let UMKMCardSection = [
   {
-    icon: "warung",
-    title: "Usaha Mikro",
-    desc: "Bisnis kecil perorangan atau keluarga. Contohnya warung, PKL, dan usaha rumahan.",
+    title: "Catatan masih di kepala.",
+    desc: "Pencatatan tidak tertulis membuat arus kas sulit dipantau dan rentan lupa.",
+    icon: "landingOpenBook",
   },
   {
-    icon: "shoppingBag",
-    title: "Usaha Kecil",
-    desc: "Sudah memiliki tempat tetap dan karyawan. Contohnya kafe, butik, dan bengkel.",
+    title: "Stok habis saat pelanggan mencari.",
+    desc: "Persediaan barang tidak terpantau sehingga terlambat stok ulang dan kehilangan pembeli.",
+    icon: "pencil",
   },
   {
-    icon: "landingFactory",
-    title: "Usaha Menengah",
-    desc: "Operasional besar dengan jangkauan pasar luas. Contohnya pabrik, konveksi, dan distributor.",
+    title: "arga jual dibuat kira-kira",
+    desc: "Penetapan harga tanpa hitungan modal yang tepat berisiko memicu kerugian.",
+    icon: "landingBrain",
   },
+  // {
+  //   title: "Uang usaha bercampur dengan uang pribadi.",
+  //   sub: "Keuangan bisnis yang tak terpisah membuat modal terpakai untuk kebutuhan harian.",
+  // },
+  // {
+  //   icon: "warung",
+  //   title: "Usaha Mikro",
+  //   desc: "Bisnis kecil perorangan atau keluarga. Contohnya warung, PKL, dan usaha rumahan.",
+  // },
+  // {
+  //   icon: "shoppingBag",
+  //   title: "Usaha Kecil",
+  //   desc: "Sudah memiliki tempat tetap dan karyawan. Contohnya kafe, butik, dan bengkel.",
+  // },
+  // {
+  //   icon: "landingFactory",
+  //   title: "Usaha Menengah",
+  //   desc: "Operasional besar dengan jangkauan pasar luas. Contohnya pabrik, konveksi, dan distributor.",
+  // },
 ];
 
 // Variabel Document

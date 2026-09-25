@@ -15,7 +15,7 @@
     url("../font/Manrope-VariableFont_wght.ttf") format("truetype");
   font-weight: 200 800;
   font-style: normal;
-}
+}x3
 
 * {
   font-family: Manrope;
@@ -24,38 +24,79 @@
 /* ── Keyframes ── */
 
 @keyframes fade-in-one {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleUp {
-  0% { opacity: 0; transform: scale(0.95); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ── Utility Classes ── */
@@ -90,12 +131,15 @@ button {
   height: 72px;
   transition:
     width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    height 0.55s cubic-bezier(0.22, 1, 0.36, 1); 
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 #navbar.open {
   width: 720px;
-  height: 350px;
+  height: 430px;
+  max-height: calc(100vh - 50px);
 }
 
 #nav-overlay.show {
@@ -103,16 +147,26 @@ button {
   pointer-events: auto !important;
 }
 
-.nav-bar-1 { top: 15px; }
-.nav-bar-2 { top: 20px; }
-.nav-bar-3 { top: 25px; }
+.nav-bar-1 {
+  top: 15px;
+}
+
+.nav-bar-2 {
+  top: 20px;
+}
+
+.nav-bar-3 {
+  top: 25px;
+}
 
 #navbar.open .nav-bar-1 {
   top: 20px;
   transform: rotate(45deg);
 }
 
-#navbar.open .nav-bar-2 { opacity: 0; }
+#navbar.open .nav-bar-2 {
+  opacity: 0;
+}
 
 #navbar.open .nav-bar-3 {
   top: 20px;
@@ -133,6 +187,7 @@ button {
   transform: translateY(0);
   transition-delay: 0.25s;
   pointer-events: auto;
+  max-height: calc(100vh - 120px);
 }
 
 .nav-link {
@@ -149,11 +204,31 @@ button {
   opacity: 1;
 }
 
-#navbar.open .nav-link:nth-child(1) { transition-delay: 0.30s; }
-#navbar.open .nav-link:nth-child(2) { transition-delay: 0.36s; }
-#navbar.open .nav-link:nth-child(3) { transition-delay: 0.42s; }
-#navbar.open .nav-link:nth-child(4) { transition-delay: 0.48s; }
-#navbar.open .nav-link:nth-child(5) { transition-delay: 0.54s; }
+#navbar.open .nav-link:nth-child(1) {
+  transition-delay: 0.30s;
+}
+
+#navbar.open .nav-link:nth-child(2) {
+  transition-delay: 0.36s;
+}
+
+#navbar.open .nav-link:nth-child(3) {
+  transition-delay: 0.42s;
+}
+
+#navbar.open .nav-link:nth-child(4) {
+  transition-delay: 0.48s;
+}
+
+#navbar.open .nav-link:nth-child(5) {
+  transition-delay: 0.54s;
+}
+#navbar.open .nav-link:nth-child(6) {
+  transition-delay: 0.54s;
+}
+#navbar.open .nav-link:nth-child(7) {
+  transition-delay: 0.54s;
+}
 
 #nav-card {
   transform: translateX(30px);
@@ -174,12 +249,27 @@ button {
     width: calc(100vw - 32px);
     max-width: 420px;
   }
+
   #navbar.open {
     width: calc(100vw - 32px);
     max-width: 420px;
-    height: 485px;
+    height: 660px;
+    max-height: calc(100vh - 60px);
   }
-  .nav-link { font-size: 20px; }
-  #nav-card { transform: translateY(20px); }
-  #navbar.open #nav-card { transform: translateY(0); }
+
+  .nav-link {
+    font-size: 20px;
+  }
+
+  #nav-card {
+    transform: translateY(20px);
+  }
+
+  #navbar.open #nav-card {
+    transform: translateY(0);
+  }
+
+  #navbar.open #nav-content {
+    max-height: calc(100vh - 120px);
+  }
 }

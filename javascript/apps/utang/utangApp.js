@@ -1,6 +1,7 @@
 /** @file utangApp.js — Template UI Catat Utang & Piutang UMKM */
 
 function getUtangAppUI() {
+  var I = window.LakuIcons;
   return `
     <div class="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
       <!-- Header Card -->
@@ -93,6 +94,25 @@ function getUtangAppUI() {
           <span class="text-xs text-gray-400">Tersimpan otomatis di HP kamu</span>
         </div>
 
+<!-- Search & Filter Controls -->
+         <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+           <div class="flex-1 min-w-0">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+             <input type="text" id="utangSearchInput" placeholder="Cari berdasarkan nama..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+           </div>
+           <div class="flex-1 min-w-0">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Catatan</label>
+             <select id="utangTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+               <option value="all">Semua</option>
+               <option value="utang">Utang</option>
+               <option value="piutang">Piutang</option>
+             </select>
+           </div>
+           <div class="flex-1 min-w-0">
+             <button id="utangClearFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">Reset Filter</button>
+           </div>
+         </div>
+
         <!-- Desktop Table View (lg:block) -->
         <div class="overflow-x-auto hidden lg:block">
           <table class="w-[60rem] text-left text-sm text-gray-600">
@@ -105,16 +125,35 @@ function getUtangAppUI() {
                 <th class="py-3 px-4 rounded-r-xl text-center">Bayar / Hapus</th>
               </tr>
             </thead>
-            <tbody id="utangTableBody" class="divide-y divide-gray-100">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="utangTableBody" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
 
         <!-- Mobile Card View (block lg:hidden) -->
-        <div id="utangMobileList" class="block lg:hidden space-y-3.5">
-          <!-- Rendered dynamically -->
-        </div>
+        <div id="utangMobileList" class="block lg:hidden space-y-3.5"></div>
+
+<!-- Pagination Controls -->
+        <div id="utangPagination" class="mt-4 flex sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex-1 sm:auto">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
+            <select id="utangPageSizeSelect" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="3">3</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="mt-2 sm:mt-0 flex items-center justify-between flex-col">
+            <div class="inline-flex items-center py-2 rounded-md shadow-sm space-x-1">
+            <button id="utangPrevPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transform rotate-180">${I.svg("arrowRight")}</button>
+            <div class="px-3 py-2 text-sm font-medium text-gray-500 flex items-center gap-2"><span id="utangCurrentPage"></span> dari <span id="utangTotalPages"></span></div>
+            <button id="utangNextPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">${I.svg("arrowRight")}</button>
+            </div>
+            </div>
+            </div>
+            <span class="text-sm my-2 text-gray-500 gap-1">Menampilkan <span id="utangStartIndex"></span> sampai <span id="utangEndIndex"></span> dari <span id="utangTotalCount"></span> data</span>
       </div>
     </div>
   `;

@@ -1,4 +1,4 @@
-var CACHE_NAME = "laku-app-v3";
+var CACHE_NAME = "laku-app-v8";
 
 var APP_SHELL = [
   "/app.html",
@@ -17,6 +17,8 @@ var APP_SHELL = [
   "/javascript/apps/hpp/hppIngredients.js",
   "/javascript/apps/hpp/hppCalc.js",
   "/javascript/apps/hpp/hppRecipes.js",
+  "/javascript/apps/produksi/produksiApp.js",
+  "/javascript/apps/produksi/produksiClient.js",
   "/javascript/apps/kas/kasApp.js",
   "/javascript/apps/kas/kasClient.js",
   "/javascript/apps/laba/labaApp.js",

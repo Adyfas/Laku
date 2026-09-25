@@ -2,6 +2,7 @@
  * kasApp.js — Template UI Buku Kas Digital UMKM
  */
 function getKasAppUI() {
+  var I = window.LakuIcons;
   return `
     <div class="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
       <div class="bg-gradient-to-br from-[#274c43] to-[#1f3d36] text-white p-8 rounded-3xl shadow-xl">
@@ -65,6 +66,33 @@ function getKasAppUI() {
           <button id="clearKasBtn" class="text-xs text-rose-600 font-semibold hover:underline cursor-pointer">Hapus Semua Data</button>
         </div>
 
+<!-- Search & Filter Controls -->
+         <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+           <div class="flex-1 min-w-0">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+             <input type="text" id="kasSearchInput" placeholder="Cari berdasarkan keterangan..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+           </div>
+           <div class="flex-1 min-w-0 sm:max-w-xs">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Transaksi</label>
+             <select id="kasTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+               <option value="all">Semua</option>
+               <option value="pemasukan">Pemasukan</option>
+               <option value="pengeluaran">Pengeluaran</option>
+             </select>
+           </div>
+           <div class="flex-1 min-w-0 sm:max-w-xs">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
+             <input type="date" id="kasDateStart" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+           </div>
+           <div class="flex-1 min-w-0 sm:max-w-xs">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
+             <input type="date" id="kasDateEnd" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+           </div>
+           <div class="flex-1 min-w-0 mt-6">
+             <button id="kasClearFilters" class="w-full bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold p-2 rounded-xl transition-all shadow-md text-sm cursor-pointer">Reset Filter</button>
+           </div>
+         </div>
+
         <!-- Desktop Table View (lg:block) -->
         <div class="overflow-x-auto hidden lg:block">
           <table class="w-[60rem] text-left text-sm text-gray-600">
@@ -83,6 +111,29 @@ function getKasAppUI() {
 
         <!-- Mobile Card View (block lg:hidden) -->
         <div id="kasMobileList" class="block lg:hidden space-y-3.5"></div>
+
+        <!-- Pagination Controls -->
+        <div id="kasPagination" class="mt-4 flex sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex-1 sm:auto">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
+            <select id="kasPageSizeSelect" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="3">3</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="mt-2 sm:mt-0 flex items-center justify-between flex-col">
+            <div class="inline-flex items-center py-2 rounded-md shadow-sm space-x-1">
+            <button id="kasPrevPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transform rotate-180">${I.svg("arrowRight")}</button>
+            <div class="px-3 py-2 text-sm font-medium text-gray-500 flex items-center gap-2"><span id="kasCurrentPage"></span> dari <span id="kasTotalPages"></span></div>
+            <button id="kasNextPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">${I.svg("arrowRight")}</button>
+            </div>
+            </div>
+            </div>
+            <span class="text-sm my-2 text-gray-500 gap-1">Menampilkan <span id="kasStartIndex"></span> sampai <span id="kasEndIndex"></span> dari <span id="kasTotalCount"></span> data</span>
       </div>
     </div>
   `;

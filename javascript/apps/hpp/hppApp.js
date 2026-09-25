@@ -96,6 +96,9 @@ function getHppAppUI() {
         <button type="button" id="hppStep1Next" class="w-full bg-[#274c43] hover:bg-[#1f3d36] text-white font-bold py-4 rounded-2xl transition-all shadow-md text-base cursor-pointer">
           Lanjut Pilih Bahan →
         </button>
+        <button type="button" id="hppStep1BuatBaru" class="w-full mt-2 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-3 rounded-2xl transition-all text-base cursor-pointer hidden">
+          Buat Baru
+        </button>
       </div>
 
       <!-- STEP 2: Bahan dari Stok -->
@@ -131,6 +134,7 @@ function getHppAppUI() {
               + Tambah
             </button>
           </div>
+          <p id="hppUnitHelper" class="text-[11px] text-gray-400 mt-1"></p>
           <p class="text-[11px] text-gray-400">${I.svg("lightbulb", "0.9em")} Pilih satuan bebas — otomatis dikonversi ke satuan stok (mis. 500 gram = 0.5 kg).</p>
         </div>
 
@@ -148,6 +152,9 @@ function getHppAppUI() {
             Lanjut Biaya Tambahan →
           </button>
         </div>
+        <button type="button" id="hppStep2BuatBaru" class="w-full mt-2 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-3 rounded-2xl transition-all text-base cursor-pointer hidden">
+          Buat Baru
+        </button>
       </div>
 
       <!-- STEP 3: Biaya Tambahan -->
@@ -215,6 +222,9 @@ function getHppAppUI() {
             Lihat Hasilnya →
           </button>
         </div>
+        <button type="button" id="hppStep3BuatBaru" class="w-full mt-2 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-3 rounded-2xl transition-all text-base cursor-pointer hidden">
+          Buat Baru
+        </button>
       </div>
 
       <!-- STEP 4: Margin & Hasil -->
@@ -231,13 +241,13 @@ function getHppAppUI() {
             <span class="text-sm font-bold text-gray-600">Keuntungan di atas modal (Margin)</span>
             <span id="hppMarginDisplay" class="text-2xl font-extrabold text-[#274c43]">30%</span>
           </div>
-          <input type="range" id="hppMarginSlider" min="5" max="100" value="30" step="5" class="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-[#274c43]" />
+          <input type="range" id="hppMarginSlider" min="5" max="99" value="30" step="1" class="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-[#274c43]" />
           <div class="flex justify-between text-xs text-gray-400 font-medium">
             <span>5% (Sedikit)</span>
             <span>30% (Wajar)</span>
-            <span>100% (Banyak)</span>
+            <span>99% (Maksimal)</span>
           </div>
-          <p class="text-xs text-gray-400">${I.svg("lightbulb", "0.9em")} Ini margin bersih: keuntungan di atas harga jual. Jadi jika diskon 20%, harga jual masih aman.</p>
+          <p class="text-xs text-gray-400">${I.svg("lightbulb", "0.9em")} Ini margin bersih: keuntungan di atas harga jual. Jadi jika diskon 20%, harga jual masih aman. Maksimum 99% untuk menghindari pembagian nol.</p>
         </div>
 
         <!-- Ringkasan -->
@@ -287,6 +297,9 @@ function getHppAppUI() {
             ${I.svg("save", "1em")} Simpan Resep
           </button>
         </div>
+        <button type="button" id="hppStep4BuatBaru" class="w-full mt-2 bg-stone-100 hover:bg-stone-200 text-gray-700 font-bold py-3 rounded-2xl transition-all text-base cursor-pointer hidden">
+          Buat Baru
+        </button>
       </div>
 
       <!-- DAFTAR RESEP TERSIMPAN -->
@@ -294,6 +307,14 @@ function getHppAppUI() {
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-bold text-gray-800">${I.svg("document", "1.1em")} Resep Tersimpan</h3>
           <span class="text-xs text-gray-400">Bisa diubah atau disalin</span>
+        </div>
+
+        <!-- Search & Pagination Controls -->
+        <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div class="flex items-center justify-between w-full gap-5 ">
+            <label class="block text-md font-bold text-gray-700 mb-1">Cari</label>
+            <input type="text" id="hppSearchInput" placeholder="Cari berdasarkan nama produk..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
         </div>
 
         <!-- Desktop Table View -->
@@ -315,6 +336,28 @@ function getHppAppUI() {
 
         <!-- Mobile Card View -->
         <div id="recipeMobileList" class="block lg:hidden space-y-3.5"></div>
+
+        <!-- Pagination Controls -->
+        <div id="hppPagination" class="mt-4 flex sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex-1 sm:auto">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
+            <select id="hppPageSizeSelect" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="mt-2 sm:mt-0 flex items-center justify-between flex-col">
+            <div class="inline-flex items-center py-2 rounded-md shadow-sm space-x-1">
+            <button id="hppPrevPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transform rotate-180">${I.svg("arrowRight")}</button>
+            <div class="px-3 py-2 text-sm font-medium text-gray-500 flex items-center gap-2"><span id="hppCurrentPage"></span> dari <span id="hppTotalPages"></span></div>
+            <button id="hppNextPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">${I.svg("arrowRight")}</button>
+            </div>
+            </div>
+            </div>
+            <span class="text-sm my-2 text-gray-500 gap-1">Menampilkan <span id="hppStartIndex"></span> sampai <span id="hppEndIndex"></span> dari <span id="hppTotalCount"></span> data</span>
       </div>
     </div>
   `;

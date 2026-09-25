@@ -18,10 +18,323 @@ window.LakuHpp = {
   _uidCounter: 0,
 };
 
+/** Helper: escape HTML string to prevent XSS / broken markup */
+window.LakuHpp.escapeHtml = function (value) {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+/** Helper: compare two IDs safely as strings */
+window.LakuHpp.idsEqual = function (id1, id2) {
+  if (id1 === null || id1 === undefined || id2 === null || id2 === undefined) return false;
+  return String(id1) === String(id2);
+};
+
+/** Helper: validate positive finite number */
+window.LakuHpp.validatePositiveFinite = function (val, fieldName) {
+  if (val === null || val === undefined || String(val).trim() === "") {
+    return { valid: false, message: `${fieldName} wajib diisi.`, value: 0 };
+  }
+  let num;
+  if (typeof val === "number") {
+    num = val;
+  } else {
+    const str = String(val).trim();
+    if (/^\d+(\.\d+)?$/.test(str)) {
+      num = parseFloat(str);
+    } else if (/^\d+(,\d+)?$/.test(str)) {
+      num = parseFloat(str.replace(",", "."));
+    } else if (typeof window.getRawNumber === "function") {
+      num = window.getRawNumber(str);
+    } else {
+      num = parseFloat(str);
+    }
+  }
+  if (isNaN(num) || !isFinite(num) || num <= 0) {
+    return { valid: false, message: `${fieldName} harus bernilai angka lebih besar dari 0.`, value: 0 };
+  }
+  return { valid: true, message: "", value: num };
+};
+
+/** Helper: generate unique ID with prefix (e.g. "ovh", "ing", "rec") */
+window.LakuHpp.generateHppId = function (prefix = "hpp") {
+  window.LakuHpp._uidCounter++;
+  return `${prefix}_${Date.now()}_${window.LakuHpp._uidCounter}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
 /** Generate a unique ID for ingredients/overhead items */
 function nextUid() {
   window.LakuHpp._uidCounter++;
   return window.LakuHpp._uidCounter + Date.now();
+}
+
+// === Search & Pagination (via shared LakuPagination controller) ===
+/** Create the shared pagination controller for the recipe list.
+ *  Must be called after the module UI is rendered (initHppAppLogic). */
+window.LakuHpp.initPaginationController = function () {
+  window.LakuHpp.paginationController = window.LakuPagination.createPaginationController({
+    storageKey: "laku_hpp_ui_state",
+    getData: loadRecipes,
+    filterFn: (item, state) => {
+      const searchTerm = (state.searchTerm || "").toLowerCase().trim();
+      if (searchTerm && (item.namaProduk || "").toLowerCase().indexOf(searchTerm) === -1) {
+        return false;
+      }
+      return true;
+    },
+    elements: {
+      searchInput: "hppSearchInput",
+      pageSizeSelect: "hppPageSizeSelect",
+      prevPage: "hppPrevPage",
+      nextPage: "hppNextPage",
+      currentPage: "hppCurrentPage",
+      totalPages: "hppTotalPages",
+      startIndex: "hppStartIndex",
+      endIndex: "hppEndIndex",
+      totalCount: "hppTotalCount",
+      paginationContainer: "hppPagination",
+    },
+    onChange: (items) => window.LakuHpp.renderRecipeList(items),
+    defaultPageSize: 10,
+    debounceMs: 300,
+  });
+};
+
+/** Refresh recipe list through the shared pagination controller */
+window.LakuHpp.refreshRecipeList = function () {
+  if (window.LakuHpp.paginationController) {
+    window.LakuHpp.paginationController.refresh();
+  } else {
+    window.LakuHpp.renderRecipeList();
+  }
+};
+
+// === HPP Session Storage ===
+const HPP_SESSION_KEY = "laku_hpp_session";
+const HPP_SESSION_VERSION = 3;
+
+/** Load HPP draft from sessionStorage */
+function loadHppSession() {
+  try {
+    const raw = sessionStorage.getItem(HPP_SESSION_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (data && data.version === HPP_SESSION_VERSION) {
+      return data;
+    }
+    // Migration from version 2 to 3
+    if (data && data.version === 2) {
+      return migrateSessionV2toV3(data);
+    }
+    // If version mismatch, ignore old session
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/** Migrate session from version 2 to version 3 */
+function migrateSessionV2toV3(v2State) {
+  return {
+    ...v2State,
+    version: HPP_SESSION_VERSION,
+    editingIngredientDraft: null,
+    editingOverheadDraft: null,
+  };
+}
+
+/** Save HPP draft to sessionStorage */
+function saveHppSession(state) {
+  try {
+    sessionStorage.setItem(HPP_SESSION_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn("Failed to save HPP session", e);
+  }
+}
+
+/** Clear HPP session */
+function clearHppSession() {
+  try {
+    sessionStorage.removeItem(HPP_SESSION_KEY);
+  } catch (e) {}
+}
+
+// Expose session functions for other modules
+window.LakuHpp.captureDraft = captureHppDraft;
+window.LakuHpp.saveSession = function() { saveHppSession(captureHppDraft()); };
+window.LakuHpp.clearSession = clearHppSession;
+
+/** Toggle "Buat Baru" buttons visibility based on edit mode */
+window.LakuHpp.toggleBuatBaruButtons = function(show) {
+  const el = (id) => document.getElementById(id);
+  const buttons = [
+    "hppStep1BuatBaru",
+    "hppStep2BuatBaru",
+    "hppStep3BuatBaru",
+    "hppStep4BuatBaru"
+  ];
+  buttons.forEach((id) => {
+    const btn = el(id);
+    if (btn) {
+      if (show) btn.classList.remove("hidden");
+      else btn.classList.add("hidden");
+    }
+  });
+};
+
+window.LakuHpp.resetForm = function() {
+  clearHppSession();
+  window.LakuHpp.ingredients = [];
+  window.LakuHpp.overheadItems = [];
+  window.LakuHpp.editingRecipeId = null;
+  window.LakuHpp.editingIngredientId = null;
+  window.LakuHpp.editingOverheadId = null;
+  window.LakuHpp.editingIngredientDraft = null;
+  window.LakuHpp.editingOverheadDraft = null;
+  window.LakuHpp.currentStep = 1;
+  // Reset UI fields
+  const el = (id) => document.getElementById(id);
+  el("hppNamaProduk").value = "";
+  el("hppJumlahProduksi").value = "";
+  el("hppSatuanProduksi").value = "porsi";
+  el("hppJamKerja").value = "";
+  el("hppUpahPerJam").value = "";
+  el("hppBiayaKemasan").value = "";
+  el("hppMarginSlider").value = 30;
+  if (el("hppMarginDisplay")) el("hppMarginDisplay").textContent = "30%";
+  // Reset pending ingredient
+  if (el("hppInventorySelect")) el("hppInventorySelect").value = "";
+  if (el("hppJumlahPakai")) el("hppJumlahPakai").value = "";
+  if (el("hppJumlahPakaiUnit")) {
+    el("hppJumlahPakaiUnit").innerHTML = '<option value="">—</option>';
+    el("hppJumlahPakaiUnit").disabled = true;
+  }
+  // Cancel any edit mode
+  if (typeof window.LakuHpp.cancelEditIngredient === "function") {
+    window.LakuHpp.cancelEditIngredient();
+  }
+  if (typeof window.LakuHpp.cancelEditOverhead === "function") {
+    window.LakuHpp.cancelEditOverhead();
+  }
+  // Hide "Buat Baru" buttons (not in edit mode)
+  window.LakuHpp.toggleBuatBaruButtons(false);
+  // Refresh UI
+  window.LakuHpp.refreshIngredientUI();
+  window.LakuHpp.renderOverhead();
+  window.LakuHpp.refreshRecipeList();
+  // Go to step 1
+  goToStep(1);
+};
+
+// Inventory sync handler reference
+let inventoryUpdatedHandler = null;
+let storageHandler = null;
+
+/** Capture current HPP state into a draft object */
+function captureHppDraft() {
+  const el = (id) => document.getElementById(id);
+  // pending ingredient selection
+  const pendingSelect = el("hppInventorySelect");
+  const pendingQty = el("hppJumlahPakai");
+  const pendingUnit = el("hppJumlahPakaiUnit");
+  const pendingIngredient = {
+    inventoryId: pendingSelect ? parseInt(pendingSelect.value) || "" : "",
+    jumlahPakai: pendingQty ? pendingQty.value : "",
+    satuan: pendingUnit ? pendingUnit.value : ""
+  };
+  // pending overhead input
+  const pendingOverheadNama = el("hppOverheadNama")?.value.trim() || "";
+  const pendingOverheadBiaya = el("hppOverheadBiaya")?.value || "";
+  const pendingOverhead = { nama: pendingOverheadNama, biaya: pendingOverheadBiaya };
+  // product fields
+  const product = {
+    namaProduk: el("hppNamaProduk")?.value.trim() || "",
+    jumlahProduksi: el("hppJumlahProduksi")?.value || "",
+    satuanProduksi: el("hppSatuanProduksi")?.value || "porsi"
+  };
+  // costs
+  const costs = {
+    jamKerja: el("hppJamKerja")?.value || "",
+    upahPerJam: el("hppUpahPerJam")?.value || "",
+    biayaKemasan: el("hppBiayaKemasan")?.value || ""
+  };
+  // margin
+  const margin = parseInt(el("hppMarginSlider")?.value) || 30;
+  // editing states
+  const editingRecipeId = window.LakuHpp.editingRecipeId;
+  const editingIngredientId = window.LakuHpp.editingIngredientId || null;
+  const editingOverheadId = window.LakuHpp.editingOverheadId || null;
+  const editingIngredientDraft = window.LakuHpp.editingIngredientDraft || null;
+  const editingOverheadDraft = window.LakuHpp.editingOverheadDraft || null;
+  // ingredients and overhead are already in window.LakuHpp
+  return {
+    version: HPP_SESSION_VERSION,
+    currentStep: window.LakuHpp.currentStep,
+    editingRecipeId,
+    editingIngredientId,
+    editingOverheadId,
+    editingIngredientDraft,
+    editingOverheadDraft,
+    product,
+    pendingIngredient,
+    pendingOverhead,
+    ingredients: window.LakuHpp.ingredients,
+    overheadItems: window.LakuHpp.overheadItems,
+    costs,
+    margin,
+  };
+}
+
+/** Restore HPP state from a draft object */
+function restoreHppDraft(state) {
+  if (!state) return;
+  const el = (id) => document.getElementById(id);
+  // Restore window.LakuHpp state
+  window.LakuHpp.currentStep = state.currentStep || 1;
+  window.LakuHpp.editingRecipeId = state.editingRecipeId || null;
+  window.LakuHpp.editingIngredientId = state.editingIngredientId || null;
+  window.LakuHpp.editingOverheadId = state.editingOverheadId || null;
+  window.LakuHpp.editingIngredientDraft = state.editingIngredientDraft || null;
+  window.LakuHpp.editingOverheadDraft = state.editingOverheadDraft || null;
+  window.LakuHpp.ingredients = state.ingredients || [];
+  // Normalize overhead items: ensure each has an ID
+  const rawOverhead = state.overheadItems || [];
+  window.LakuHpp.overheadItems = rawOverhead.map((item, idx) => {
+    if (item.id) return item;
+    return { ...item, id: "ovh_" + Date.now() + "_" + idx + "_" + Math.random().toString(36).substr(2, 9) };
+  });
+  // Restore UI fields
+  if (state.product) {
+    el("hppNamaProduk").value = state.product.namaProduk || "";
+    el("hppJumlahProduksi").value = state.product.jumlahProduksi || "";
+    el("hppSatuanProduksi").value = state.product.satuanProduksi || "porsi";
+  }
+  if (state.pendingIngredient) {
+    if (el("hppInventorySelect")) el("hppInventorySelect").value = state.pendingIngredient.inventoryId || "";
+    if (el("hppJumlahPakai")) el("hppJumlahPakai").value = state.pendingIngredient.jumlahPakai || "";
+    if (el("hppJumlahPakaiUnit")) el("hppJumlahPakaiUnit").value = state.pendingIngredient.satuan || "";
+  }
+  if (state.pendingOverhead) {
+    if (el("hppOverheadNama")) el("hppOverheadNama").value = state.pendingOverhead.nama || "";
+    if (el("hppOverheadBiaya")) el("hppOverheadBiaya").value = state.pendingOverhead.biaya || "";
+  }
+  if (state.costs) {
+    el("hppJamKerja").value = state.costs.jamKerja || "";
+    el("hppUpahPerJam").value = state.costs.upahPerJam || "";
+    if (el("hppUpahPerJam") && state.costs.upahPerJam) window.formatNumberInput(el("hppUpahPerJam"));
+    el("hppBiayaKemasan").value = state.costs.biayaKemasan || "";
+    if (el("hppBiayaKemasan") && state.costs.biayaKemasan) window.formatNumberInput(el("hppBiayaKemasan"));
+  }
+  if (state.margin !== undefined) {
+    el("hppMarginSlider").value = state.margin;
+    if (el("hppMarginDisplay")) el("hppMarginDisplay").textContent = `${state.margin}%`;
+  }
+  // Note: unit selector for pending ingredient will be refreshed by refreshIngredientUI
 }
 
 /** Load inventory data from localStorage */
@@ -107,8 +420,7 @@ function toggleOnboardingVisibility() {
     if (onboarding) onboarding.classList.add("hidden");
     if (stepIndicator) stepIndicator.classList.remove("hidden");
     if (recipeListSection) recipeListSection.classList.remove("hidden");
-    // Show current step
-    goToStep(window.LakuHpp.currentStep);
+    // Do NOT navigate here; caller should handle step visibility if needed
   }
 }
 
@@ -116,12 +428,40 @@ function toggleOnboardingVisibility() {
 
 /** Initialize all sub-modules and bind all event listeners */
 function initHppAppLogic() {
+  // Load session draft
+  const session = loadHppSession();
+  if (session) {
+    restoreHppDraft(session);
+  } else {
+    // Ensure default state
+    window.LakuHpp.currentStep = 1;
+    window.LakuHpp.editingRecipeId = null;
+    window.LakuHpp.editingIngredientId = null;
+    window.LakuHpp.ingredients = [];
+    window.LakuHpp.overheadItems = [];
+  }
+
   // Init sub-modules
   window.LakuHpp.refreshIngredientUI();
+  // Restore ingredient edit mode if any
+  if (window.LakuHpp.editingIngredientId) {
+    window.LakuHpp.startEditIngredient(window.LakuHpp.editingIngredientId, window.LakuHpp.editingIngredientDraft);
+  }
+  // Restore pending ingredient unit selection after dropdown populated
+  if (session && session.pendingIngredient) {
+    const unitSel = document.getElementById("hppJumlahPakaiUnit");
+    if (unitSel) unitSel.value = session.pendingIngredient.satuan || "";
+  }
   window.LakuHpp.renderOverhead();
-  window.LakuHpp.renderRecipeList();
+  // Restore overhead edit mode if any
+  if (window.LakuHpp.editingOverheadId) {
+    window.LakuHpp.startEditOverhead(window.LakuHpp.editingOverheadId, window.LakuHpp.editingOverheadDraft);
+  }
+  // Initialize shared pagination controller (binds search & pagination events)
+  window.LakuHpp.initPaginationController();
+  window.LakuHpp.refreshRecipeList();
 
-  // Check onboarding visibility (also handles goToStep when inventory exists)
+  // Check onboarding visibility
   toggleOnboardingVisibility();
 
   // If inventory is empty, onboarding is shown — wizard stays hidden, don't goToStep
@@ -132,11 +472,17 @@ function initHppAppLogic() {
       item.kategori === "Kemasan / Packaging"
   );
   if (bahanInv.length > 0) {
-    goToStep(1);
+    // Go to the step from session (or default 1)
+    goToStep(window.LakuHpp.currentStep);
   }
 
   // --- Event Binding ---
   const el = (id) => document.getElementById(id);
+
+  // Helper to save session after UI changes
+  function saveSession() {
+    saveHppSession(captureHppDraft());
+  }
 
   // Step 1: Next
   el("hppStep1Next")?.addEventListener("click", () => {
@@ -151,28 +497,73 @@ function initHppAppLogic() {
       return;
     }
     goToStep(2);
+    saveSession();
   });
 
   // Step 2: Back, Next
-  el("hppStep2Back")?.addEventListener("click", () => goToStep(1));
+  el("hppStep2Back")?.addEventListener("click", () => {
+    goToStep(1);
+    saveSession();
+  });
   el("hppStep2Next")?.addEventListener("click", () => {
+    // Validate pending ingredient if user has started adding one
+    const pendingSelect = el("hppInventorySelect");
+    const pendingQty = el("hppJumlahPakai");
+    const pendingUnit = el("hppJumlahPakaiUnit");
+    if (pendingSelect && pendingSelect.value) {
+      if (!pendingQty.value || parseFloat(pendingQty.value) <= 0) {
+        window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi jumlah pakai bahan terlebih dahulu." });
+        return;
+      }
+      if (!pendingUnit.value) {
+        window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Pilih satuan bahan terlebih dahulu." });
+        return;
+      }
+    }
     if (window.LakuHpp.ingredients.length === 0) {
       window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Tambahkan minimal satu bahan ya!" });
       return;
     }
     goToStep(3);
+    saveSession();
   });
 
   // Step 3: Back, Next
-  el("hppStep3Back")?.addEventListener("click", () => goToStep(2));
-  el("hppStep3Next")?.addEventListener("click", () => goToStep(4));
+  el("hppStep3Back")?.addEventListener("click", () => {
+    goToStep(2);
+    saveSession();
+  });
+  el("hppStep3Next")?.addEventListener("click", () => {
+    goToStep(4);
+    saveSession();
+  });
 
   // Step 4: Back, Save
-  el("hppStep4Back")?.addEventListener("click", () => goToStep(3));
+  el("hppStep4Back")?.addEventListener("click", () => {
+    goToStep(3);
+    saveSession();
+  });
   el("hppSimpanResep")?.addEventListener("click", () => window.LakuHpp.saveCurrentRecipe());
 
+  // Buat Baru button handlers
+  el("hppStep1BuatBaru")?.addEventListener("click", () => {
+    window.LakuHpp.resetForm();
+  });
+  el("hppStep2BuatBaru")?.addEventListener("click", () => {
+    window.LakuHpp.resetForm();
+  });
+  el("hppStep3BuatBaru")?.addEventListener("click", () => {
+    window.LakuHpp.resetForm();
+  });
+  el("hppStep4BuatBaru")?.addEventListener("click", () => {
+    window.LakuHpp.resetForm();
+  });
+
   // Add ingredient from inventory
-  el("hppAddIngredientBtn")?.addEventListener("click", () => window.LakuHpp.addIngredientFromInventory());
+  el("hppAddIngredientBtn")?.addEventListener("click", () => {
+    window.LakuHpp.addIngredientFromInventory();
+    // session saved inside addIngredientFromInventory
+  });
 
   // Enter key on jumlah pakai input → add ingredient from inventory
   el("hppJumlahPakai")?.addEventListener("keydown", (e) => {
@@ -183,13 +574,17 @@ function initHppAppLogic() {
   });
 
   // Add overhead
-  el("hppAddOverheadBtn")?.addEventListener("click", () => window.LakuHpp.addOverhead());
+  el("hppAddOverheadBtn")?.addEventListener("click", () => {
+    window.LakuHpp.addOverhead();
+    saveSession();
+  });
 
   // Enter key on overhead biaya input → add overhead
   el("hppOverheadBiaya")?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       window.LakuHpp.addOverhead();
+      saveSession();
     }
   });
 
@@ -205,17 +600,67 @@ function initHppAppLogic() {
     setTimeout(() => window.openAppModal("inventory"), 300);
   });
 
-  // Margin slider — recalc on change
+  // Margin slider — recalc on change and save session
   el("hppMarginSlider")?.addEventListener("input", () => {
     window.LakuHpp.calculateAll();
+    saveSession();
   });
 
-  // Real-time update for step 3 inputs
+  // Real-time update for step 3 inputs and save session
   ["hppJamKerja", "hppUpahPerJam", "hppBiayaKemasan"].forEach((id) => {
     el(id)?.addEventListener("input", () => {
       if (window.LakuHpp.currentStep >= 3) window.LakuHpp.calculateAll();
+      saveSession();
     });
   });
+
+  // Save session on product field changes
+  ["hppNamaProduk", "hppJumlahProduksi", "hppSatuanProduksi"].forEach((id) => {
+    el(id)?.addEventListener("input", () => saveSession());
+    el(id)?.addEventListener("change", () => saveSession());
+  });
+
+  // Save session on pending ingredient selection changes
+  if (el("hppInventorySelect")) {
+    el("hppInventorySelect").addEventListener("change", () => saveSession());
+  }
+  if (el("hppJumlahPakai")) {
+    el("hppJumlahPakai").addEventListener("input", () => saveSession());
+  }
+  if (el("hppJumlahPakaiUnit")) {
+    el("hppJumlahPakaiUnit").addEventListener("change", () => saveSession());
+  }
+
+  // Save session on pending overhead input changes
+  if (el("hppOverheadNama")) {
+    el("hppOverheadNama").addEventListener("input", () => saveSession());
+  }
+  if (el("hppOverheadBiaya")) {
+    el("hppOverheadBiaya").addEventListener("input", () => saveSession());
+  }
+
+  // Inventory sync listener
+  if (inventoryUpdatedHandler) {
+    window.removeEventListener("laku-inventory-updated", inventoryUpdatedHandler);
+  }
+  inventoryUpdatedHandler = () => {
+    if (document.getElementById("hppInventorySelect")) {
+      window.LakuHpp.refreshIngredientUI();
+    }
+  };
+  window.addEventListener("laku-inventory-updated", inventoryUpdatedHandler);
+
+  // Cross-tab storage sync for inventory
+  if (storageHandler) {
+    window.removeEventListener("storage", storageHandler);
+  }
+  storageHandler = (e) => {
+    if (e.key === "laku_inventory_data" && document.getElementById("hppInventorySelect")) {
+      window.LakuHpp.refreshIngredientUI();
+    }
+  };
+  window.addEventListener("storage", storageHandler);
+
 }
 
 /** Entry point — renders UI and initializes logic. Called by core/app.js */

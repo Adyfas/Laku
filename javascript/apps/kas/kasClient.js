@@ -16,9 +16,57 @@ function initKasAppLogic() {
     localStorage.setItem(KAS_STORAGE_KEY, JSON.stringify(data));
   };
 
+  // Filter function for Kas
+  const kasFilterFn = (item, state) => {
+    // Search filter
+    if (state.searchTerm && item.note.toLowerCase().indexOf(state.searchTerm.toLowerCase()) === -1) {
+      return false;
+    }
+
+    // Type filter
+    if (state.typeFilter !== "all" && item.type !== state.typeFilter) {
+      return false;
+    }
+
+    // Date range filter
+    if (state.dateStart && item.date < state.dateStart) {
+      return false;
+    }
+    if (state.dateEnd && item.date > state.dateEnd) {
+      return false;
+    }
+
+    return true;
+  };
+
+  // Initialize shared pagination controller
+  const pagination = window.LakuPagination.createPaginationController({
+    storageKey: "laku_kas_ui_state",
+    getData: loadKasData,
+    filterFn: kasFilterFn,
+    elements: {
+      searchInput: "kasSearchInput",
+      typeFilter: "kasTypeFilter",
+      dateStart: "kasDateStart",
+      dateEnd: "kasDateEnd",
+      pageSizeSelect: "kasPageSizeSelect",
+      prevPage: "kasPrevPage",
+      nextPage: "kasNextPage",
+      currentPage: "kasCurrentPage",
+      totalPages: "kasTotalPages",
+      startIndex: "kasStartIndex",
+      endIndex: "kasEndIndex",
+      totalCount: "kasTotalCount",
+      paginationContainer: "kasPagination",
+      clearFilters: "kasClearFilters",
+    },
+    onChange: (items, pagination) => renderTable(items, pagination),
+    defaultPageSize: 3,
+    debounceMs: 300,
+  });
+
   /** Render tabel desktop + kartu mobile */
-  const renderTable = () => {
-    const data = loadKasData();
+  const renderTable = (data, paginationData) => {
     const tbody = document.getElementById("kasTableBody");
     const mobileList = document.getElementById("kasMobileList");
 
@@ -123,7 +171,7 @@ function initKasAppLogic() {
           const currentData = loadKasData();
           const filtered = currentData.filter((it) => it.id !== id);
           saveKasData(filtered);
-          renderTable();
+          pagination.refresh();
         }
       });
     });
@@ -159,7 +207,7 @@ function initKasAppLogic() {
       saveKasData(currentData);
 
       form.reset();
-      renderTable();
+      pagination.refresh();
     });
   }
 
@@ -176,12 +224,13 @@ function initKasAppLogic() {
 
       if (ok) {
         saveKasData([]);
-        renderTable();
+        pagination.refresh();
       }
     });
   }
 
-  renderTable();
+  // Initial render
+  pagination.refresh();
 }
 
 /** Entry point: render template + init logic */

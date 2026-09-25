@@ -1,7 +1,5 @@
-/**
- * inventoryApp.js — Template UI Stok Barang & Bahan UMKM
- */
 function getInventoryAppUI() {
+  var I = window.LakuIcons;
   return `
     <div class="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
       <!-- Header Card -->
@@ -69,26 +67,28 @@ function getInventoryAppUI() {
                 <option value="bungkus">Bungkus</option>
                 <option value="pack">Pack</option>
                 <option value="botol">Botol</option>
+                <option value="dus">Dus</option>
                 <option value="lusin">Lusin</option>
                 <option value="roll">Roll</option>
                 <option value="lembar">Lembar</option>
                 <option value="dosin">Dosin</option>
               </select>
             </div>
+
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Stok Awal</label>
-              <input type="number" id="invStok" placeholder="Contoh: 20" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
+              <input type="number" id="invStok" placeholder="Contoh: 20 atau 0,5" step="0.01" min="0" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1">Batas stok terendah (biar dapat peringatan)</label>
-              <input type="number" id="invMinStok" placeholder="Contoh: 5" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
+              <input type="number" id="invMinStok" placeholder="Contoh: 5" step="0.01" min="0" class="w-full bg-[#f5f5f5] text-black-main font-medium py-3 px-4 rounded-xl outline-none border border-transparent focus:border-[#274c43] text-sm" required />
             </div>
           </div>
 
           <!-- Nesting Levels (Opsional) -->
           <div id="invNestingSection" class="col-span-2 sm:col-span-4 space-y-2">
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Isi Kemasan (Opsional)</label>
-            <p class="text-[11px] text-gray-400">Tambah jika barang punya isi di dalamnya (misal: 1 pack = 10 bungkus). Biarkan kosong jika tidak ada.</p>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Isi per Kemasan (Opsional)</label>
+            <p class="text-[11px] text-gray-400">Isi jika barang punya kemasan bertingkat, misalnya: 1 dus = 10 butir. Biarkan kosong jika tidak ada.</p>
             <div id="invNestingLevels" class="space-y-2"></div>
             <button type="button" id="invAddNestingLevel" class="text-xs text-[#274c43] font-bold cursor-pointer hover:text-[#1f3d36] transition-colors">+ Tambah Level Isi</button>
           </div>
@@ -105,6 +105,26 @@ function getInventoryAppUI() {
           <h3 class="text-lg font-bold text-gray-800">Daftar Stok Inventaris</h3>
           <span class="text-xs text-gray-400">Tersimpan otomatis di browser</span>
         </div>
+
+<!-- Search & Filter Controls -->
+         <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+           <div class="flex-1 min-w-0">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+             <input type="text" id="invSearchInput" placeholder="Cari berdasarkan nama barang..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+           </div>
+           <div class="flex-1 min-w-0">
+             <label class="block text-sm font-medium text-gray-700 mb-1">Status Stok</label>
+             <select id="invStatusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+               <option value="all">Semua</option>
+               <option value="aman">Aman</option>
+               <option value="tipis">Tipis</option>
+               <option value="habis">Habis</option>
+             </select>
+           </div>
+           <div class="flex-1 min-w-0">
+             <button id="invClearFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">Reset Filter</button>
+           </div>
+         </div>
 
         <!-- Desktop Table View (lg:block) -->
         <div class="overflow-x-auto hidden lg:block">
@@ -128,6 +148,28 @@ function getInventoryAppUI() {
         <div id="inventoryMobileList" class="block lg:hidden space-y-3.5">
           <!-- Rendered dynamically -->
         </div>
+
+        <!-- Pagination Controls -->
+        <div id="invPagination" class="mt-4 flex sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex-1 sm:auto">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
+            <select id="invPageSizeSelect" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="mt-2 sm:mt-0 flex items-center justify-between flex-col">
+            <div class="inline-flex items-center py-2 rounded-md shadow-sm space-x-1">
+            <button id="invPrevPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transform rotate-180">${I.svg("arrowRight")}</button>
+            <div class="px-3 py-2 text-sm font-medium text-gray-500 flex items-center gap-2"><span id="invCurrentPage"></span> dari <span id="invTotalPages"></span></div>
+            <button id="invNextPage" class="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">${I.svg("arrowRight")}</button>
+            </div>
+            </div>
+            </div>
+            <span class="text-sm my-2 text-gray-500 gap-1">Menampilkan <span id="invStartIndex"></span> sampai <span id="invEndIndex"></span> dari <span id="invTotalCount"></span> data</span>
       </div>
     </div>
   `;

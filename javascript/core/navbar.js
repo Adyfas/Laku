@@ -2,10 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbar = document.getElementById("navbar");
   const menuBtn = document.getElementById("nav-menu-btn");
   const overlay = document.getElementById("nav-overlay");
-  const navLinks = document.querySelectorAll(".nav-link");
   const navbarItemsSection = document.getElementById("items-nav");
 
-  let navbarItems = [
+  const isAppPage = window.location.pathname.endsWith("app.html") || window.location.pathname === "/app";
+
+  const publicNavbarItems = [
     {
       title: "Beranda",
       link: "/",
@@ -25,6 +26,38 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Kontak",
       link: "./kontak.html",
       path: "/kontak",
+    },
+  ];
+
+  const appNavbarItems = [
+    {
+      title: "Beranda",
+      link: "./index.html",
+      isHome: true,
+    },
+    {
+      title: "Kalkulator HPP",
+      appKey: "hpp",
+    },
+    {
+      title: "Produksi",
+      appKey: "produksi",
+    },
+    {
+      title: "Buku Kas Digital",
+      appKey: "kas",
+    },
+    {
+      title: "Buku Utang & Piutang",
+      appKey: "utang",
+    },
+    {
+      title: "Stok Inventaris",
+      appKey: "inventory",
+    },
+    {
+      title: "Simulasi Laba Rugi",
+      appKey: "laba",
     },
   ];
 
@@ -120,55 +153,139 @@ document.addEventListener("DOMContentLoaded", () => {
 
   overlay.addEventListener("click", closeMenu);
 
-  navLinks.forEach((link) => link.addEventListener("click", closeMenu));
-
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
 
-  const navbarItemsSectionMapping = navbarItems
-    .map(
-      (item) => `
-  <a
-    href=${item.link}
-    class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl ${item.path == window.location.pathname ? "text-black-main/50" : "hover:text-black-main/50"}"
-    >${item.title}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      class="transform ${item.path == window.location.pathname ? "rotate-45" : "hover:rotate-45"} group-hover:rotate-45 transition-all duration-500"
-    >
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path
-        fill="currentColor"
-        d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
-      />
-    </svg>
-  </a>
-`,
-    )
+  function normalizePath(pathname) {
+    if (pathname === "/") return "/";
+    let normalized = pathname.replace(/\.html$/, "");
+    if (normalized.endsWith("/") && normalized.length > 1) {
+      normalized = normalized.slice(0, -1);
+    }
+    return normalized;
+  }
+
+  const currentPathNormalized = normalizePath(window.location.pathname);
+
+  const itemsToRender = isAppPage ? appNavbarItems : publicNavbarItems;
+  
+  const navbarItemsSectionMapping = itemsToRender
+    .map((item) => {
+      if (isAppPage) {
+        if (item.isHome) {
+          return `
+          <a
+            href="${item.link}"
+            class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl hover:text-black-main/50"
+            >${item.title}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              class="transform hover:rotate-45 group-hover:rotate-45 transition-all duration-500"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                fill="currentColor"
+                d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
+              />
+            </svg>
+          </a>
+        `;
+        } else {
+          return `
+          <button
+            type="button"
+            data-app-key="${item.appKey}"
+            class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl hover:text-black-main/50 cursor-pointer bg-transparent border-0 w-full text-left"
+            >${item.title}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              class="transform hover:rotate-45 group-hover:rotate-45 transition-all duration-500"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                fill="currentColor"
+                d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
+              />
+            </svg>
+          </button>
+        `;
+        }
+      } else {
+        const itemPathNormalized = normalizePath(item.path);
+        const isActive = itemPathNormalized === currentPathNormalized;
+        return `
+        <a
+          href=${item.link}
+          class="flex items-center justify-between nav-link no-underline text-black-main font-medium group transform transition-all duration-400 text-2xl ${isActive ? "text-black-main/50" : "hover:text-black-main/50"}"
+          >${item.title}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            class="transform ${item.link === isActive? "rotate-45" : "hover:rotate-45"} group-hover:rotate-45 transition-all duration-500"
+          >
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              fill="currentColor"
+              d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
+            />
+          </svg>
+        </a>
+      `;
+      }
+    })
     .join("");
+
+  let cardHtml = "";
+  if (!isAppPage) {
+    cardHtml = `
+    <div class="mt-2 pt-1 nav-link">
+      <a href="./app.html" class="rounded-2xl py-3 px-5 bg-lime-main hover:bg-lime-200 transition-all duration-300 text-black-main font-semibold w-full flex items-center justify-between gap-4 text-base no-underline cursor-pointer shadow-xs">
+        <span>Aplikasi</span> 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            fill="currentColor"
+            d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
+          />
+        </svg>
+      </a>
+    </div>
+    `;
+  }
 
   navbarItemsSection.innerHTML = `
   ${navbarItemsSectionMapping}
-  <div class="mt-2 pt-1 nav-link">
-    <a href="./app.html" class="rounded-2xl py-3 px-5 bg-lime-main hover:bg-lime-200 transition-all duration-300 text-black-main font-semibold w-full flex items-center justify-between gap-4 text-base no-underline cursor-pointer shadow-xs">
-      <span>Aplikasi</span> 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path
-          fill="currentColor"
-          d="M11 17v4h2v-8h8v-2h-8V3h-2v8H3v2h8z"
-        />
-      </svg>
-    </a>
-  </div>
+  ${cardHtml}
   `;
+
+  navbarItemsSection.addEventListener("click", (e) => {
+    const appButton = e.target.closest("[data-app-key]");
+    if (appButton) {
+      const appKey = appButton.getAttribute("data-app-key");
+      closeMenu();
+      if (typeof window.openAppModal === "function") {
+        window.openAppModal(appKey);
+      }
+      return;
+    }
+
+    const link = e.target.closest("a.nav-link");
+    if (link) {
+      closeMenu();
+    }
+  });
 });

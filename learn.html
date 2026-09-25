@@ -41,7 +41,7 @@
 
         <nav data-delay="0.9" data-direction="down" id="navbar"
             class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
-        <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
+            <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
             class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
             <div class="h-[72px] flex items-center justify-between px-[22px]">
                 <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
@@ -86,21 +86,30 @@
 
 
         <section class="min-h-screen flex py-24 px-6 flex-col mt-26">
-            <div class="flex justify-between flex-col md:flex-row">
-                <div class="flex md:w-[500px] my-5 flex-col">
+            <div class="flex justify-between flex-col items-start md:flex-row relative">
+                <!-- Kolom Kiri -->
+                <div class="flex md:w-[500px] flex-col w-full">
                     <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start">
                         Belajar
-                        <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+                        <span class="text-lime-600 text-xl" data-laku-icon="sparkle"
+                            data-laku-icon-size="1.25em"></span>
                     </p>
-                    <h1 class="text-4xl font-semibold text-start">Menuju UMKM Sejahtera Dengan Belajar Lebih Lanjut</h1>
+                    <h1 class="text-4xl font-semibold text-start leading-tight">
+                        Menuju UMKM Sejahtera Dengan Belajar Lebih Lanjut
+                    </h1>
                 </div>
-                <div class="flex items-start gap-2 justify-start flex-col md:w-[500px] w-full">
-                    <!-- <h1 class="text-4xl font-semibold text-start"></h1> -->
-                    <p>Belajar dari Masalah Nyata UMKM, setiap usaha punya tantangan. Yuk, bantu Ibu Siti menghadapi
-                        masalah usahanya dan temukan cara yang lebih baik untuk mengelolanya.</p>
+
+                <!-- Kolom Kanan -->
+                <div class="flex items-start gap-2 justify-start flex-col md:w-[500px] w-full md:pt-[32px]">
+                    <p class="leading-relaxed">
+                        Belajar dari Masalah Nyata UMKM, setiap usaha punya tantangan. Yuk, bantu Ibu Siti menghadapi
+                        masalah usahanya dan temukan cara yang lebih baik untuk mengelolanya.
+                    </p>
                     <div class="flex items-start relative my-5 group">
                         <button onclick="window.LakuLearn.open('s1')"
-                            class="rounded-2xl bg-black-main text-white-main p-2 px-8">Belajar Sekarang</button>
+                            class="rounded-2xl bg-black-main text-white-main p-2 px-8">
+                            Belajar Sekarang
+                        </button>
                         <button onclick="window.LakuLearn.open('s1')"
                             class="rounded-full p-3 text-center bg-black-main relative right-1 transform group-hover:translate-x-3 transition-all duration-450">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
@@ -109,12 +118,10 @@
                                 <path fill="white"
                                     d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
                             </svg>
-
                         </button>
                     </div>
                 </div>
             </div>
-
 
 
             <div
@@ -151,13 +158,13 @@
                 </div>
             </div>
 
-            <div class="flex justify-between my-8 flex-col md:flex-row">
+            <div class="flex justify-between my-8 flex-col lg:flex-row">
                 <div
-                    class="w-full md:w-[500px] h-[350px] relative flex items-end justify-start md:justify-center overflow-hidden p-4">
-                    <img class="h-[300px] object-contain z-10 select-none" src="./assets/images/BU Siti.png"
+                    class="w-full md:w-[500px] h-[350px] relative flex items-end justify-start md:justify-center overflow-hidden p-4 bottom-10">
+                    <img class="h-[300px] object-contain z-10 select-none" src="./assets/images/busiti-bubblechat.png"
                         alt="Bu Siti">
-                    <div
-                        class="absolute top-4 right-9 z-20 w-[180px] h-[180px] flex items-center justify-center md:justify-start p-4">
+                    <!-- <div
+                        class="absolute top-4 right-0 z-20 w-[195px] h-[195px] flex items-center justify-center md:justify-start p-4">
                         <img class="w-full h-full object-contain absolute top-0 left-0 -z-10"
                             src="./assets/images/Bubble Chat.png" alt="Chat">
 
@@ -166,7 +173,7 @@
                             data-once="true">
                             Halo! Mari belajar bersama Bu Siti hari ini.
                         </p>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -242,55 +249,55 @@
 
     <!-- Footer  -->
     <footer class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen">
-      <div
-        class="absolute -left-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
-      </div>
-      <div
-        class="absolute -right-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
-      </div>
-      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          <div class="lg:col-span-2">
-            <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
+        <div
+            class="absolute -left-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
+        </div>
+        <div
+            class="absolute -right-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+                <div class="lg:col-span-2">
+                    <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
                 Footer
               <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
             </p> -->
-            <h2 class="text-4xl font-semibold leading-tight">
-              Bersama Laku,
-              <br />
-              UMKM Tumbuh
-              <br />
-              Lebih Mudah.
-            </h2>
-            <div class="mt-12 text-sm text-black-main/60 space-y-3">
-              <p>© Copyright 2026 Laku.</p>
+                    <h2 class="text-4xl font-semibold leading-tight">
+                        Bersama Laku,
+                        <br />
+                        UMKM Tumbuh
+                        <br />
+                        Lebih Mudah.
+                    </h2>
+                    <div class="mt-12 text-sm text-black-main/60 space-y-3">
+                        <p>© Copyright 2026 Laku.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-5">Menu</h3>
+                    <ul class="space-y-3 text-black-main/60">
+                        <li><a href="./index.html">Beranda</a></li>
+                        <li><a href="./about.html">Tentang</a></li>
+                        <li><a href="./learn.html">Belajar</a></li>
+                        <li><a href="./kontak.html">Kontak</a></li>
+                    </ul>
+                </div>
+                <!-- Product -->
+                <div>
+                    <h3 class="font-semibold mb-5">Aplikasi</h3>
+                    <ul class="space-y-3 text-black-main/60">
+                        <li><a href="./app.html">Aplikasi Laku</a></li>
+                        <li><a href="./learn.html">Edukasi</a></li>
+                    </ul>
+                </div>
+                <div>
+                </div>
             </div>
-          </div>
-          <div>
-            <h3 class="font-semibold mb-5">Menu</h3>
-            <ul class="space-y-3 text-black-main/60">
-              <li><a href="./index.html">Beranda</a></li>
-              <li><a href="./about.html">Tentang</a></li>
-              <li><a href="./learn.html">Belajar</a></li>
-              <li><a href="./kontak.html">Kontak</a></li>
-            </ul>
-          </div>
-          <!-- Product -->
-          <div>
-            <h3 class="font-semibold mb-5">Aplikasi</h3>
-            <ul class="space-y-3 text-black-main/60">
-              <li><a href="./app.html">Aplikasi Laku</a></li>
-              <li><a href="./learn.html">Edukasi</a></li>
-            </ul>
-          </div>
-          <div>
-          </div>
         </div>
-      </div>
-      <h2
-        class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
-        Laku
-      </h2>
+        <h2
+            class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+            Laku
+        </h2>
     </footer>
     <!-- ENd Footer  -->
 
@@ -313,23 +320,27 @@
                 <div class="flex items-center gap-2">
                     <button type="button" onclick="window.LakuLearn.close()"
                         class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center transition-colors cursor-pointer text-lg"
-                        aria-label="Tutup"><span data-laku-icon="closeCircle" data-laku-icon-size="1.1em"></span></button>
+                        aria-label="Tutup"><span data-laku-icon="closeCircle"
+                            data-laku-icon-size="1.1em"></span></button>
                 </div>
             </div>
             <div class="mx-auto w-full max-w-xl px-4 sm:px-6 py-5 grid grid-cols-1 gap-5 items-start">
                 <div id="learnStage" data-mood="neutral">
                     <div class="learn-scene h-[450px]">
                         <div class="learn-awning" aria-hidden="true"></div>
-                        <div id="learnMood" class="learn-mood-chip"><span data-laku-icon="happy" data-laku-icon-size="1em"></span> Tenang</div>
-                    <div id="learnSitiFigure" class="learn-siti-frame">
-                        <!-- Karakter utama dari BU-Siti.svg -->
-                        <img id="learnSitiImage" src="./assets/images/BU-Siti.svg" alt="Bu Siti" class="siti-char-base">
+                        <div id="learnMood" class="learn-mood-chip"><span data-laku-icon="happy"
+                                data-laku-icon-size="1em"></span> Tenang</div>
+                        <div id="learnSitiFigure" class="learn-siti-frame">
+                            <!-- Karakter utama dari BU-Siti.svg -->
+                            <img id="learnSitiImage" src="./assets/images/BU-Siti.svg" alt="Bu Siti"
+                                class="siti-char-base">
 
-                        <!-- PNG fallback (only visible via noscript if JS is disabled) -->
-                        <noscript>
-                            <img id="learnSitiImage" src="./assets/images/BU Siti.png" alt="Bu Siti" class="w-full h-[235px] object-contain">
-                        </noscript>
-                    </div>
+                            <!-- PNG fallback (only visible via noscript if JS is disabled) -->
+                            <noscript>
+                                <img id="learnSitiImage" src="./assets/images/BU Siti.png" alt="Bu Siti"
+                                    class="w-full h-[235px] object-contain">
+                            </noscript>
+                        </div>
                         <div id="learnBubbleChat" class="learn-dialog-box hidden">
                             <p id="learnSpeaker"
                                 class="text-[11px] font-bold uppercase tracking-widest text-emerald-800 mb-1">Bu Siti

@@ -51,7 +51,7 @@ window.LakuTour = (function () {
         selector: "#dashSummaryGrid",
         title: "Rangkuman Keuangan Cepat " + window.LakuIcons.svg("wallet", "1em"),
         description:
-          "Lihat saldo kas aktif, tagihan piutang pelanggan, stok barang, dan status AI promo secara sekilas dalam 4 kartu ringkasan.",
+          "Lihat saldo kas aktif, tagihan piutang pelanggan, stok barang, dan akses cepat ke Produksi dalam 4 kartu ringkasan.",
       },
       {
         selector: "#dashQuickHpp",
@@ -66,16 +66,34 @@ window.LakuTour = (function () {
           "Catat uang masuk dan uang keluar tiap hari agar pembukuan kas rapi dan keuangan bisnis terpisah dari uang pribadi.",
       },
       {
-        selector: "#dashQuickInventory",
+        selector: "#dashQuickUtang",
+        title: "Utang & Piutang " + window.LakuIcons.svg("creditCard", "1em"),
+        description:
+          "Catat utang ke supplier dan piutang dari pelanggan. Pantau jatuh tempo, status lunas, dan kirim pengingat WA otomatis.",
+      },
+      {
+        selector: "#dashQuickLaba",
+        title: "Cek Untung Rugi Bulanan " + window.LakuIcons.svg("chart", "1em"),
+        description:
+          "Simulasi laba rugi bulanan. Masukkan target penjualan, biaya bahan, dan beban tetap untuk lihat estimasi laba & titik balik modal (BEP).",
+      },
+      {
+      selector: "#dashQuickInventory",
         title: "Stok Barang & Bahan " + window.LakuIcons.svg("package", "1em"),
         description:
           "Kelola seluruh bahan baku dan produk jualan. Sistem otomatis memberi peringatan saat stok mulai menipis.",
       },
       {
-        selector: "#bottomFloatingNav",
-        title: "Navigasi Cepat " + window.LakuIcons.svg("arrowUp", "1em"),
+        selector: "#dashQuickProduksi",
+        title: "Catat Produksi " + window.LakuIcons.svg("save", "1em"),
         description:
-          "Gunakan tombol di bawah layar ini untuk berpindah antar aplikasi secara instan tanpa perlu kembali ke atas.",
+          "Pilih resep saat benar-benar membuat produk. Setelah dikonfirmasi, stok bahan berkurang dan hasil produksi tercatat.",
+      },
+      {
+        selector: "#nav-menu-btn",
+        title: "Navigasi Aplikasi " + window.LakuIcons.svg("menu", "1em"),
+        description:
+          "Klik tombol menu di pojok kanan atas untuk membuka navigasi aplikasi. Di sana kamu bisa beralih ke Beranda atau membuka Kalkulator HPP, Produksi, Buku Kas, Utang & Piutang, Inventaris, dan Simulasi Laba Rugi.",
       },
       {
         selector: "#resetProfileBtn",
@@ -240,6 +258,49 @@ window.LakuTour = (function () {
         title: "Jalankan Simulasi " + window.LakuIcons.svg("play", "1em"),
         description:
           "Klik untuk melihat hasil analisis: status usaha, total omzet, estimasi laba bersih, dan titik impas balik modal (BEP).",
+      },
+    ],
+
+    produksi: [
+      {
+        selector: "#produksiTabResep",
+        title: "Daftar Resep " + window.LakuIcons.svg("document", "1em"),
+        description:
+          "Workflow produksi dimulai dari tab ini. Contoh dummy: pilih resep Nasi Goreng yang menghasilkan 10 porsi. Menyimpan resep belum mengurangi stok.",
+      },
+      {
+        selector: "#produksiRecipeList",
+        title: "Pilih Jumlah Produksi " + window.LakuIcons.svg("calculator", "1em"),
+        description:
+          "Pilih barang dari daftar resep. Contoh dummy: Nasi Goreng memakai Beras 0,5 kg dan Telur 2 butir per 10 porsi. Sistem membaca bahan dari resep tersebut.",
+      },
+      {
+        selector: "[data-produksi-qty]",
+        fallbackSelector: "#produksiRecipeList",
+        title: "Masukkan Jumlah Produksi " + window.LakuIcons.svg("calculator", "1em"),
+        description:
+          "Isi jumlah yang benar-benar dibuat. Contoh dummy: masukkan 3 untuk membuat 3 batch resep. Jumlah ini dikalikan dengan kebutuhan setiap bahan.",
+      },
+      {
+        selector: "[data-produksi-id]",
+        fallbackSelector: "#produksiRecipeList",
+        title: "Jalankan Produksi " + window.LakuIcons.svg("play", "1em"),
+        description:
+          "Klik tombol Produksi pada resep yang dipilih. Pada popup berikutnya, periksa nama produk dan jumlahnya, lalu pilih Ya untuk mengecek stok atau Batal untuk kembali.",
+      },
+      {
+        selector: "#produksiTabRiwayat",
+        title: "Riwayat Produksi " + window.LakuIcons.svg("chart", "1em"),
+        description:
+          "Setelah stok semua bahan cukup dan kamu memilih Ya, buka tab ini. Contoh hasil dummy: 3 batch Nasi Goreng, total biaya, omzet, dan profit tercatat otomatis. Catatan produksi bersifat tetap.",
+      },
+      {
+        selector: "#produksiSummary",
+        fallbackSelector: "#produksiHistoryList",
+        title: "Lihat Ringkasan Profit " + window.LakuIcons.svg("wallet", "1em"),
+        description:
+          "Gunakan ringkasan untuk melihat Total Profit, Total Produksi, dan Rata-rata Profit. Jika stok kurang, transaksi dibatalkan dan tidak ada bahan yang berkurang.",
+        highlightParent: true,
       },
     ],
 
@@ -775,6 +836,11 @@ window.LakuTour = (function () {
     // 1) Prevent any re-entry IMMEDIATELY
     isRunning = false;
 
+    var finishedKey = currentKey;
+    document.dispatchEvent(new CustomEvent("laku-tour-finish", {
+      detail: { moduleKey: finishedKey },
+    }));
+
     // 2) Cancel the RAF loop (guard against late callbacks)
     if (engineRafId) {
       cancelAnimationFrame(engineRafId);
@@ -865,6 +931,10 @@ window.LakuTour = (function () {
     currentIndex = 0;
     isRunning = true;
     lastBoundsStr = "";
+
+    document.dispatchEvent(new CustomEvent("laku-tour-start", {
+      detail: { moduleKey: moduleKey },
+    }));
 
     document.addEventListener("keydown", _onKeyDown);
 

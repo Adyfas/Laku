@@ -15,6 +15,45 @@ function initUtangAppLogic() {
     localStorage.setItem(UTANG_STORAGE_KEY, JSON.stringify(data));
   };
 
+  // Filter function for Utang
+  const utangFilterFn = (item, state) => {
+    // Search filter
+    if (state.searchTerm && item.nama.toLowerCase().indexOf(state.searchTerm.toLowerCase()) === -1) {
+      return false;
+    }
+
+    // Type filter
+    if (state.typeFilter !== "all" && item.type !== state.typeFilter) {
+      return false;
+    }
+
+    return true;
+  };
+
+  // Initialize shared pagination controller
+  const pagination = window.LakuPagination.createPaginationController({
+    storageKey: "laku_utang_ui_state",
+    getData: loadUtangData,
+    filterFn: utangFilterFn,
+    elements: {
+      searchInput: "utangSearchInput",
+      typeFilter: "utangTypeFilter",
+      pageSizeSelect: "utangPageSizeSelect",
+      prevPage: "utangPrevPage",
+      nextPage: "utangNextPage",
+      currentPage: "utangCurrentPage",
+      totalPages: "utangTotalPages",
+      startIndex: "utangStartIndex",
+      endIndex: "utangEndIndex",
+      totalCount: "utangTotalCount",
+      paginationContainer: "utangPagination",
+      clearFilters: "utangClearFilters",
+    },
+    onChange: (items, pagination) => renderTable(items, pagination),
+    defaultPageSize: 3,
+    debounceMs: 300,
+  });
+
   /** Mengirim notifikasi browser untuk catatan yang jatuh tempo hari ini */
   const checkDueNotifications = () => {
     if (!("Notification" in window) || Notification.permission !== "granted") return;
@@ -37,8 +76,9 @@ function initUtangAppLogic() {
   };
 
   /** Me-render ulang tabel desktop, kartu mobile, dan ringkasan overview */
-  const renderTable = () => {
-    const data = loadUtangData();
+  const renderTable = (paginatedItems) => {
+    const allData = loadUtangData();
+    const data = paginatedItems || allData;
     const tbody = document.getElementById("utangTableBody");
     const mobileList = document.getElementById("utangMobileList");
 
@@ -46,6 +86,18 @@ function initUtangAppLogic() {
     let totalUtang = 0;
     let dueTodayCount = 0;
     const todayStr = new Date().toISOString().split("T")[0];
+
+    // Ringkasan overview dihitung dari SEMUA data (bukan hasil filter/pagination)
+    allData.forEach((item) => {
+      const remaining = item.totalAmount - item.paidAmount;
+      const isLunas = remaining <= 0;
+      const isPiutang = item.type === "piutang";
+      const isDueToday = !isLunas && item.dueDate === todayStr;
+
+      if (isPiutang && !isLunas) totalPiutang += remaining;
+      if (!isPiutang && !isLunas) totalUtang += remaining;
+      if (isDueToday) dueTodayCount++;
+    });
 
     if (data.length === 0) {
       if (tbody) {
@@ -74,10 +126,6 @@ function initUtangAppLogic() {
         const isPiutang = item.type === "piutang";
         const isOverdue = !isLunas && item.dueDate < todayStr;
         const isDueToday = !isLunas && item.dueDate === todayStr;
-
-        if (isPiutang && !isLunas) totalPiutang += remaining;
-        if (!isPiutang && !isLunas) totalUtang += remaining;
-        if (isDueToday) dueTodayCount++;
 
         let statusBadge = "";
         if (isLunas) {
@@ -143,7 +191,6 @@ function initUtangAppLogic() {
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center gap-2">
                 ${typeBadge}
-                <span class="text-gray-400 font-medium font-mono text-[11px]">Harus dibayar: ${item.dueDate}</span>
               </div>
               ${statusBadge}
             </div>
@@ -154,6 +201,10 @@ function initUtangAppLogic() {
             </div>
 
             <div class="border-t border-gray-100 pt-2 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 font-medium">Harus dibayar:</span>
+               <span class="text-gray-700 font-bold text-[11px]">${item.dueDate}</span>
+              </div>
               <div class="flex items-center justify-between">
                 <span class="text-gray-500 font-medium">Total uang</span>
                 <span class="font-semibold text-gray-700">${window.formatRupiah(item.totalAmount)}</span>
@@ -209,11 +260,11 @@ function initUtangAppLogic() {
         });
 
         if (bayarStr !== null) {
-          const bayarNum = parseFloat(bayarStr) || 0;
+          const bayarNum = window.getRawNumber(bayarStr);
           if (bayarNum > 0) {
             item.paidAmount = Math.min(item.totalAmount, item.paidAmount + bayarNum);
             saveUtangData(currentData);
-            renderTable();
+            pagination.refresh();
           }
         }
       });
@@ -235,7 +286,7 @@ function initUtangAppLogic() {
           const currentData = loadUtangData();
           const filtered = currentData.filter((it) => it.id !== id);
           saveUtangData(filtered);
-          renderTable();
+          pagination.refresh();
         }
       });
     });
@@ -292,12 +343,13 @@ function initUtangAppLogic() {
       saveUtangData(currentData);
 
       form.reset();
-      renderTable();
+      pagination.refresh();
       checkDueNotifications();
     });
   }
 
-  renderTable();
+  // Initial render
+  pagination.refresh();
   checkDueNotifications();
 }
 

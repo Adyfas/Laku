@@ -40,7 +40,7 @@
     </div>
 
     <nav data-delay="0.2" data-direction="down" data-once="true" id="navbar"
-      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] lg:h-[860px]">
     <!-- <nav data-delay="0.2" data-direction="down" data-once="true" id="navbar"
       class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
       <div class="h-[72px] flex items-center justify-between px-[22px]">
@@ -246,7 +246,7 @@
           <div onclick="window.openAppModal('kas')"
             class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-3.5 group">
             <div
-              class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              class="w-12 h-12 rounded-2xl text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
@@ -264,7 +264,7 @@
           <div onclick="window.openAppModal('utang')"
             class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-3.5 group">
             <div
-              class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              class="w-12 h-12 rounded-2xl text-rose-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -285,7 +285,7 @@
           <div onclick="window.openAppModal('inventory')"
             class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-3.5 group">
             <div
-              class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              class="w-12 h-12 rounded-2xl text-indigo-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
                 <path d="m7.5 4.27 9 5.15" />
@@ -301,22 +301,22 @@
             </div>
           </div>
 
-          <!-- Card 4: AI Promo WA -->
-          <div onclick="window.openAppModal('promo')"
+          <!-- Card 4: Produksi -->
+          <div onclick="window.openAppModal('produksi')"
             class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-3.5 group">
             <div
-              class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              class="w-12 h-12 rounded-2xl text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-                <path
-                  d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71 1.1-1.38 1.4-2h0a18.2 18.2 0 0 0 7.85-7.85c.62-.3 1.29-.69 2-1.4 1.5-1.5 2-5 2-5s-3.5.5-5 2c-.71.71-1.1 1.38-1.4 2A18.2 18.2 0 0 0 6.5 15.1c-.3.62-.69 1.29-1.4 2Z" />
-                <path d="M12 15l-3-3" />
-                <path d="M15 12l-3-3" />
+                <path d="M3 7h18" />
+                <path d="M5 3h14v18H5z" />
+                <path d="M8 11h8" />
+                <path d="M8 15h5" />
               </svg>
             </div>
             <div class="min-w-0">
-              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">AI Copywriter</span>
-              <div id="dashPromoStatus" class="text-sm font-extrabold text-amber-900 truncate">Siap Buat Caption</div>
+              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Catat Produksi</span>
+              <div class="text-sm font-extrabold text-emerald-900 truncate">Produksi Barang</div>
             </div>
           </div>
         </div>
@@ -330,7 +330,7 @@
             <div id="dashQuickHpp" onclick="window.openAppModal('hpp')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-[#e2ffc8] flex items-center justify-center text-[#274c43]">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-[#274c43]">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
@@ -364,7 +364,7 @@
             <div id="dashQuickKas" onclick="window.openAppModal('kas')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-700">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
@@ -388,10 +388,10 @@
             </div>
 
             <!-- Card 3: Laba Rugi -->
-            <div onclick="window.openAppModal('laba')"
+            <div id="dashQuickLaba" onclick="window.openAppModal('laba')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-700">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-amber-700">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
@@ -413,10 +413,10 @@
               </div>
             </div>
             <!-- Card 4: Utang & Piutang -->
-            <div onclick="window.openAppModal('utang')"
+            <div id="dashQuickUtang" onclick="window.openAppModal('utang')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-700">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-rose-700">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
@@ -446,7 +446,7 @@
             <div id="dashQuickInventory" onclick="window.openAppModal('inventory')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-700">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-indigo-700">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
@@ -471,31 +471,30 @@
               </div>
             </div>
 
-            <!-- Card 6: AI Promo & Digital -->
-            <div onclick="window.openAppModal('promo')"
+            <!-- Card 6: Produksi -->
+            <div id="dashQuickProduksi" onclick="window.openAppModal('produksi')"
               class="group bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4">
               <div class="flex items-center justify-between">
-                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-700">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-7 h-7">
-                    <path
-                      d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71 1.1-1.38 1.4-2h0a18.2 18.2 0 0 0 7.85-7.85c.62-.3 1.29-.69 2-1.4 1.5-1.5 2-5 2-5s-3.5.5-5 2c-.71.71-1.1 1.38-1.4 2A18.2 18.2 0 0 0 6.5 15.1c-.3.62-.69 1.29-1.4 2Z" />
-                    <path d="M12 15l-3-3" />
-                    <path d="M15 12l-3-3" />
+                    <path d="M3 7h18" />
+                    <path d="M5 3h14v18H5z" />
+                    <path d="M8 11h8" />
+                    <path d="M8 15h5" />
                   </svg>
                 </div>
-                <span class="text-xs font-bold px-3 py-1 rounded-full bg-stone-100 text-stone-600">Promo & Iklan</span>
+                <span class="text-xs font-bold px-3 py-1 rounded-full bg-stone-100 text-stone-600">Catat Produksi</span>
               </div>
               <div>
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-[#274c43] transition-colors">Buat Teks Promo
-                  WA</h3>
-                <p class="text-gray-500 text-sm mt-2 leading-relaxed">Bikin caption promo WA & sosmed otomatis, tinggal
-                  copas.</p>
+                <h3 class="text-xl font-bold text-gray-900 group-hover:text-[#274c43] transition-colors">Catat Produksi
+                  Barang</h3>
+                <p class="text-gray-500 text-sm mt-2 leading-relaxed">Pakai resep untuk mengurangi stok bahan dan mencatat hasil produksi.</p>
               </div>
               <div
                 class="text-sm font-bold text-[#274c43] flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                Buat Promo →
+                Mulai Produksi →
               </div>
             </div>
 
@@ -527,11 +526,6 @@
         <!-- Rendered by modular JS scripts -->
       </div>
     </div>
-
-    <!-- Floating Bottom Navbar (Pill Container) -->
-    <nav id="bottomFloatingNav"
-      class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[110] bg-white rounded-full px-5 sm:px-6 py-3 shadow-[0_15px_40px_rgba(0,0,0,0.15)] border border-gray-100/90 flex items-center gap-3 sm:gap-6 md:gap-8 transition-all duration-300">
-    </nav>
 
     <!-- Footer -->
     <footer class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen">
@@ -576,7 +570,7 @@
         </div>
       </div>
       <h2
-        class="absolute left-1/2 -translate-x-1/2 -bottom-45 text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+        class="shadow-2xl absolute left-1/2 -translate-x-1/2 -bottom-45 text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
         Laku
       </h2>
     </footer>
@@ -588,6 +582,7 @@
   <script src="./javascript/core/appUtils.js"></script>
   <script src="./javascript/core/unitConversion.js"></script>
   <script src="./javascript/core/icons.js"></script>
+  <script src="./javascript/core/pagination.js"></script>
 
   <!-- HPP Module (5 files) — client first to define window.LakuHpp namespace -->
   <script src="./javascript/apps/hpp/hppApp.js"></script>
@@ -595,6 +590,10 @@
   <script src="./javascript/apps/hpp/hppIngredients.js"></script>
   <script src="./javascript/apps/hpp/hppCalc.js"></script>
   <script src="./javascript/apps/hpp/hppRecipes.js"></script>
+
+  <!-- Production Module -->
+  <script src="./javascript/apps/produksi/produksiApp.js"></script>
+  <script src="./javascript/apps/produksi/produksiClient.js"></script>
 
   <!-- Kas Module -->
   <script src="./javascript/apps/kas/kasApp.js"></script>
@@ -622,6 +621,9 @@
   <script src="./javascript/core/app.js"></script>
   <script src="./javascript/core/navbar.js"></script>
   <script src="./javascript/core/animations.js"></script>
+
+
+  <!-- <script src="./test.js"></script> -->
 </body>
 
 </html>

@@ -48,3 +48,13 @@ window.roundToNearest = function (num, nearest = 100) {
   if (!num || num <= 0) return 0;
   return Math.ceil(num / nearest) * nearest;
 };
+
+/** Debounce function: delays invoking func until after wait ms since last call */
+window.debounce = function (func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+};

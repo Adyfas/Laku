@@ -7,7 +7,9 @@
  * Uses window.formatRupiah() and window.roundToNearest() from appUtils.js (no local versions).
  */
 
-/** Render overhead list with remove handlers */
+const MAX_MARGIN = 99;
+
+/** Render overhead list with edit/remove handlers using event delegation */
 window.LakuHpp.renderOverhead = function () {
   const list = document.getElementById("hppOverheadList");
   if (!list) return;
@@ -16,127 +18,385 @@ window.LakuHpp.renderOverhead = function () {
     list.innerHTML = `
       <div class="text-center py-3 text-amber-700/60 text-xs">Kosong — isi kalau ada biaya lain.</div>
     `;
-  } else {
-    list.innerHTML = window.LakuHpp.overheadItems
-      .map(
-        (item, i) => `
-          <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-amber-200/50">
-            <div class="flex items-center gap-2">
-              <span class="text-sm font-medium text-gray-700">${item.nama}</span>
-              <span class="text-sm font-bold text-amber-800">${window.formatRupiah(item.biaya)}</span>
-            </div>
-            <button data-remove-ovh="${i}" class="text-rose-400 hover:text-rose-600 font-bold text-xs cursor-pointer transition-colors" title="Hapus">${window.LakuIcons.svg("closeCircle", "0.85em")}</button>
-          </div>
-        `
-      )
-      .join("");
+    // Remove any existing delegated listeners
+    if (list._overheadClickHandler) {
+      list.removeEventListener("click", list._overheadClickHandler);
+      list._overheadClickHandler = null;
+    }
+    if (list._overheadInputHandler) {
+      list.removeEventListener("input", list._overheadInputHandler);
+      list._overheadInputHandler = null;
+    }
+    return;
   }
 
-  // Bind remove buttons
-  list.querySelectorAll("[data-remove-ovh]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const idx = parseInt(btn.getAttribute("data-remove-ovh"));
-      window.LakuHpp.overheadItems.splice(idx, 1);
-      window.LakuHpp.renderOverhead();
-    });
-  });
+  list.innerHTML = window.LakuHpp.overheadItems
+    .map((item) => {
+      const isEditing = window.LakuHpp.editingOverheadId && window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, item.id);
+      const draft = window.LakuHpp.editingOverheadDraft || {};
+
+      if (isEditing) {
+        // Inline edit mode
+        return `
+          <div class="flex flex-col gap-2 bg-white p-3 rounded-xl border border-amber-200/50" data-overhead-id="${item.id}">
+            <div class="flex flex-col gap-2">
+              <input type="text" data-edit-ovh-nama="${item.id}" value="${window.LakuHpp.escapeHtml(draft.nama ?? item.nama)}" class="bg-white text-black-main font-medium py-2 px-3 rounded-xl outline-none border border-gray-200 focus:border-amber-500 text-sm" placeholder="Nama biaya" />
+              <input type="text" inputmode="numeric" data-edit-ovh-biaya="${item.id}" value="${draft.biaya !== undefined ? window.formatRupiah(draft.biaya) : window.formatRupiah(item.biaya)}" class="bg-white text-black-main font-medium py-2 px-3 rounded-xl outline-none border border-gray-200 focus:border-amber-500 text-sm" placeholder="Rp" oninput="window.formatNumberInput(this)" />
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-1">
+              <button data-cancel-edit-ovh="${item.id}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-3 rounded-xl transition-colors text-xs cursor-pointer">
+                ${window.LakuIcons.svg("close", "0.85em")} Batal
+              </button>
+              <button data-save-edit-ovh="${item.id}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-3 rounded-xl transition-colors shadow-sm text-xs cursor-pointer">
+                ${window.LakuIcons.svg("save", "0.85em")} Simpan
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-amber-200/50" data-overhead-id="${item.id}">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-700">${window.LakuHpp.escapeHtml(item.nama)}</span>
+            <span class="text-sm font-bold text-amber-800">${window.formatRupiah(item.biaya)}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <button data-edit-ovh="${item.id}" class="text-blue-500 hover:text-blue-700 font-bold text-xs cursor-pointer transition-colors" title="Edit biaya">
+              ${window.LakuIcons.svg("pencil", "0.85em")}
+            </button>
+            <button data-remove-ovh="${item.id}" class="text-rose-400 hover:text-rose-600 font-bold text-xs cursor-pointer transition-colors" title="Hapus biaya">
+              ${window.LakuIcons.svg("closeCircle", "0.85em")}
+            </button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  // Set up delegated event handlers
+  // Remove old handlers first
+  if (list._overheadClickHandler) {
+    list.removeEventListener("click", list._overheadClickHandler);
+  }
+  if (list._overheadInputHandler) {
+    list.removeEventListener("input", list._overheadInputHandler);
+  }
+
+  // Click handler for buttons
+  list._overheadClickHandler = (e) => {
+    const target = e.target.closest("button");
+    if (!target) return;
+
+    const overheadEl = target.closest("[data-overhead-id]");
+    const overheadId = overheadEl?.getAttribute("data-overhead-id");
+    if (!overheadId) return;
+
+    if (target.hasAttribute("data-remove-ovh")) {
+      handleRemoveOverhead(overheadId);
+    } else if (target.hasAttribute("data-edit-ovh")) {
+      window.LakuHpp.startEditOverhead(overheadId);
+    } else if (target.hasAttribute("data-save-edit-ovh")) {
+      window.LakuHpp.saveInlineEditOverhead(overheadId);
+    } else if (target.hasAttribute("data-cancel-edit-ovh")) {
+      window.LakuHpp.cancelInlineEditOverhead(overheadId);
+    }
+  };
+  list.addEventListener("click", list._overheadClickHandler);
+
+  // Input handler for inline edit fields
+  list._overheadInputHandler = (e) => {
+    const target = e.target;
+    const overheadEl = target.closest("[data-overhead-id]");
+    const overheadId = overheadEl?.getAttribute("data-overhead-id");
+    if (!overheadId || window.LakuHpp.editingOverheadId !== overheadId) return;
+
+    if (target.hasAttribute("data-edit-ovh-nama")) {
+      window.LakuHpp.updateOverheadEditDraft(overheadId, { nama: target.value.trim() });
+    } else if (target.hasAttribute("data-edit-ovh-biaya")) {
+      const value = window.getRawNumber(target);
+      window.LakuHpp.updateOverheadEditDraft(overheadId, { biaya: value });
+    }
+  };
+  list.addEventListener("input", list._overheadInputHandler);
 };
 
-/** Add an overhead item from the input fields */
-window.LakuHpp.addOverhead = function () {
+/** Handle remove overhead with confirmation */
+async function handleRemoveOverhead(id) {
+  const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
+  if (!item) return;
+  const ok = await window.showCustomConfirm({
+    title: "Hapus Biaya?",
+    message: `Yakin ingin menghapus "${item.nama}" dari daftar?`,
+  });
+  if (ok) {
+    window.LakuHpp.overheadItems = window.LakuHpp.overheadItems.filter((i) => !window.LakuHpp.idsEqual(i.id, id));
+    window.LakuHpp.renderOverhead();
+    window.LakuHpp.saveSession();
+  }
+}
+
+/** Start inline editing an overhead item in its box — save-first transition */
+window.LakuHpp.startEditOverhead = function (id, draft) {
+  // If another overhead item is being edited, try to save it first
+  if (window.LakuHpp.editingOverheadId && !window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) {
+    const currentDraft = window.LakuHpp.editingOverheadDraft;
+    if (currentDraft && (currentDraft.nama || currentDraft.biaya !== undefined)) {
+      // Try to save the current edit
+      const saved = window.LakuHpp.saveInlineEditOverhead(window.LakuHpp.editingOverheadId);
+      if (!saved) {
+        // Save failed (validation error), stay on current edit
+        window.showAlert({
+          type: "warning",
+          title: "Simpan Dulu",
+          message: "Perbaiki data biaya yang sedang diedit sebelum berpindah.",
+        });
+        return;
+      }
+    } else {
+      // No changes, just cancel
+      window.LakuHpp.cancelInlineEditOverhead(window.LakuHpp.editingOverheadId);
+    }
+  }
+
+  const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
+  if (!item) return;
+
+  // Initialize draft with current values
+  const initialDraft = draft || {
+    nama: item.nama,
+    biaya: item.biaya,
+  };
+
+  window.LakuHpp.editingOverheadId = id;
+  window.LakuHpp.editingOverheadDraft = initialDraft;
+  window.LakuHpp.saveSession();
+  window.LakuHpp.renderOverhead();
+};
+
+/** Update inline edit draft and persist to session */
+window.LakuHpp.updateOverheadEditDraft = function (id, updates) {
+  if (!window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) return;
+  window.LakuHpp.editingOverheadDraft = {
+    ...window.LakuHpp.editingOverheadDraft,
+    ...updates,
+  };
+  window.LakuHpp.saveSession();
+};
+
+/** Save inline edited overhead item — returns true on success */
+window.LakuHpp.saveInlineEditOverhead = function (id) {
+  const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
+  if (!item) return false;
+
+  const draft = window.LakuHpp.editingOverheadDraft;
+  if (!draft) return false;
+
+  const nama = draft.nama;
+  const biaya = draft.biaya;
+
+  // Validate required fields
+  if (!nama || biaya === undefined) {
+    window.showAlert({
+      type: "error",
+      title: "Data Tidak Lengkap",
+      message: "Isi nama dan nominal biaya terlebih dahulu.",
+    });
+    return false;
+  }
+
+  const biayaValidation = window.LakuHpp.validatePositiveFinite(biaya, "Biaya");
+  if (!biayaValidation.valid) {
+    window.showAlert({
+      type: "error",
+      title: "Biaya Tidak Valid",
+      message: biayaValidation.message,
+    });
+    return false;
+  }
+
+  // Find and replace overhead item
+  const idx = window.LakuHpp.overheadItems.findIndex((i) => window.LakuHpp.idsEqual(i.id, id));
+  if (idx === -1) return false;
+
+  window.LakuHpp.overheadItems[idx] = { id, nama, biaya: biayaValidation.value };
+
+  // Reset editing state
+  window.LakuHpp.editingOverheadId = null;
+  window.LakuHpp.editingOverheadDraft = null;
+  window.LakuHpp.renderOverhead();
+  window.LakuHpp.saveSession();
+  return true;
+};
+
+/** Cancel inline editing overhead item */
+window.LakuHpp.cancelInlineEditOverhead = function (id) {
+  if (!window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) return;
+  window.LakuHpp.editingOverheadId = null;
+  window.LakuHpp.editingOverheadDraft = null;
+  window.LakuHpp.saveSession();
+  window.LakuHpp.renderOverhead();
+};
+
+/** Cancel active overhead edit mode (general) */
+window.LakuHpp.cancelEditOverhead = function () {
+  if (window.LakuHpp.editingOverheadId) {
+    window.LakuHpp.cancelInlineEditOverhead(window.LakuHpp.editingOverheadId);
+  } else {
+    window.LakuHpp.editingOverheadId = null;
+    window.LakuHpp.editingOverheadDraft = null;
+  }
   const namaInput = document.getElementById("hppOverheadNama");
   const biayaInput = document.getElementById("hppOverheadBiaya");
-  if (!namaInput || !biayaInput) return;
+  if (namaInput) namaInput.value = "";
+  if (biayaInput) biayaInput.value = "";
+};
 
-  const nama = namaInput.value.trim();
-  const biaya = window.getRawNumber(biayaInput);
+/** Add an overhead item from the input fields — single-flight guard */
+window.LakuHpp.addOverhead = function () {
+  // Single-flight guard
+  if (window.LakuHpp._addingOverhead) return;
+  window.LakuHpp._addingOverhead = true;
 
-  if (!nama || biaya <= 0) return;
+  try {
+    // If currently editing, treat as save
+    if (window.LakuHpp.editingOverheadId) {
+      const saved = window.LakuHpp.saveInlineEditOverhead(window.LakuHpp.editingOverheadId);
+      if (saved === false) return; // Validation failed, stay in edit mode
+    }
 
-  window.LakuHpp.overheadItems.push({ nama, biaya });
-  namaInput.value = "";
-  biayaInput.value = "";
-  window.LakuHpp.renderOverhead();
+    const namaInput = document.getElementById("hppOverheadNama");
+    const biayaInput = document.getElementById("hppOverheadBiaya");
+    if (!namaInput || !biayaInput) return;
+
+    const nama = namaInput.value.trim();
+    const biaya = window.getRawNumber(biayaInput);
+
+    const biayaValidation = window.LakuHpp.validatePositiveFinite(biaya, "Biaya");
+    if (!nama || !biayaValidation.valid) return;
+
+    // Generate a unique ID
+    const id = window.LakuHpp.generateHppId("ovh");
+    window.LakuHpp.overheadItems.push({ id, nama, biaya: biayaValidation.value });
+    namaInput.value = "";
+    biayaInput.value = "";
+    window.LakuHpp.renderOverhead();
+    window.LakuHpp.saveSession();
+  } finally {
+    window.LakuHpp._addingOverhead = false;
+  }
+};
+
+/** Pure calculation engine shared by the result screen and recipe persistence. */
+window.LakuHpp.calculateValues = function ({
+  ingredients = window.LakuHpp.ingredients,
+  jam = 0,
+  upah = 0,
+  overheadItems = window.LakuHpp.overheadItems,
+  biayaKemasan = 0,
+  jumlahProduksi = 1,
+  margin = 30,
+} = {}) {
+  // Validate all numeric inputs
+  const validatedJam = Number.isFinite(jam) && jam >= 0 ? jam : 0;
+  const validatedUpah = Number.isFinite(upah) && upah >= 0 ? upah : 0;
+  const validatedBiayaKemasan = Number.isFinite(biayaKemasan) && biayaKemasan >= 0 ? biayaKemasan : 0;
+  const validatedJumlahProduksi = Number.isFinite(jumlahProduksi) && jumlahProduksi > 0 ? jumlahProduksi : 1;
+  const validatedMargin = Number.isFinite(margin) ? Math.max(0, Math.min(MAX_MARGIN, margin)) : 30;
+
+  const totalBahan = ingredients.reduce(
+    (sum, ingredient) => {
+      const qty = Number.isFinite(ingredient.jumlahPakai) ? ingredient.jumlahPakai : 0;
+      const harga = Number.isFinite(ingredient.hargaBeli) ? ingredient.hargaBeli : 0;
+      return sum + qty * harga;
+    },
+    0
+  );
+  const totalTenaga = validatedJam * validatedUpah;
+  const totalOverhead = overheadItems.reduce(
+    (sum, item) => {
+      const biaya = Number.isFinite(item.biaya) ? item.biaya : 0;
+      return sum + biaya;
+    },
+    0
+  );
+  const totalBiaya = totalBahan + totalTenaga + totalOverhead + validatedBiayaKemasan;
+  const output = validatedJumlahProduksi;
+  const hppPerUnit = output > 0 ? totalBiaya / output : 0;
+  const safeMargin = validatedMargin;
+  const hargaJual = hppPerUnit / (1 - safeMargin / 100);
+
+  return {
+    totalBahan,
+    totalTenaga,
+    totalOverhead,
+    biayaKemasan: validatedBiayaKemasan,
+    totalBiaya,
+    jumlahProduksi: output,
+    hppPerUnit,
+    margin: safeMargin,
+    hargaJual,
+    hargaJualBulat: window.roundToNearest(hargaJual, 100),
+  };
 };
 
 /** Main calculation: total bahan + tenaga + overhead + kemasan + margin → HPP per unit → harga jual */
 window.LakuHpp.calculateAll = function () {
-  // Total bahan
-  const totalBahan = window.LakuHpp.ingredients.reduce(
-    (sum, ing) => sum + ing.jumlahPakai * ing.hargaBeli,
-    0
-  );
-
   // Tenaga kerja
   const jam =
     parseFloat(document.getElementById("hppJamKerja")?.value) || 0;
   const upah = window.getRawNumber(
     document.getElementById("hppUpahPerJam")
   );
-  const totalTenaga = jam * upah;
+  const biayaKemasan = window.getRawNumber(
+    document.getElementById("hppBiayaKemasan")
+  );
+
+  const jumlahProduksi =
+    parseFloat(document.getElementById("hppJumlahProduksi")?.value) || 1;
+  const margin =
+    parseFloat(document.getElementById("hppMarginSlider")?.value) || 30;
+  const values = window.LakuHpp.calculateValues({
+    jam,
+    upah,
+    biayaKemasan,
+    jumlahProduksi,
+    margin,
+  });
 
   // Update tenaga display
   const tenagaDisplay = document.getElementById("hppTotalTenaga");
   const tenagaValue = document.getElementById("hppTotalTenagaValue");
   if (jam > 0 && upah > 0) {
     if (tenagaDisplay) tenagaDisplay.classList.remove("hidden");
-    if (tenagaValue) tenagaValue.textContent = window.formatRupiah(totalTenaga);
+    if (tenagaValue) tenagaValue.textContent = window.formatRupiah(values.totalTenaga);
   } else {
     if (tenagaDisplay) tenagaDisplay.classList.add("hidden");
   }
 
-  // Overhead
-  const totalOverhead = window.LakuHpp.overheadItems.reduce(
-    (sum, item) => sum + item.biaya,
-    0
-  );
-
-  // Kemasan
-  const biayaKemasan = window.getRawNumber(
-    document.getElementById("hppBiayaKemasan")
-  );
-
-  // Grand total
-  const totalBiaya = totalBahan + totalTenaga + totalOverhead + biayaKemasan;
-
-  // Jumlah produksi
-  const jumlahProduksi =
-    parseInt(document.getElementById("hppJumlahProduksi")?.value) || 1;
   const satuan =
     document.getElementById("hppSatuanProduksi")?.value || "unit";
-
-  // HPP per unit
-  const hppPerUnit =
-    jumlahProduksi > 0 ? totalBiaya / jumlahProduksi : 0;
-
-  // Margin
-  const margin =
-    parseInt(document.getElementById("hppMarginSlider")?.value) || 30;
-
-  // Harga jual
-  const hargaJual = (margin >= 100) ? Infinity : hppPerUnit / (1 - margin / 100);
-  const hargaBulat = window.roundToNearest(hargaJual, 100);
 
   // Update summary displays
   const el = (id) => document.getElementById(id);
   if (el("hppRingkasanBahan"))
-    el("hppRingkasanBahan").textContent = window.formatRupiah(totalBahan);
+    el("hppRingkasanBahan").textContent = window.formatRupiah(values.totalBahan);
   if (el("hppRingkasanTenaga"))
-    el("hppRingkasanTenaga").textContent = window.formatRupiah(totalTenaga);
+    el("hppRingkasanTenaga").textContent = window.formatRupiah(values.totalTenaga);
   if (el("hppRingkasanOverhead"))
-    el("hppRingkasanOverhead").textContent = window.formatRupiah(totalOverhead);
+    el("hppRingkasanOverhead").textContent = window.formatRupiah(values.totalOverhead);
   if (el("hppRingkasanKemasan"))
-    el("hppRingkasanKemasan").textContent = window.formatRupiah(biayaKemasan);
+    el("hppRingkasanKemasan").textContent = window.formatRupiah(values.biayaKemasan);
   if (el("hppRingkasanTotal"))
-    el("hppRingkasanTotal").textContent = window.formatRupiah(totalBiaya);
+    el("hppRingkasanTotal").textContent = window.formatRupiah(values.totalBiaya);
   if (el("hppRingkasanHpp"))
-    el("hppRingkasanHpp").textContent = window.formatRupiah(hppPerUnit);
+    el("hppRingkasanHpp").textContent = window.formatRupiah(values.hppPerUnit);
   if (el("hppRingkasanSatuan"))
     el("hppRingkasanSatuan").textContent = satuan;
   if (el("hppHargaJual"))
-    el("hppHargaJual").textContent = window.formatRupiah(hargaJual);
+    el("hppHargaJual").textContent = window.formatRupiah(values.hargaJual);
   if (el("hppHargaBulat"))
-    el("hppHargaBulat").textContent = `Dibulatkan: ${window.formatRupiah(hargaBulat)}`;
+    el("hppHargaBulat").textContent = `Dibulatkan: ${window.formatRupiah(values.hargaJualBulat)}`;
   if (el("hppMarginDisplay"))
-    el("hppMarginDisplay").textContent = `${margin}%`;
+    el("hppMarginDisplay").textContent = `${values.margin}%`;
 };

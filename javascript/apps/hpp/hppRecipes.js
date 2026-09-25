@@ -7,12 +7,16 @@
  * Uses window.formatRupiah() from appUtils.js (no local formatRupiah).
  */
 
+const RECIPE_SCHEMA_VERSION = 2;
+
 /** Save current form data as a new recipe or update existing one */
 window.LakuHpp.saveCurrentRecipe = function () {
   const namaProduk =
     document.getElementById("hppNamaProduk")?.value.trim();
-  const jumlahProduksi =
-    parseInt(document.getElementById("hppJumlahProduksi")?.value) || 0;
+  const jumlahProduksiValidation = window.LakuHpp.validatePositiveFinite(
+    document.getElementById("hppJumlahProduksi")?.value,
+    "Jumlah produksi"
+  );
   const satuan =
     document.getElementById("hppSatuanProduksi")?.value || "porsi";
 
@@ -20,8 +24,8 @@ window.LakuHpp.saveCurrentRecipe = function () {
     window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi nama produk dulu ya!" });
     return;
   }
-  if (jumlahProduksi <= 0) {
-    window.showAlert({ type: "warning", title: "Belum Lengkap", message: "Isi jumlah produksi dulu ya!" });
+  if (!jumlahProduksiValidation.valid) {
+    window.showAlert({ type: "warning", title: "Belum Lengkap", message: jumlahProduksiValidation.message });
     return;
   }
   if (window.LakuHpp.ingredients.length === 0) {
@@ -29,37 +33,29 @@ window.LakuHpp.saveCurrentRecipe = function () {
     return;
   }
 
-  // Recalculate final values
-  const totalBahan = window.LakuHpp.ingredients.reduce(
-    (sum, ing) => sum + ing.jumlahPakai * ing.hargaBeli,
-    0
-  );
   const jam =
     parseFloat(document.getElementById("hppJamKerja")?.value) || 0;
   const upah = window.getRawNumber(
     document.getElementById("hppUpahPerJam")
   );
-  const totalTenaga = jam * upah;
-  const totalOverhead = window.LakuHpp.overheadItems.reduce(
-    (sum, item) => sum + item.biaya,
-    0
-  );
   const biayaKemasan = window.getRawNumber(
     document.getElementById("hppBiayaKemasan")
   );
-  const totalBiaya =
-    totalBahan + totalTenaga + totalOverhead + biayaKemasan;
-  const hppPerUnit =
-    jumlahProduksi > 0 ? totalBiaya / jumlahProduksi : 0;
   const margin =
-    parseInt(document.getElementById("hppMarginSlider")?.value) || 30;
-  const hargaJual = (margin >= 100) ? Infinity : hppPerUnit / (1 - margin / 100);
-  const hargaBulat = window.roundToNearest(hargaJual, 100);
+    parseFloat(document.getElementById("hppMarginSlider")?.value) || 30;
+  const values = window.LakuHpp.calculateValues({
+    jam,
+    upah,
+    biayaKemasan,
+    jumlahProduksi: jumlahProduksiValidation.value,
+    margin,
+  });
 
   const recipe = {
-    id: Date.now(),
+    id: window.LakuHpp.generateHppId("rec"),
+    schemaVersion: RECIPE_SCHEMA_VERSION,
     namaProduk,
-    jumlahProduksi,
+    jumlahProduksi: jumlahProduksiValidation.value,
     satuanProduksi: satuan,
     bahanBaku: window.LakuHpp.ingredients.map((ing) => ({
       inventoryId: ing.inventoryId,
@@ -68,6 +64,11 @@ window.LakuHpp.saveCurrentRecipe = function () {
       jumlahPakai: ing.jumlahPakai,
       satuan: ing.satuan,
       biayaTerhitung: ing.jumlahPakai * ing.hargaBeli,
+      inputQty: ing._inputQty ?? ing.jumlahPakai,
+      inputUnit: ing._inputUnit || ing.satuan,
+      calculationQty: ing.jumlahPakai,
+      calculationUnit: ing.satuan,
+      ...(ing._inputUnitPrice !== undefined ? { inputUnitPrice: ing._inputUnitPrice } : {}),
       // Nesting levels for auto-calculation on restore
       ...(ing.nestedLevels ? { nestedLevels: ing.nestedLevels } : {}),
       // Conversion data (for restoring original input & stock deduct):
@@ -75,27 +76,28 @@ window.LakuHpp.saveCurrentRecipe = function () {
       ...(ing._baseUnit ? { _baseUnit: ing._baseUnit } : {}),
       ...(ing._inputQty !== undefined ? { _inputQty: ing._inputQty } : {}),
       ...(ing._inputUnit ? { _inputUnit: ing._inputUnit } : {}),
+      ...(ing._inputUnitPrice !== undefined ? { _inputUnitPrice: ing._inputUnitPrice } : {}),
     })),
     tenagaKerja: {
       jam,
       upahPerJam: upah,
-      total: totalTenaga,
+      total: values.totalTenaga,
     },
     overhead: [...window.LakuHpp.overheadItems],
     biayaKemasan,
-    totalBiayaBahan: totalBahan,
-    totalBiaya,
-    hppPerUnit,
-    margin,
-    hargaJual,
-    hargaJualBulat: hargaBulat,
+    totalBiayaBahan: values.totalBahan,
+    totalBiaya: values.totalBiaya,
+    hppPerUnit: values.hppPerUnit,
+    margin: values.margin,
+    hargaJual: values.hargaJual,
+    hargaJualBulat: values.hargaJualBulat,
     tanggalDibuat: new Date().toISOString(),
   };
 
   if (window.LakuHpp.editingRecipeId) {
     // UPDATE existing recipe
     const recipes = loadRecipes();
-    const idx = recipes.findIndex((r) => r.id === window.LakuHpp.editingRecipeId);
+    const idx = recipes.findIndex((r) => window.LakuHpp.idsEqual(r.id, window.LakuHpp.editingRecipeId));
     if (idx === -1) {
       window.showAlert({ type: "error", title: "Gagal Menyimpan", message: "Resep tidak ditemukan!" });
       return;
@@ -129,16 +131,37 @@ window.LakuHpp.saveCurrentRecipe = function () {
     }, 2000);
   }
 
-  window.LakuHpp.renderRecipeList();
+  // Clear session and reset form for new product
+  if (window.LakuHpp.resetForm) {
+    window.LakuHpp.resetForm();
+  } else {
+    // Fallback if resetForm not available
+    window.LakuHpp.clearSession();
+    window.LakuHpp.ingredients = [];
+    window.LakuHpp.overheadItems = [];
+    window.LakuHpp.editingRecipeId = null;
+    window.LakuHpp.currentStep = 1;
+    window.LakuHpp.refreshIngredientUI();
+    window.LakuHpp.renderOverhead();
+    window.LakuHpp.refreshRecipeList();
+    goToStep(1);
+  }
+
+  window.LakuHpp.refreshRecipeList();
 };
 
-/** Render recipe list: desktop table + mobile cards */
-window.LakuHpp.renderRecipeList = function () {
+/** Render recipe list: desktop table + mobile cards with event delegation.
+ *  Accepts optional paginated items from the shared pagination controller. */
+window.LakuHpp.renderRecipeList = function (paginatedItems) {
   const tbody = document.getElementById("recipeTableBody");
   const mobileList = document.getElementById("recipeMobileList");
   if (!tbody || !mobileList) return;
 
-  const recipes = loadRecipes();
+  // Get filtered and paginated recipes from the shared pagination controller
+  const paginationData = window.LakuHpp.paginationController
+    ? window.LakuHpp.paginationController.getPaginatedData()
+    : { items: [], totalItems: 0, totalPages: 1, currentPage: 1, pageSize: 10, startIdx: 0, endIdx: 0 };
+  const recipes = paginatedItems !== undefined ? paginatedItems : paginationData.items;
 
   if (recipes.length === 0) {
     const emptyHtml = `
@@ -148,6 +171,15 @@ window.LakuHpp.renderRecipeList = function () {
     `;
     tbody.innerHTML = `<tr><td colspan="6" class="py-2">${emptyHtml}</td></tr>`;
     mobileList.innerHTML = emptyHtml;
+    // Remove any existing delegated listeners
+    if (tbody._recipeClickHandler) {
+      tbody.removeEventListener("click", tbody._recipeClickHandler);
+      tbody._recipeClickHandler = null;
+    }
+    if (mobileList._recipeClickHandler) {
+      mobileList.removeEventListener("click", mobileList._recipeClickHandler);
+      mobileList._recipeClickHandler = null;
+    }
     return;
   }
 
@@ -165,21 +197,21 @@ window.LakuHpp.renderRecipeList = function () {
       : "";
 
     const actionButtons = `
-      <button data-recipe-edit="${r.id}" class="bg-stone-100 hover:bg-[#274c43] hover:text-white text-gray-600 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Edit</button>
-      <button data-recipe-duplicate="${r.id}" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Duplikat</button>
-      <button data-recipe-delete="${r.id}" class="text-stone-400 hover:text-rose-600 font-semibold text-xs cursor-pointer">Hapus</button>
+      <button data-recipe-edit="${window.LakuHpp.escapeHtml(r.id)}" class="bg-stone-100 hover:bg-[#274c43] hover:text-white text-gray-600 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Edit</button>
+      <button data-recipe-duplicate="${window.LakuHpp.escapeHtml(r.id)}" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Duplikat</button>
+      <button data-recipe-delete="${window.LakuHpp.escapeHtml(r.id)}" class="text-stone-400 hover:text-rose-600 font-semibold text-xs cursor-pointer">Hapus</button>
     `;
 
     desktopHtml += `
       <tr class="hover:bg-stone-50/80 transition-colors">
         <td class="py-3.5 px-4">
-          <div class="font-bold text-gray-800">${r.namaProduk} ${badgeDiubah}</div>
+          <div class="font-bold text-gray-800">${window.LakuHpp.escapeHtml(r.namaProduk)} ${badgeDiubah}</div>
           <div class="text-[11px] text-gray-400">${tgl} • ${r.bahanBaku?.length || 0} bahan</div>
         </td>
-        <td class="py-3.5 px-4 text-center text-xs font-medium text-gray-600">${r.jumlahProduksi} ${r.satuanProduksi}</td>
+        <td class="py-3.5 px-4 text-center text-xs font-medium text-gray-600">${window.LakuHpp.escapeHtml(String(r.jumlahProduksi))} ${window.LakuHpp.escapeHtml(r.satuanProduksi)}</td>
         <td class="py-3.5 px-4 text-right font-semibold text-gray-800">${window.formatRupiah(r.hppPerUnit)}</td>
         <td class="py-3.5 px-4 text-right font-extrabold text-[#274c43]">${window.formatRupiah(r.hargaJualBulat)}</td>
-        <td class="py-3.5 px-4 text-center text-xs font-bold text-amber-700">${r.margin}%</td>
+        <td class="py-3.5 px-4 text-center text-xs font-bold text-amber-700">${window.LakuHpp.escapeHtml(String(r.margin))}%</td>
         <td class="py-3.5 px-4 text-center space-x-1.5 whitespace-nowrap">${actionButtons}</td>
       </tr>
     `;
@@ -187,10 +219,10 @@ window.LakuHpp.renderRecipeList = function () {
     mobileHtml += `
       <div class="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-xs space-y-3">
         <div class="flex items-center justify-between">
-          <h4 class="text-base font-bold text-gray-900">${r.namaProduk} ${badgeDiubah}</h4>
-          <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-md">${r.margin}%</span>
+          <h4 class="text-base font-bold text-gray-900">${window.LakuHpp.escapeHtml(r.namaProduk)} ${badgeDiubah}</h4>
+          <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-md">${window.LakuHpp.escapeHtml(String(r.margin))}%</span>
         </div>
-        <div class="text-[11px] text-gray-400">${tgl} • ${r.jumlahProduksi} ${r.satuanProduksi} • ${r.bahanBaku?.length || 0} bahan</div>
+        <div class="text-[11px] text-gray-400">${tgl} • ${window.LakuHpp.escapeHtml(String(r.jumlahProduksi))} ${window.LakuHpp.escapeHtml(r.satuanProduksi)} • ${r.bahanBaku?.length || 0} bahan</div>
         <div class="border-t border-gray-100 pt-2 flex items-center justify-between text-xs">
           <span class="text-gray-500 font-medium">Modal/satuan</span>
           <span class="font-semibold text-gray-800">${window.formatRupiah(r.hppPerUnit)}</span>
@@ -201,10 +233,10 @@ window.LakuHpp.renderRecipeList = function () {
         </div>
         <div class="pt-2 flex items-center justify-between gap-2 border-t border-gray-100">
           <div class="flex items-center gap-2">
-            <button data-recipe-edit="${r.id}" class="bg-stone-100 hover:bg-[#274c43] hover:text-white text-gray-600 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Edit</button>
-            <button data-recipe-duplicate="${r.id}" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Duplikat</button>
+            <button data-recipe-edit="${window.LakuHpp.escapeHtml(r.id)}" class="bg-stone-100 hover:bg-[#274c43] hover:text-white text-gray-600 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Edit</button>
+            <button data-recipe-duplicate="${window.LakuHpp.escapeHtml(r.id)}" class="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 font-bold py-1.5 px-3 rounded-lg text-xs transition-all cursor-pointer">Duplikat</button>
           </div>
-          <button data-recipe-delete="${r.id}" class="text-stone-400 hover:text-rose-600 font-semibold text-xs cursor-pointer">Hapus</button>
+          <button data-recipe-delete="${window.LakuHpp.escapeHtml(r.id)}" class="text-stone-400 hover:text-rose-600 font-semibold text-xs cursor-pointer">Hapus</button>
         </div>
       </div>
     `;
@@ -213,37 +245,37 @@ window.LakuHpp.renderRecipeList = function () {
   tbody.innerHTML = desktopHtml;
   mobileList.innerHTML = mobileHtml;
 
-  // Bind Edit / Duplicate / Delete actions
-  tbody.querySelectorAll("[data-recipe-edit]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.openRecipeForEdit(parseInt(btn.getAttribute("data-recipe-edit")))
-    )
-  );
-  mobileList.querySelectorAll("[data-recipe-edit]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.openRecipeForEdit(parseInt(btn.getAttribute("data-recipe-edit")))
-    )
-  );
-  tbody.querySelectorAll("[data-recipe-duplicate]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.duplicateRecipe(parseInt(btn.getAttribute("data-recipe-duplicate")))
-    )
-  );
-  mobileList.querySelectorAll("[data-recipe-duplicate]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.duplicateRecipe(parseInt(btn.getAttribute("data-recipe-duplicate")))
-    )
-  );
-  tbody.querySelectorAll("[data-recipe-delete]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.deleteRecipe(parseInt(btn.getAttribute("data-recipe-delete")))
-    )
-  );
-  mobileList.querySelectorAll("[data-recipe-delete]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.LakuHpp.deleteRecipe(parseInt(btn.getAttribute("data-recipe-delete")))
-    )
-  );
+  // Set up delegated click handlers
+  // Remove old handlers first
+  if (tbody._recipeClickHandler) {
+    tbody.removeEventListener("click", tbody._recipeClickHandler);
+  }
+  if (mobileList._recipeClickHandler) {
+    mobileList.removeEventListener("click", mobileList._recipeClickHandler);
+  }
+
+  const handleRecipeAction = (e, listEl) => {
+    const target = e.target.closest("button");
+    if (!target) return;
+
+    const recipeId = target.getAttribute("data-recipe-edit") ||
+                     target.getAttribute("data-recipe-duplicate") ||
+                     target.getAttribute("data-recipe-delete");
+    if (!recipeId) return;
+
+    if (target.hasAttribute("data-recipe-edit")) {
+      window.LakuHpp.openRecipeForEdit(recipeId);
+    } else if (target.hasAttribute("data-recipe-duplicate")) {
+      window.LakuHpp.duplicateRecipe(recipeId);
+    } else if (target.hasAttribute("data-recipe-delete")) {
+      window.LakuHpp.deleteRecipe(recipeId);
+    }
+  };
+
+  tbody._recipeClickHandler = (e) => handleRecipeAction(e, tbody);
+  mobileList._recipeClickHandler = (e) => handleRecipeAction(e, mobileList);
+  tbody.addEventListener("click", tbody._recipeClickHandler);
+  mobileList.addEventListener("click", mobileList._recipeClickHandler);
 };
 
 /** Fill the wizard form with recipe data (for edit or duplicate) */
@@ -258,7 +290,7 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
   // Step 2 — ingredients (restore original user input if available)
   window.LakuHpp.ingredients = (recipe.bahanBaku || []).map((ing) => {
     const restored = {
-      id: nextUid(),
+      id: window.LakuHpp.generateHppId("ing"),
       inventoryId: ing.inventoryId || null,
       nama: ing.namaBahan,
       hargaBeli: ing.hargaBeli,
@@ -270,6 +302,7 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
     if (ing._inputQty !== undefined && ing._inputUnit) {
       restored._inputQty = ing._inputQty;
       restored._inputUnit = ing._inputUnit;
+      if (ing._inputUnitPrice !== undefined) restored._inputUnitPrice = ing._inputUnitPrice;
       if (ing._qtyBase !== undefined) restored._qtyBase = ing._qtyBase;
       if (ing._baseUnit) restored._baseUnit = ing._baseUnit;
     }
@@ -281,7 +314,10 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
   el("hppJamKerja").value = tk.jam || "";
   el("hppUpahPerJam").value = tk.upahPerJam || "";
   if (tk.upahPerJam) window.formatNumberInput(el("hppUpahPerJam"));
-  window.LakuHpp.overheadItems = [...(recipe.overhead || [])];
+  window.LakuHpp.overheadItems = [...(recipe.overhead || [])].map((item) => ({
+    ...item,
+    id: item.id || window.LakuHpp.generateHppId("ovh"),
+  }));
   el("hppBiayaKemasan").value = recipe.biayaKemasan || "";
   if (recipe.biayaKemasan) window.formatNumberInput(el("hppBiayaKemasan"));
 
@@ -297,17 +333,21 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
 
 /** Load a recipe into the form for editing */
 window.LakuHpp.openRecipeForEdit = function (recipeId) {
-  const recipe = loadRecipes().find((r) => r.id === recipeId);
+  const recipe = loadRecipes().find((r) => window.LakuHpp.idsEqual(r.id, recipeId));
   if (!recipe) return;
   window.LakuHpp.editingRecipeId = recipeId;
   window.LakuHpp.prefillFromRecipe(recipe);
+  // Show "Buat Baru" buttons when in edit mode
+  if (typeof window.LakuHpp.toggleBuatBaruButtons === "function") {
+    window.LakuHpp.toggleBuatBaruButtons(true);
+  }
   // Scroll to top of wizard
   document.getElementById("hppStep1")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 /** Duplicate a recipe with a new name */
 window.LakuHpp.duplicateRecipe = async function (recipeId) {
-  const recipe = loadRecipes().find((r) => r.id === recipeId);
+  const recipe = loadRecipes().find((r) => window.LakuHpp.idsEqual(r.id, recipeId));
   if (!recipe) return;
 
   const newName = await window.showCustomPrompt({
@@ -335,6 +375,10 @@ window.LakuHpp.deleteRecipe = async function (recipeId) {
     isDanger: true,
   });
   if (!ok) return;
-  saveRecipes(loadRecipes().filter((r) => r.id !== recipeId));
-  window.LakuHpp.renderRecipeList();
+  saveRecipes(loadRecipes().filter((r) => !window.LakuHpp.idsEqual(r.id, recipeId)));
+  // If we were editing this recipe, clear the editing state
+  if (window.LakuHpp.idsEqual(window.LakuHpp.editingRecipeId, recipeId)) {
+    window.LakuHpp.editingRecipeId = null;
+  }
+  window.LakuHpp.refreshRecipeList();
 };

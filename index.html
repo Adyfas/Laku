@@ -40,7 +40,7 @@
 
     <nav data-delay="0.9" data-direction="down" id="navbar"
       class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
-    <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
+      <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
       class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
       <div class="h-[72px] flex items-center justify-between px-[22px]">
         <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
@@ -91,7 +91,8 @@
                 alt=""
                 class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
               /> -->
-            Hari Ini <span class="font-bold text-green-main text-5xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+            Hari Ini
+            <!--<span class="font-bold text-green-main text-5xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span> -->
             <!-- </span> -->
           </h1>
           <p class="text-lg lg:text-xl text-gray-500 mt-6 max-w-3xl mx-auto fade-in" data-once="true">
@@ -233,7 +234,8 @@
           <div class="absolute inset-0 flex flex-col justify-between p-5 lg:p-10">
             <div>
               <p class="uppercase tracking-[5px] text-lime-main text-[10px] lg:text-sm font-semibold">
-                Dokumenter <span class="font-bold text-lime-main text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+                Dokumenter <span class="font-bold text-lime-main text-xl" data-laku-icon="sparkle"
+                  data-laku-icon-size="1.25em"></span>
               </p>
 
               <h2 class="mt-2 text-white font-bold leading-tight text-2xl lg:text-5xl">
@@ -267,33 +269,71 @@
 
     <section class="w-full px-6 py-24">
       <div class="max-w-7xl mx-auto">
-        <!-- Heading -->
-        <div class="max-w-4xl mb-20">
-          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
-            Mengenal UMKM
+
+        <!-- Kolom Teks (Sisi Kiri) -->
+        <div class="flex flex-col items-start gap-3 w-full md:w-1/2 text-left">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1">
+            Masalah UMKM
             <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
           </p>
-
-          <h2 class="text-4xl lg:text-6xl font-bold leading-tight">
-            Apa Itu UMKM
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+            Masalah sehari-hari UMKM
           </h2>
-
-          <p class="mt-6 text-lg text-gray-500 leading-relaxed">
-            <span class="text-green-main text-xl">Usaha Mikro, Kecil, dan Menengah (UMKM)</span> adalah usaha yang
-            dijalankan oleh masyarakat, mulai dari pedagang kaki lima, warung makan, toko kelontong, hingga usaha lokal
-            yang berkembang menjadi perusahaan. Jumlahnya mencapai puluhan juta dan menjadi penggerak utama perekonomian
-            Indonesia.
-          </p>
-
-          <p class="mt-6 text-lg text-gray-500 leading-relaxed">
-            Di balik setiap warung, kedai kopi, penjahit, pengrajin, atau toko online lokal, terdapat pelaku UMKM yang
-            terus berinovasi untuk memenuhi kebutuhan masyarakat. Mereka bukan hanya menciptakan produk, tetapi juga
-            membuka lapangan pekerjaan dan menggerakkan ekonomi di berbagai daerah.
+          <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+            UMKM adalah pilar utama perekonomian Indonesia. Namun, sebagian besar pelaku usaha masih menghadapi berbagai
+            tantangan berikut:
           </p>
         </div>
-      </div>
 
-      <div id="UMKMAboutSection" class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-10">
+        <!-- Kolom Mockup Gambar (Mepet Kanan di Desktop)
+      <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+        <img 
+          src="./assets/images/lakuApp.png" 
+          alt="Laku App Mockup"
+          class="w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[520px] h-auto object-contain drop-shadow-2xl"
+        >
+      </div> -->
+
+        <!-- Section Grid UMKM -->
+        <div id="UMKMAboutSection" class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-10">
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="w-full px-6 py-24">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Container Utama Teks & Mockup -->
+        <div class="flex flex-col md:flex-row items-center justify-between w-full mb-20 gap-8">
+
+          <!-- Kolom Teks (Sisi Kiri) -->
+          <div class="flex flex-col items-start gap-3 w-full md:w-1/2 text-left">
+            <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1">
+              Laku App
+              <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+            </p>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+              Apa Itu Laku App
+            </h2>
+            <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+              Laku App adalah aplikasi yang membantu UMKM untuk mengelola usaha, mencatat keuangan, dan siap
+              bertransformasi ke ekosistem digital dengan lebih mudah.
+            </p>
+          </div>
+
+          <!-- Kolom Mockup Gambar (Mepet Kanan di Desktop) -->
+          <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+            <img src="./assets/images/lakuApp.png" alt="Laku App Mockup"
+              class="w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[520px] h-auto object-contain drop-shadow-2xl">
+          </div>
+
+        </div>
+
+        <!-- Section Grid UMKM -->
+        <div id="UMKMAboutSection" class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-10">
+        </div>
 
       </div>
     </section>
