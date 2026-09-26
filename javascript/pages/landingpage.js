@@ -1,33 +1,33 @@
 // Content Variabel
 let aboutSectionRaw = [
   {
-    title: "Wawasan",
-    sub: "Ringkasan masalah dan informasi penting seputar pengelolaan usaha.",
+    title: "Pisahkan Uang",
+    sub: "Buat batas yang jelas antara uang pribadi dan uang dagang agar modal usaha tetap terjaga.",
     icon: "landingOpenBook",
   },
   {
-    title: "Belajar",
-    sub: "Materi ringkas tentang keuangan, branding, dan literasi digital.",
+    title: "Catatan Harian",
+    sub: "Catat pemasukan dan pengeluaran usaha dengan cepat, kapan pun transaksi terjadi.",
     icon: "pencil",
   },
   {
-    title: "Kuis",
-    sub: "Cek seberapa jauh kamu memahami materi yang sudah dibaca.",
+    title: "Ringkasan Usaha",
+    sub: "Lihat kondisi keuangan usaha dalam tampilan sederhana yang mudah dipahami.",
     icon: "landingBrain",
   },
   {
-    title: "Kalkulator",
-    sub: "Hitung harga jual dari modal, biaya, dan target untung dengan mudah.",
+    title: "Cek Keuntungan",
+    sub: "Pahami apakah usaha Anda benar-benar menghasilkan keuntungan, bukan hanya ramai penjualan.",
     icon: "landingCalc",
   },
   {
-    title: "Catatan",
-    sub: "Catat pemasukan, pengeluaran, dan arus kas usaha secara sederhana.",
+    title: "Belajar Finansial",
+    sub: "Dapatkan pembelajaran keuangan dasar yang relevan dengan kebutuhan usaha sehari-hari.",
     icon: "landingNotes",
   },
   {
-    title: "Cek Siap Digital",
-    sub: "Ketahui seberapa siap UMKM kamu masuk ke dunia digital.",
+    title: "Wawasan Usaha",
+    sub: "Temukan kebiasaan dan langkah kecil yang membantu usaha Anda tumbuh lebih sehat.",
     icon: "landingGlobe",
   },
 ];
@@ -41,37 +41,38 @@ let UMKMCardSection = [
   {
     title: "Stok habis saat pelanggan mencari.",
     desc: "Persediaan barang tidak terpantau sehingga terlambat stok ulang dan kehilangan pembeli.",
-    icon: "pencil",
+    icon: "box",
   },
   {
-    title: "arga jual dibuat kira-kira",
+    title: "Harga jual dibuat kira-kira",
     desc: "Penetapan harga tanpa hitungan modal yang tepat berisiko memicu kerugian.",
-    icon: "landingBrain",
+    icon: "walletv2",
   },
-  // {
-  //   title: "Uang usaha bercampur dengan uang pribadi.",
-  //   sub: "Keuangan bisnis yang tak terpisah membuat modal terpakai untuk kebutuhan harian.",
-  // },
-  // {
-  //   icon: "warung",
-  //   title: "Usaha Mikro",
-  //   desc: "Bisnis kecil perorangan atau keluarga. Contohnya warung, PKL, dan usaha rumahan.",
-  // },
-  // {
-  //   icon: "shoppingBag",
-  //   title: "Usaha Kecil",
-  //   desc: "Sudah memiliki tempat tetap dan karyawan. Contohnya kafe, butik, dan bengkel.",
-  // },
-  // {
-  //   icon: "landingFactory",
-  //   title: "Usaha Menengah",
-  //   desc: "Operasional besar dengan jangkauan pasar luas. Contohnya pabrik, konveksi, dan distributor.",
-  // },
 ];
+
+let LakuCards = [
+  {
+    details: "Pisahkan uang usaha dan uang pribadi",
+    icon: "walletv2"
+  },
+  {
+    details: "Catat pemasukan serta pengeluaran harian",
+    icon: "book"
+  },
+  {
+    details: "Pantau ringkasan kondisi usaha",
+    icon: "chart"
+  },
+  {
+    details: "Pelajari dasar keuangan dengan bahasa sederhana",
+    icon: "calculator"
+  },
+]
 
 // Variabel Document
 const aboutSection = document.getElementById("aboutSection");
 const UMKMAboutSection = document.getElementById("UMKMAboutSection");
+const LakuCardSection = document.getElementById('LakuCard');
 
 // Render
 const aboutSectionMapping = aboutSectionRaw
@@ -129,3 +130,19 @@ const UMKMaboutSectionMapping = UMKMCardSection.map(
 ).join("");
 
 UMKMAboutSection.innerHTML = UMKMaboutSectionMapping;
+
+
+
+const UMKMCardLakuMapping = LakuCards.map(laku => `
+      <ul class="my-2">
+                <li class="flex items-center gap-2">
+                  <div class="text-base sm:text-lg text-green-main leading-relaxed p-2 rounded-full text-center bg-lime-main">
+                      ${window.LakuIcons.svg(laku.icon, "1.5rem")}
+                  </div>
+                  <p class="text-base sm:text-lg text-gray-600 leading-relaxed">${laku.details}</p>
+                </li>
+              </ul>
+  `).join("")
+
+
+LakuCardSection.innerHTML = UMKMCardLakuMapping;
