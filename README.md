@@ -401,7 +401,6 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 | Penyimpanan | `localStorage` saja (tanpa backend) |
 | Hosting | Firebase Hosting (`firebase.json`, project `laku-umkm`) |
 | PWA | `manifest.json` + `sw.js` (cache app-shell, Tailwind runtime) + `icons/` + registrasi SW & tombol Install di `app.html` |
-| AI opsional | Groq Chat Completions (saat ini nonaktif, fallback template lokal) |
 | Ikon | SVG inline bergaya Lucide + `javascript/core/icons.js` + 50 file di `assets/icons/` |
 | Animasi | `IntersectionObserver` (fade-in, reveal, count-up, marquee) di `animations.js` |
 | Pengujian | QA manual (lihat §9) — belum ada unit test |
