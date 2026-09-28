@@ -62,7 +62,7 @@ Website Laku menjawab masalah di atas lewat tiga pilar:
 |---|---|
 | **Informasi** | Dasar pengelolaan keuangan UMKM, pentingnya memisahkan uang pribadi dan uang usaha, dasar literasi digital, kesalahan umum UMKM, tips memulai usaha yang tertata. |
 | **Edukasi** | Pembelajaran interaktif: ringkasan materi poin singkat, video pembelajaran, kuis setelah materi, checklist kesiapan digital, dan cerita visual-novel **Bu Siti** (6 skenario masalah nyata UMKM). |
-| **Interaktif** | Alat bantu yang langsung bisa dipakai: **kalkulator harga jual (HPP)**, pencatatan pemasukan/pengeluaran (buku kas), simulasi laba rugi + BEP, pencatatan utang-piutang, stok inventaris, pencatatan produksi, dan generator teks promo. |
+| **Interaktif** | Alat bantu yang langsung bisa dipakai: **kalkulator harga jual (HPP)**, pencatatan pemasukan/pengeluaran (buku kas), simulasi laba rugi + BEP, pencatatan utang-piutang, stok inventaris dan pencatatan produksi. |
 
 ### 1.3 Tujuan & manfaat (ringkas)
 
@@ -133,13 +133,13 @@ Konfigurasi penting di `firebase.json`:
 | `index.html` | Laku | **Landing page**: hero ("Uang Usaha Tertata & Bisnis Lebih Terarah"), statistik UMKM, video dokumenter, section masalah sehari-hari, grid 6 kartu fitur, CTA ke aplikasi. |
 | `app.html` | Buat Profile - Laku | **Ruang kerja aplikasi**: registrasi profil usaha → dashboard (kas, piutang, stok, produksi) → 7 modul terbuka sebagai modal layar penuh. Lihat [Fitur](#5-fitur-aplikasi) dan [Rumus](#4-rumus-yang-dipakai-di-aplikasi). |
 | `about.html` | About \| Laku | **Tentang Laku**: 3 pilar pendampingan, section Dampak & Masalah, Solusi Laku, Nilai Laku, testimoni UMKM, CTA aplikasi. |
-| `learn.html` | Belajar \| Laku | **Edukasi interaktif Bu Siti**: cerita visual-novel 6 skenario (stok habis, uang hilang, salah harga, utang langganan, promo, skala usaha) dengan pilihan → insight → aksi → hasil, XP, streak, badge, dan checklist kesiapan digital. |
+| `learn.html` | Belajar \| Laku | **Edukasi interaktif Bu Siti**: cerita visual-novel **Bu Siti** (6 skenario masalah nyata UMKM) dengan pilihan → insight → aksi → hasil, XP, streak, badge, dan checklist kesiapan digital. |
 | `kontak.html` | Kontak - Laku | **Kontak**: form nama/email/pesan (submit dialihkan ke kanal kontak resmi) + info kontak `+62 8318-2719-413` / `contact.adyfas@gmail.com`. |
 | `404.html` | 404 \| Laku | **Halaman error**: "404 — Halaman Tidak Ditemukan" + tombol kembali ke beranda. |
 
 **Deep-link yang didukung:**
 
-- `app.html?open=hpp|produksi|kas|utang|inventory|laba|promo` — membuka modul langsung
+- `app.html?open=hpp|produksi|kas|utang|inventory|laba` — membuka modul langsung
   (`javascript/core/app.js:370`).
 - `learn.html?scenario=s1..s6` — melompat ke skenario Bu Siti tertentu.
 - Dari modul aplikasi ada bar "Kembali ke Belajar" menuju skenario terkait.
@@ -354,10 +354,6 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 
 ### 4.10 Catatan kejujuran rumus
 
-- Modul **Promo tidak memiliki rumus** — hanya merangkai template teks berdasarkan
-  gaya bahasa; pemanggilan Groq AI (`api.groq.com`) sedang **dikomentari**
-  (`promoClient.js:29`), dan kata "Diskon" di form hanya placeholder
-  (`promoApp.js:54`).
 - **Tidak ada** rumus PPN/pajak, diskon, markup, bunga, maupun berat bersih/gross
   di seluruh basis kode.
 - Fungsi `getCumulativeIsi()` (`hppIngredients.js:13`) adalah kode mati yang tidak
@@ -370,7 +366,7 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 
 ## 5. Fitur Aplikasi
 
-### 5.1 Tujuh modul (`app.html`, dibuka sebagai modal layar penuh)
+### 5.1 Enam modul (`app.html`, dibuka sebagai modal layar penuh)
 
 | Modul | Nama di UI | Fungsi singkat | Data (`localStorage`) |
 |---|---|---|---|
@@ -380,7 +376,6 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 | `utang` | Catat Utang & Piutang | Catat tagihan (nama, nominal, No. WA, jatuh tempo); bayar/cicil; status sisa/Lunas/terlambat; pengingat WhatsApp + notifikasi peramban. | `laku_utang_data` |
 | `laba` | Cek Untung Rugi Bulanan | Simulasi target jual, harga, modal bahan, biaya rutin → omzet, beban, laba bersih, BEP + status untung/rugi/impas. | `laku_laba_data` |
 | `produksi` | Catat Produksi Barang | Pilih resep + jumlah → stok bahan otomatis berkurang; riwayat produksi + ringkasan profit (transaksi tidak bisa diubah). | `laku_produksi_data` |
-| `promo` | Buat Teks Promo WA | Generator teks promosi (kategori usaha, 4 gaya bahasa, keunggulan/penawaran) + tombol Salin. AI opsional, fallback template lokal. | `laku_promo_data` |
 
 ### 5.2 Fitur lintas modul
 
@@ -406,7 +401,7 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 | Penyimpanan | `localStorage` saja (tanpa backend) |
 | Hosting | Firebase Hosting (`firebase.json`, project `laku-umkm`) |
 | PWA | `manifest.json` + `sw.js` (cache app-shell, Tailwind runtime) + `icons/` + registrasi SW & tombol Install di `app.html` |
-| AI opsional | Groq Chat Completions untuk teks promo (saat ini nonaktif, fallback template lokal) |
+| AI opsional | Groq Chat Completions (saat ini nonaktif, fallback template lokal) |
 | Ikon | SVG inline bergaya Lucide + `javascript/core/icons.js` + 50 file di `assets/icons/` |
 | Animasi | `IntersectionObserver` (fade-in, reveal, count-up, marquee) di `animations.js` |
 | Pengujian | QA manual (lihat §9) — belum ada unit test |
@@ -431,7 +426,7 @@ FE/
     ├── core/   app.js, appUtils.js, navbar.js, popup.js, animations.js,
     │           unitConversion.js, icons.js, pagination.js, guidedTour.js
     ├── apps/   hpp/ (5 file), produksi/, kas/, utang/, inventory/,
-    │           laba/, promo/  (tiap modul: *App.js + *Client.js)
+    │           laba/  (tiap modul: *App.js + *Client.js)
     └── pages/  landingpage.js, contact.js, learn.js
                 learn/ learnData.js, learnState.js, learnDOM.js,
                        learnScenario.js, learnRender.js, learnActions.js,
@@ -496,7 +491,7 @@ Rekaman layar dokumentasi (`Screen_Recording_2026-…mov`) di akun Cloudinary ti
   tanpa framework JS (React/Angular/Vue) · Bahasa Indonesia.
 - **Riwayat perbaikan terbaru**: judul `learn.html`/`404.html` dibetulkan, registrasi
   service worker + tombol Install PWA diaktifkan kembali (dengan header `no-cache`
-  untuk `/sw.js`), deep-link `?open=promo` ditambahkan ke daftar modul valid.
+  untuk `/sw.js`).
 
 ---
 
