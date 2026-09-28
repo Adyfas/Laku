@@ -625,6 +625,44 @@
 
 
   <!-- <script src="./test.js"></script> -->
+
+  <!-- PWA: Service Worker Registration + Install Prompt -->
+  <script>
+    (function () {
+      // Register Service Worker
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js").catch(function () { });
+      }
+
+      // Install Prompt
+      var deferredPrompt = null;
+      var installBtn = document.getElementById("installAppBtn");
+
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBtn) installBtn.classList.remove("hidden");
+      });
+
+      if (installBtn) {
+        installBtn.addEventListener("click", function () {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(function (choiceResult) {
+            if (choiceResult.outcome === "accepted") {
+              installBtn.classList.add("hidden");
+            }
+            deferredPrompt = null;
+          });
+        });
+      }
+
+      window.addEventListener("appinstalled", function () {
+        if (installBtn) installBtn.classList.add("hidden");
+        deferredPrompt = null;
+      });
+    })();
+  </script>
 </body>
 
 </html>

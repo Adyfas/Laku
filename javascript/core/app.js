@@ -367,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
   var urlParams = new URLSearchParams(window.location.search);
   var openKey = urlParams.get("open");
   if (openKey) {
-    var validKeys = ["hpp", "produksi", "kas", "utang", "inventory", "laba"];
+    var validKeys = ["hpp", "produksi", "kas", "utang", "inventory", "laba", "promo"];
     if (validKeys.indexOf(openKey) !== -1) {
       setTimeout(function () {
         window.openAppModal(openKey);
