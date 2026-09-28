@@ -90,7 +90,7 @@ folder `FE/`:
 
 ```bash
 cd FE
-python3 -m http.server 3000
+npx serve
 # lalu buka http://localhost:3000
 ```
 
