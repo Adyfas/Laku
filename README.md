@@ -401,7 +401,7 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 | Penyimpanan | `localStorage` saja (tanpa backend) |
 | Hosting | Firebase Hosting (`firebase.json`, project `laku-umkm`) |
 | PWA | `manifest.json` + `sw.js` (cache app-shell, Tailwind runtime) + `icons/` + registrasi SW & tombol Install di `app.html` |
-| Ikon | SVG inline bergaya Lucide + `javascript/core/icons.js` + 50 file di `assets/icons/` |
+| Ikon | File SVG di `assets/icons/` (39 file) + ikon inline via `javascript/core/icons.js` |
 | Animasi | `IntersectionObserver` (fade-in, reveal, count-up, marquee) di `animations.js` |
 | Pengujian | QA manual (lihat §9) — belum ada unit test |
 
@@ -412,29 +412,27 @@ Sumber: `javascript/core/appUtils.js` — dipakai semua input rupiah & tampilan.
 ```
 FE/
 ├── index.html  app.html  about.html  learn.html  kontak.html  404.html
-├── README.md
+├── README.md  Laku.md
 ├── firebase.json  .firebaserc  manifest.json  sw.js  test.js
 ├── css/        global.css, learn.css, tour.css
 ├── font/       Manrope (variable + 7 static weights)
 ├── icons/      icon-192.png, icon-512.png
 ├── assets/
 │   ├── images/     (karakter Bu Siti, mockup aplikasi)
-│   ├── icons/      (50 ikon SVG)
+│   ├── icons/      (39 ikon SVG)
 │   └── videos/     (Laku-Video-UMKM.mp4)
 └── javascript/
     ├── core/   app.js, appUtils.js, navbar.js, popup.js, animations.js,
     │           unitConversion.js, icons.js, pagination.js, guidedTour.js
-    ├── apps/   hpp/ (5 file), produksi/, kas/, utang/, inventory/,
-    │           laba/  (tiap modul: *App.js + *Client.js)
+    ├── apps/   hpp/ (5 file), produksi/, kas/, utang/, inventory/, laba/
+    │           (tiap modul: *App.js + *Client.js)
     └── pages/  landingpage.js, contact.js, learn.js
                 learn/ learnData.js, learnState.js, learnDOM.js,
                        learnScenario.js, learnRender.js, learnActions.js,
                        learnDebug.js
 ```
 
-Dokumen perencanaan (di folder induk, bukan bagian deploy): `main.md`, `QWEN.md`,
-`Plan.md`, `TASK.md`, `TESTING_GUIDE.md`, `test.md`, `learn-*.md`,
-`report-debugging-logika.md`, `planning-production.md`, proposal & guide book lomba.
+Hanya isi folder `FE/` yang dicantumkan di atas.
 
 ---
 
