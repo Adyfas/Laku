@@ -553,10 +553,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isMobile) {
       playButton.style.position = "absolute";
-      // playButton.style.bottom = '80px'
-      // playButton.style.left = '50%';
-      // playButton.style.top = '50%';
-      // playButton.style.transform = 'translate(-50%, -50%)';
+      playButton.style.left = "50%";
+      playButton.style.top = "50%";
+      playButton.style.transform = "translate(-50%, -50%)";
       return;
     }
 
@@ -606,6 +605,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handlePlay(e) {
       if (e) e.stopPropagation();
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      if (isMobile) {
+        // Mode mobile: tampilkan landscape penuh (16:9) tanpa zoom/crop.
+        videoSection.style.aspectRatio = "16 / 9";
+        videoSection.style.backgroundColor = "#000";
+        video.style.height = "100%";
+        video.style.objectFit = "contain";
+        video.style.backgroundColor = "#000";
+      }
       thumbnail.style.transition = "opacity 0.4s ease, visibility 0.4s ease";
       thumbnail.style.opacity = "0";
       thumbnail.style.visibility = "hidden";
