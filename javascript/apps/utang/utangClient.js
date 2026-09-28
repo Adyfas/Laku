@@ -69,7 +69,7 @@ function initUtangAppLogic() {
         const notifBody = `Sisa belum dibayar ${window.formatRupiah(item.totalAmount - item.paidAmount)} untuk "${item.note}" harus dibayar hari ini!`;
         new Notification(notifTitle, {
           body: notifBody,
-          icon: "/favicon.ico",
+          icon: "/icons/icon-192.png",
         });
       });
     }

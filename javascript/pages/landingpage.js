@@ -77,12 +77,12 @@ const LakuCardSection = document.getElementById('LakuCard');
 // Render
 const aboutSectionMapping = aboutSectionRaw
   .map(
-    (about) => `
+    (about, index) => `
 
-  <div class="group bg-white rounded-3xl border border-gray-200 p-8 transition duration-300 hover:shadow-xl cursor-pointe w-full">
+  <div class="group bg-white rounded-3xl border border-gray-200 p-8 transition duration-300 hover:shadow-xl cursor-pointe w-full fade-in" data-once="true" data-delay="0.2" data-duration="${1*index+1}">
 
     <div class="flex justify-between items-start">
-
+ 
         <div
         class= w-16 h-16 rounded-2xl bg-lime-100 flex items-center justify-center
         ">
@@ -116,9 +116,9 @@ const aboutSectionMapping = aboutSectionRaw
 aboutSection.innerHTML = aboutSectionMapping;
 
 const UMKMaboutSectionMapping = UMKMCardSection.map(
-  (item) => `
+  (item, index) => `
 
-  <div class="rounded-3xl p-6 bg-stone-50 shadow-sm border border-stone-100 h-55 w-full">
+  <div class="rounded-3xl p-4 bg-stone-50 shadow-sm border border-stone-100 h-65 w-full fade-in" data-once="true" data-delay="0.2" data-duration="${1*index+1}">
   <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center mb-4">
     ${window.LakuIcons.svg(item.icon, "1.5rem")}
   </div>
@@ -133,15 +133,13 @@ UMKMAboutSection.innerHTML = UMKMaboutSectionMapping;
 
 
 
-const UMKMCardLakuMapping = LakuCards.map(laku => `
-      <ul class="my-2">
-                <li class="flex items-center gap-2">
+const UMKMCardLakuMapping = LakuCards.map((laku, index) => `
+                <li class="flex items-center gap-2 my-3 fade-in" data-once="true" data-delay="0.2" data-duration="${1*index+1}">
                   <div class="text-base sm:text-lg text-green-main leading-relaxed p-2 rounded-full text-center bg-lime-main">
                       ${window.LakuIcons.svg(laku.icon, "1.5rem")}
                   </div>
                   <p class="text-base sm:text-lg text-gray-600 leading-relaxed">${laku.details}</p>
                 </li>
-              </ul>
   `).join("")
 
 

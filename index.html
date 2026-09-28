@@ -7,6 +7,8 @@
   <title>Laku</title>
 
   <!-- PWA -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#274c43">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,7 +34,7 @@
 </head>
 
 <body class="md:lined-grid-bg">
-  <div class="app relative w-full max-w-8xl mx-auto scroll-smooth">
+  <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
     <!-- Navbar -->
     <div id="nav-overlay"
       class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450">
@@ -80,7 +82,7 @@
       <div class="lg:p-6 p-2 flex flex-col items-center justify-center">
         <!-- Text intro -->
         <div class="text-center">
-          <h1 class="text-4xl text-center lg:text-6xl font-extrabold leading-tight fade-in" data-once="true"
+          <h1 class="text-4xl text-center md:text-5xl font-extrabold leading-tight fade-in" data-once="true"
             data-ease="ease">
             Uang Usaha <span class="text-green-main">Tertata</span> & Bisnis Lebih <span
               class="text-green-main">Terarah</span>
@@ -201,7 +203,7 @@
 
         <!-- Item 1: Statistik UMKM -->
         <div class="border-b border-black/20 py-10 fade-in" data-duration="0.3">
-          <h2 class="text-4xl font-bold text-count" data-from="0" data-to="66" data-suffix="Jt+" data-duration="10"
+          <h2 class="text-3xl md:text-4xl font-bold text-count" data-from="0" data-to="66" data-suffix="Jt+" data-duration="10"
             data-once="true"></h2>
 
           <h3 class="mt-6 text-2xl font-semibold">
@@ -216,7 +218,7 @@
 
         <!-- Item 2: Masalah Keuangan (Disesuaikan dengan poin "Banyak UMKM") -->
         <div class="border-b border-black/20 py-10 fade-in" data-duration="0.3">
-          <h2 class="text-4xl font-bold">
+          <h2 class="text-3xl md:text-4xl font-bold">
             Masalah Utama
           </h2>
 
@@ -232,7 +234,7 @@
 
         <!-- Item 3: Target Digitalisasi -->
         <div class="border-b border-black/20 py-10 fade-in" data-duration="0.3">
-          <h2 class="text-4xl font-bold text-count" data-from="0" data-to="40" data-suffix="Jt" data-duration="8"
+          <h2 class="text-3xl md:text-4xl font-bold text-count" data-from="0" data-to="40" data-suffix="Jt" data-duration="8"
             data-once="true"></h2>
 
           <h3 class="mt-6 text-2xl font-semibold">
@@ -247,7 +249,7 @@
 
         <!-- Item 4: Solusi (Disesuaikan dengan Laku App) -->
         <div class="py-10 fade-in" data-duration="0.3">
-          <h2 class="text-4xl font-bold">
+          <h2 class="text-3xl md:text-4xl font-bold">
             1 Solusi
           </h2>
 
@@ -284,11 +286,11 @@
                     data-laku-icon-size="1.25em"></span>
                 </p>
 
-                <h2 class="mt-2 text-white font-bold leading-tight text-2xl lg:text-5xl">
+                <h2 class="mt-2 text-white font-bold leading-tight text-3xl md:text-4xl">
                   Salah Satu UMKM Indonesia
                 </h2>
 
-                <p class="mt-3 text-white/80 text-xs lg:text-lg max-w-lg leading-relaxed">
+                <p class="mt-3 text-white/80 text-sm max-w-lg leading-relaxed">
                   Cerita perjuangan para pelaku usaha dalam membangun bisnis dan
                   bertahan di era digital.
                 </p>
@@ -319,14 +321,17 @@
 
         <!-- Kolom Teks (Sisi Kiri) -->
         <div class="flex flex-col items-start gap-3 w-full md:w-1/2 text-left">
-          <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1 reveal" data-duration="0.7" data-delay="0.1" data-direction="up" data-once="true" data-mode="word" >
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1 fade-in"
+            data-duration="0.7" data-delay="0.1" data-direction="up" data-once="true">
             Masalah UMKM
             <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
           </p>
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+          <h2 class="text-3xl md:text-4xl font-bold leading-tight text-gray-900 reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9" data-mode="word">
             Masalah sehari-hari yang Sering Terjadi
           </h2>
-          <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p class="text-sm text-gray-600 leading-relaxed fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">
             Mengelola usaha <span class="text-grenn-main underline">bukan sekadar menjual produk,</span> tapi juga
             tentang <span class="text-grenn-main underline">keteraturan keuangan.</span> Tanpa pencatatan dan pemisahan
             uang yang jelas, modal sering terpakai untuk kebutuhan pribadi dan keuntungan bersih sulit dipantau.
@@ -360,14 +365,17 @@
 
           <!-- Kolom Teks (Sisi Kiri) -->
           <div class="flex flex-col items-start gap-3 w-full md:w-1/2 text-left">
-            <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1">
+            <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1 fade-in"
+              data-once="true" data-delay="0.2" data-duration="0.5">
               Laku App
               <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
             </p>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+            <h2 class="text-3xl md:text-4xl font-bold leading-tight text-gray-900 reveal" data-once="true"
+              data-delay="0.2" data-duration="0.9" data-mode="word">
               Laku, Pendamping Keuangan Harian untuk UMKM
             </h2>
-            <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+            <p class="text-sm text-gray-600 leading-relaxed fade-in" data-once="true" data-delay="0.2"
+              data-duration="0.12">
               Laku adalah aplikasi sederhana yang membantu pelaku UMKM memisahkan uang pribadi dan uang dagang, mencatat
               transaksi, serta memahami kondisi usaha tanpa perlu menguasai akuntansi.
 
@@ -375,12 +383,15 @@
               sehat.
             </p>
             <div class="flex flex-col gap-2">
-              <div id="LakuCard"></div>
+              <ul id="LakuCard" class="my-2">
+
+              </ul>
             </div>
           </div>
 
           <!-- Kolom Mockup Gambar (Mepet Kanan di Desktop) -->
-          <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+          <div class="w-full md:w-1/2 flex justify-center md:justify-end fade-in" data-once="true" data-delay="0.2"
+            data-duration="1" data-direction="left">
             <img src="./assets/images/lakuApp.png" alt="Laku App Mockup"
               class="w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[520px] h-auto object-contain drop-shadow-2xl">
           </div>
@@ -403,17 +414,20 @@
 
         <!-- Kolom 1: Heading & Highlight (4 cols) -->
         <div class="lg:col-span-4 relative">
-          <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold flex items-center gap-1 fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.5">
             Tentang UMKM Indonesia<span class="text-lime-600 text-xl" data-laku-icon="sparkle"
               data-laku-icon-size="1.25em"></span>
           </p>
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+          <h2 class="text-3xl md:text-4xl font-bold leading-tight reveal" data-once="true" data-delay="0.2"
+            data-duration="0.5" data-mode="word">
             Potensi Besar, Tantangan Nyata.
           </h2>
         </div>
 
         <!-- Kolom 2: Body Content / Sub-points (5 cols) -->
-        <div class="lg:col-span-5 space-y-8 text-gray-700 leading-relaxed text-base">
+        <div class="lg:col-span-5 space-y-8 text-gray-700 leading-relaxed text-sm fade-in" data-once="true"
+          data-delay="0.2" data-duration="0.7">
           <div>
             <h3 class="font-medium text-lg text-black mb-2">Potensi yang Sangat Besar</h3>
             <p>
@@ -423,7 +437,7 @@
             </p>
           </div>
 
-          <div>
+          <div class="fade-in" data-once="true" data-delay="0.2" data-duration="0.9">
             <h3 class="font-medium text-lg text-black mb-2">Usaha Berjalan, Tapi Sulit Bertumbuh</h3>
             <p>
               Tanpa pencatatan yang rapi, pelaku UMKM sulit mengetahui apakah usahanya benar-benar untung atau hanya
@@ -435,7 +449,8 @@
 
         <!-- Kolom 3: Single Feature Image (3 cols) -->
         <div class="lg:col-span-3">
-          <div class="overflow-hidden rounded-2xl shadow-sm">
+          <div class="overflow-hidden rounded-2xl shadow-sm fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9" data-direction="left">
             <img src="https://bisnisukm.com/uploads/2017/11/izin-usaha-umkm-720x480.jpg" alt="UMKM Indonesia"
               class="w-full h-[380px] object-cover filter contrast-[0.95]" />
           </div>
@@ -446,7 +461,8 @@
       <!-- Bottom Bold Statement / Quote -->
       <div class="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div class="lg:col-start-5 lg:col-span-7">
-          <p class="text-2xl lg:text-3xl text-black leading-snug">
+          <p class="text-2xl lg:text-3xl text-black leading-snug reveal" data-once="true" data-delay="0.3"
+            data-duration="0.6" data-mode="word">
             Mengelola usaha bukan sekadar menjual produk. Ini adalah tentang keteraturan keuangan dan keterbukaan
             terhadap teknologi.
           </p>
@@ -458,14 +474,17 @@
 
   <section class="my-10 justify-center flex flex-col items-center px-6 py-20 w-full max-w-7xl mx-auto">
     <div class="text-center lg:w-[80%] w-full">
-      <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 lg:text-center text-start">
-        LAKU Hadir
+      <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 lg:text-center text-start fade-in"
+        data-once="true" data-delay="0.2" data-duration="0.3">
+        Laku Hadir
         <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
       </p>
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight lg:text-center text-start">Laku membantu usaha
+      <h2 class="text-3xl md:text-4xl font-bold leading-tight lg:text-center text-start fade-in"
+        data-once="true" data-delay="0.2" data-duration="0.6" data-mode="word">Laku membantu usaha
         kecil belajar, mencatat, menghitung, dan siap
         digital.</h2>
-      <p class="my-5 lg:text-center text-start">Teman Tumbuh UMKM Indonesia
+      <p class="my-5 lg:text-center text-start fade-in" data-once="true" data-delay="0.2" data-duration="0.7"
+        data-mode="word">Teman Tumbuh UMKM Indonesia
         Belajar, uji pemahaman, lalu kelola usaha dengan alat sederhana dari Laku.</p>
     </div>
 
@@ -476,12 +495,14 @@
 
 
   <section class="min-h-screen flex flex-col items-center px-6 py-20 w-full max-w-7xl mx-auto">
-    <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 lg:text-center text-start">
+    <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 lg:text-center text-start fade-in"
+      data-once="true" data-delay="0.2" data-duration="0.6">
       Tentang Laku
       <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
     </p>
 
-    <h2 class="font-bold text-3xl lg:text-5xl my-3 text-center lg:text-center text-start">
+    <h2 class="font-bold text-3xl md:text-4xl my-3 text-center lg:text-center text-start reveal" data-once="true"
+      data-delay="0.2" data-duration="0.6" data-mode="word">
       Apa yang bisa kamu lakukan di Laku
     </h2>
     <div id="aboutSection" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-5 my-5"></div>
@@ -494,12 +515,15 @@
         Aplikasi
         <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
       </p>
-      <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-black-main leading-tight md:text-center text-start fade-in"
+        data-once="true" data-delay="0.2" data-duration="0.6">
         Saatnya Mengelola UMKM
         <br />
         Dengan Lebih Mudah
       </h2>
-      <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
+      <p class="max-w-3xl mx-auto mt-8 text-sm text-gray-600 leading-relaxed md:text-center text-start fade-in"
+        data-once="true" data-delay="0.2" data-duration="0.5">
         Gunakan
         <span class="font-semibold text-black-main">Aplikasi Laku</span>
         untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
@@ -507,7 +531,7 @@
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
-        <div class="flex items-start relative group">
+        <div class="flex items-start relative group fade-in" data-once="true" data-delay="0.2" data-duration="0.6">
           <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
               href="app.html">Aplikasi</a></button>
           <button
@@ -579,7 +603,8 @@
       </div>
     </div>
     <h2
-      class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+      class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none reveal"
+      data-once="true" data-delay="0.2" data-duration="1" data-mode="char">
       Laku
     </h2>
   </footer>

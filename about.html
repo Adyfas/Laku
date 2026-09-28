@@ -1,12 +1,21 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About | Laku</title>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Laku</title>
+  <!-- Favicon & PWA -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#274c43">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
         --color-clifford: #da373d;
         --color-green-main: #0f4c5c;
         --color-black-main: #2a2b2f;
@@ -19,345 +28,330 @@
         --animate-marquee-reverse: marquee-reverse 25s linear infinite;
       }
     </style>
-    <link rel="stylesheet" href="./css/global.css">
-  </head>
-  <body>
-    <div class="app relative w-full max-w-7xl mx-auto scroll-smooth">
-      <!-- Navbar -->
-      <div
-        id="nav-overlay"
-        class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450"
-      ></div>
+  <link rel="stylesheet" href="./css/global.css">
+</head>
 
-      <nav
-         data-delay="0.9"
-         data-direction="down"
-         id="navbar"
-         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]"
-       >
-      <!-- <nav
-         data-delay="0.9"
-         data-direction="down"
-         id="navbar"
-         class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"
-       > -->
-           <div class="h-[72px] flex items-center justify-between px-[22px]">
-           <a
-             href="/"
-             class="text-xl font-bold tracking-[3px] text-black-main no-underline"
-           >
-             LAKU
-           </a>
- 
-           <button
-             id="nav-menu-btn"
-             class="relative w-[42px] h-[42px] cursor-pointer"
-             aria-label="Toggle menu"
-             aria-expanded="false"
-           >
-             <span
-               class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-             <span
-               class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-             <span
-               class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"
-             ></span>
-           </button>
-         </div>
-         <div
-           id="nav-content"
-           class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10"
-         >
-              <div class="flex flex-col gap-[18px]" id="items-nav">
+<body>
+  <div class="app relative w-full max-w-8xl mx-auto scroll-smooth">
+    <!-- Navbar -->
+    <div id="nav-overlay"
+      class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450">
+    </div>
+
+    <nav data-delay="0.9" data-direction="down" id="navbar"
+      class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in">
+      <div class="h-[72px] flex items-center justify-between px-[22px]">
+        <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
+          LAKU
+        </a>
+
+        <button id="nav-menu-btn" class="relative w-[42px] h-[42px] cursor-pointer" aria-label="Toggle menu"
+          aria-expanded="false">
+          <span class="nav-bar-1 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+          <span class="nav-bar-2 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+          <span class="nav-bar-3 absolute left-2 w-[26px] h-[2px] bg-black-main transition-all duration-350"></span>
+        </button>
+      </div>
+      <div id="nav-content" class="grid grid-cols-2 max-md:grid-cols-1 px-6 pb-8 gap-10">
+        <div class="flex flex-col gap-[18px]" id="items-nav">
 
 
-              </div>
-              <div class="flex flex-col justify-between">
+        </div>
+        <div class="flex flex-col justify-between">
           <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
             <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
-              <source src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov" type="video/mp4" />
+              <source
+                src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov"
+                type="video/mp4" />
             </video>
             <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
             <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
-              <a
-                href="./learn.html"
-                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform"
-                >Mulai Belajar →</a
-              >
-            </div>
-          </div>
-          </div>
-       </nav>
-      <!-- End Navbar -->
-
-      <section class="min-h-screen flex py-24 px-6 flex-col mt-26">
-        <div class="flex flex-col w-full">
-          <div class="flex justify-between flex-col">
-            <!-- section pertama -->
-            <div class="flex items-start flex-col w-full lg:w-[90%]">
-              <p
-                class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3"
-              >
-                Tentang Laku
-                <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
-              </p>
-              <h2 class="font-bold text-5xl">
-                Laku hadir untuk membantu UMKM tumbuh lebih terarah
-              </h2>
-            </div>
-
-            <div
-              class="flex flex-col lg:flex-row gap-10 lg:gap-15 w-full my-15"
-            >
-              <!-- Numbers/Stats - Mobile: last, Desktop: first -->
-              <div class="order-last lg:order-first lg:w-1/2 flex-shrink-0">
-                <div class="grid grid-cols-2 gap-0">
-                  <div
-                    class="flex items-start justify-center flex-col p-5 border-0 lg:border-r border-gray-200"
-                  >
-                    <h2
-                      class="text-count text-5xl font-bold"
-                      data-from="0"
-                      data-to="66"
-                      data-duration="2.5"
-                      data-suffix="+"
-                      data-once="true"
-                    ></h2>
-                    <p class="text-gray-600">UMKM Indonesia</p>
-                  </div>
-                  <div
-                    class="flex items-start justify-center flex-col p-5 border-0 lg:border-l border-gray-200"
-                  >
-                    <h2
-                      class="text-count text-5xl font-bold"
-                      data-from="0"
-                      data-to="66"
-                      data-duration="2.5"
-                      data-suffix="+"
-                      data-once="true"
-                    ></h2>
-                    <p class="text-gray-600">UMKM Indonesia</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Paragraph - Mobile: first (after title), Desktop: last -->
-              <div
-                class="order-first lg:order-last lg:w-1/2 text-start lg:text-xl leading-relaxed"
-              >
-                <p class="text-gray-700">
-                  UMKM memiliki peran besar dalam menggerakkan ekonomi
-                  Indonesia, tetapi banyak pelaku usaha masih menghadapi
-                  tantangan dasar dalam pengelolaan keuangan, pencatatan
-                  transaksi, penentuan harga jual, dan pemanfaatan teknologi
-                  digital. Laku dibuat sebagai ruang belajar dan alat bantu
-                  sederhana agar UMKM dapat memahami kondisi usahanya dengan
-                  lebih jelas.
-                </p>
-              </div>
+              <a href="./learn.html"
+                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform">Mulai
+                Belajar →</a>
             </div>
           </div>
         </div>
+    </nav>
+    <!-- End Navbar -->
 
-        <div class="flex flex-col lg:flex-row gap-6 w-full  mx-auto py-16 px-6 lg:px-0 items-center justify-center">
-          <!-- Left box -->
-          <div class="relative w-full lg:w-[400px] xl:w-[440px] h-[550px] lg:h-[620px] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 shrink-0 shadow-lg">
-            <div class="absolute inset-0 z-0">
-              <img
-                src="https://images.unsplash.com/photo-1555876484-a71a693b161b?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                class="w-full h-full object-cover"
-                alt="contoh foto"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-            </div>
-            <div class="relative z-10">
-              <p class="text-[#51C42B] font-semibold text-lg tracking-wide">Masalah UMKM</p>
-            </div>
-            <div class="relative z-10 text-white">
-              <h2 class="text-[32px] md:text-4xl font-bold mb-4 leading-snug">Potensi besar,<br/>tantangan juga nyata.</h2>
-              <p class="text-sm md:text-[15px] text-gray-300 font-light leading-relaxed">Banyak usaha kecil berjalan setiap hari, tetapi belum semuanya memiliki sistem pengelolaan yang rapi dan mudah dipahami.</p>
-            </div>
-          </div>
-
-          <!-- Right box grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full lg:h-[620px]">
-            <!-- Card 1 -->
-            <div class="rounded-[32px] bg-white p-8 flex flex-col shadow-sm border border-gray-100 h-full">
-              <div class="w-[64px] h-[64px] rounded-full bg-[#f4f4f4] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black-main"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
-              </div>
-              <div class="mt-auto">
-                <h3 class="text-[22px] font-bold text-black-main mb-2 leading-tight">Keuangan Belum<br/>Rapi</h3>
-                <p class="text-gray-600 text-[14px] leading-relaxed">Pemasukan, pengeluaran, modal, dan uang pribadi masih sering tercampur.</p>
-              </div>
-            </div>
-            
-            <!-- Card 2 -->
-            <div class="rounded-[32px] bg-[#e3fbc1] p-8 flex flex-col shadow-sm h-full">
-              <div class="w-[64px] h-[64px] rounded-full bg-[#2c2d30] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              </div>
-              <div class="mt-auto">
-                <h3 class="text-[22px] font-bold text-black-main mb-2 leading-tight">Literasi Digital<br/>Rendah</h3>
-                <p class="text-[#3b4b2e] text-[14px] leading-relaxed">Sebagian UMKM belum terbiasa memakai teknologi untuk belajar, promosi, dan pencatatan.</p>
-              </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="rounded-[32px] bg-[#e3fbc1] p-8 flex flex-col shadow-sm h-full">
-              <div class="w-[64px] h-[64px] rounded-full bg-[#c9e89c] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black-main"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-              </div>
-              <div class="mt-auto">
-                <h3 class="text-[22px] font-bold text-black-main mb-2 leading-tight">Harga Jual Belum<br/>Tepat</h3>
-                <p class="text-[#3b4b2e] text-[14px] leading-relaxed">Biaya bahan, tenaga, operasional, dan margin belum selalu dihitung secara menyeluruh.</p>
-              </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="rounded-[32px] bg-white p-8 flex flex-col shadow-sm border border-gray-100 h-full">
-              <div class="w-[64px] h-[64px] rounded-full bg-[#f4f4f4] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black-main"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-4 0 2.7 2.7 0 0 1-4 0 2.7 2.7 0 0 1-4 0 2 2 0 0 1-2-2V7"/></svg>
-              </div>
-              <div class="mt-auto">
-                <h3 class="text-[22px] font-bold text-black-main mb-2 leading-tight">Usaha Sulit<br/>Dipantau</h3>
-                <p class="text-gray-600 text-[14px] leading-relaxed">Tanpa catatan yang jelas, pelaku usaha sulit mengetahui apakah bisnisnya benar-benar untung.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="flex py-24 px-6 flex-col mt-26 w-full gap-24 lg:gap-36">
-        <!-- Block 1 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full">
-          <div class="flex flex-col lg:pr-10 lg:pt-4">
-            <p class="text-[#72bc23] font-semibold mb-3 text-[15px] tracking-wide">Dampak & Masalah</p>
-            <h2 class="text-3xl lg:text-[2.75rem] font-bold text-black-main leading-[1.2] mb-6">Usaha bisa ramai, tapi belum tentu sehat.</h2>
-            <p class="text-gray-500 text-[15px] leading-relaxed">Tanpa pencatatan yang rapi, pelaku UMKM sulit melihat kondisi usahanya secara nyata. Penjualan mungkin terlihat berjalan, tetapi keuntungan, biaya, dan arus kas belum tentu terukur dengan baik.</p>
-          </div>
-          <div class="w-full">
-            <img src="https://plus.unsplash.com/premium_photo-1687131786869-dc26efcbc405?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-full h-auto rounded-[2rem] object-cover aspect-[4/3] lg:aspect-[1.3/1] shadow-sm">
-          </div>
+    <section class="mt-26 justify-center flex flex-col items-center px-6 py-20 w-full max-w-7xl mx-auto">
+      <!-- Top Header Section -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start my-6">
+        <!-- Kolom Kiri -->
+        <div class="md:col-span-7">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.3">
+            About Laku
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+          <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9" data-mode="word">
+            Laku Membantu Kamu Mengelola Uang Usaha, Tanpa Ribet.
+          </h1>
         </div>
 
-        <!-- Block 2 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
-          <div class="w-full order-2 lg:order-1">
-            <img src="https://plus.unsplash.com/premium_photo-1686156706088-0102e1d11b9d?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-full h-auto rounded-[2rem] object-cover aspect-[4/3] lg:aspect-[1.3/1] shadow-sm">
-          </div>
-          <div class="flex flex-col order-1 lg:order-2 text-left lg:text-right lg:pl-10">
-            <h2 class="text-3xl lg:text-[2.75rem] font-bold text-black-main leading-[1.2] mb-6">Saatnya mulai dari langkah sederhana.</h2>
-            <p class="text-gray-500 text-[15px] leading-relaxed lg:ml-auto lg:max-w-[85%]">Laku membantu UMKM memulai dari hal dasar: memahami keuangan, belajar literasi digital, menguji pemahaman, lalu memakai alat bantu untuk mencatat dan menghitung kebutuhan usaha.</p>
-          </div>
-        </div>
+        <!-- Kolom Kanan -->
+        <div class="md:col-span-5 flex flex-col justify-end">
+          <!-- Blank/Spacer seukuran label "About Laku" + margin bawahnya -->
+          <div class="hidden md:block h-[1.5rem] mb-3"></div>
 
-        <!-- Block 3 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full">
-          <div class="flex flex-col lg:pr-10">
-            <p class="text-[#72bc23] font-semibold mb-3 text-[15px] tracking-wide">Solusi Laku</p>
-            <h2 class="text-3xl lg:text-[2.75rem] font-bold text-black-main leading-[1.2]">Belajar dulu, lalu kelola usaha dengan lebih percaya diri.</h2>
-          </div>
-          <div class="flex flex-col lg:pl-4">
-            <p class="text-gray-500 text-[15px] leading-relaxed mb-6">Laku tidak hanya menampilkan informasi, tetapi juga mengajak pengguna memahami materi melalui pembelajaran singkat dan kuis sederhana. Dengan begitu, pengguna tidak hanya memakai alat, tetapi juga memahami alasan di balik pengelolaan usaha yang baik.</p>
-            <p class="text-gray-500 text-[15px] leading-relaxed mb-8">Setelah belajar, pengguna dapat memakai aplikasi Laku untuk menghitung harga jual, mencatat pemasukan dan pengeluaran, melakukan simulasi laba rugi, serta mengecek kesiapan digital usahanya.</p>
-            <div class="flex">
-              <a href="#" class="inline-flex items-center justify-center gap-2 bg-[#e3fbc1] hover:bg-[#d6f5a3] transition-colors text-black-main font-semibold px-8 py-3 rounded-full group text-[15px]">
-                Belajar
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-              </a>
-            </div>
-          </div>
+          <p class="text-sm md:text-base text-neutral-600 leading-relaxed fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">
+            Laku adalah pendamping keuangan harian untuk UMKM. Mulai dari memisahkan uang pribadi dan uang usaha,
+            mencatat transaksi, hingga memahami kondisi usahamu dengan lebih jelas.
+          </p>
         </div>
+      </div>
 
-        <!-- Block 4 -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start w-full">
-          <div class="flex flex-col lg:col-span-4 lg:pr-6">
-            <p class="text-[#72bc23] font-semibold mb-3 text-[15px] tracking-wide uppercase">Nilai Laku</p>
-            <h2 class="text-3xl lg:text-[2.75rem] font-bold text-black-main leading-[1.1]">Dibuat sederhana, dekat, dan bermanfaat.</h2>
-          </div>
-          <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Card 1 -->
-            <div class="bg-white border border-gray-100 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-full">
-              <p class="text-black-main text-[14px] leading-relaxed mb-10">
-                <span class="font-bold block mb-1">Mudah Dipahami</span>
-                Laku memakai bahasa yang sederhana agar pelaku UMKM dapat belajar tanpa merasa terbebani.
-              </p>
-              <div class="flex items-center gap-4">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop" alt="" class="w-12 h-12 rounded-full object-cover">
-                <div>
-                  <h4 class="font-bold text-[14px] text-black-main">Untuk pengguna baru</h4>
-                  <p class="text-gray-400 text-[11px] mt-0.5 leading-[1.4]">Belajar dari dasar</p>
-                </div>
-              </div>
-            </div>
-            <!-- Card 2 -->
-            <div class="bg-white border border-gray-100 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-full">
-              <p class="text-black-main text-[14px] leading-relaxed mb-10">
-                <span class="font-bold block mb-1">Langsung Bisa Dipakai</span>
-                Fitur Laku dirancang untuk kebutuhan harian UMKM, mulai dari mencatat sampai menghitung laba rugi.
-              </p>
-              <div class="flex items-center gap-4">
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=256&auto=format&fit=crop" alt="" class="w-12 h-12 rounded-full object-cover">
-                <div>
-                  <h4 class="font-bold text-[14px] text-black-main">Untuk usaha kecil</h4>
-                  <p class="text-gray-400 text-[11px] mt-0.5 leading-[1.4]">Kelola lebih rapi</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Call to action -->
-     <section class="w-full bg-white py-24 px-6 min-h-screen">
-        <div class="max-w-5xl mx-auto center flex-col flex ">
-            <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 md:text-center text-start">
-                Aplikasi
-                <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
-            </p>
-            <h2
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
-                Saatnya Mengelola UMKM
-                <br />
-                Dengan Lebih Mudah
+      <!-- Bottom Cards Section (Tinggi Kiri & Kanan Terkunci Seimbang) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        <!-- Kartu Kiri Besar (Posisi Mockup Absolute di Dasar) -->
+        <div
+          class="bg-neutral-100/90 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between overflow-hidden relative min-h-[460px] lg:min-h-[500px] fade-in"
+          data-once="true" data-delay="0.2" data-duration="0.8" data-direction="up">
+          <div class="z-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-3 tracking-tight">
+              Uang usaha dan uang pribadi, kini lebih jelas.
             </h2>
-            <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
-                Gunakan
-                <span class="font-semibold text-black-main">Aplikasi Laku</span>
-                untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
-                belajar lebih praktis dalam satu tempat.
+            <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-md">
+              Laku membantu kamu membangun batas yang sehat antara uang untuk usaha dan uang untuk kebutuhan pribadi.
             </p>
+          </div>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
-                <div class="flex items-start relative group">
-                    <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
-                            href="app.html">Aplikasi</a></button>
-                    <button
-                        class="rounded-full p-3 text-center bg-black-main relative transform group-hover:translate-x-3 transition-all duration-450">
-                        <a href="app.html" class="text-xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
-                                class="transform rotate-45">
-                                <path d="M0 0h16v16H0z" fill="none" />
-                                <path fill="white"
-                                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
-                            </svg>
-                        </a>
-
-                    </button>
-                </div>
-
-            </div>
+          <!-- Area Mockup HP Terpotong Rapi di Batas Bawah Kartu -->
+          <div class="absolute top-40 left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
+            data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
+            <img src="./assets/images/LakuAppVertical.png" alt="App Mockup"
+              class="w-[340px] translate-y-6 drop-shadow-2xl object-contain object-bottom absolute" />
+          </div>
         </div>
+
+        <!-- Kolom Kanan (2 Kartu Pembagi 50:50 Presisi) -->
+        <div class="flex flex-col gap-6 h-full fade-in" data-once="true" data-delay="0.2" data-duration="0.8">
+          <!-- Kartu Kanan Atas (Placeholder / Mockup Terpotong Bawah) -->
+          <div
+            class="bg-neutral-100/90 rounded-[2.5rem] p-8 flex-1 min-h-90 flex flex-col justify-between overflow-hidden relative">
+            <div class="z-10">
+              <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
+                Catat setiap transaksi, kapan saja.
+              </h2>
+              <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-sm">
+                Masukkan pemasukan dan pengeluaran usaha dalam beberapa langkah sederhana.
+              </p>
+            </div>
+            <!-- Mockup Kecil / Terpotong di Bawah Kartu Atas -->
+            <div
+              class="absolute top-30 left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
+              data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
+              <img src="./assets/images/keuanganMokup.png" alt="App Mockup"
+                class="w-[300px] drop-shadow-lg object-contain object-top" />
+            </div>
+          </div>
+
+          <!-- Kartu Kanan Bawah (Teks Highlight Hijau/Lime) -->
+          <div class="bg-lime-200/80 rounded-[2.5rem] p-8 md:p-10 flex-1 min-h-0 flex flex-col justify-center fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.6">
+            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
+              Ketahui uangmu bekerja ke mana.
+            </h2>
+            <p class="text-neutral-700 text-sm md:text-base leading-relaxed">
+              Lihat ringkasan pemasukan, pengeluaran, dan kondisi usaha agar keputusan untuk belanja stok, menentukan
+              harga, atau mengambil uang pribadi terasa lebih yakin.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-      <!-- End Call to action -->
 
-      <!-- Footer  -->
-      <footer class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen">
+
+    <section class="flex py-24 px-6 flex-col mt-26 w-full gap-24 lg:gap-36 w-full max-w-7xl mx-auto">
+      <!-- Block 1 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 w-full">
+        <div class="flex flex-col lg:pr-10 lg:pt-4">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.3">
+            Dampak & Masalah
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+          <p class="text-[#72bc23] font-semibold mb-3 text-sm tracking-wide"></p>
+          <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-[1.2] mb-6 reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9" data-mode="word">Usaha Bisa Ramai, Tapi
+            Belum Tentu Sehat.</h2>
+          <p class="text-gray-500 text-sm leading-relaxed fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">Pemasukan yang terlihat besar belum tentu berarti usaha
+            menghasilkan keuntungan. Saat uang pribadi dan uang dagang bercampur, modal sulit dijaga dan kondisi usaha
+            menjadi tidak jelas.</p>
+        </div>
+        <div class="w-full">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1687131786869-dc26efcbc405?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="" class="w-full h-auto rounded-[2rem] object-cover aspect-[4/3] lg:aspect-[1.3/1] shadow-sm fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.8" data-direction="left">
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+        <div class="w-full order-2 lg:order-1">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1686156706088-0102e1d11b9d?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="" class="w-full h-auto rounded-[2rem] object-cover aspect-[4/3] lg:aspect-[1.3/1] shadow-sm fade-in"
+            data-once="true" data-delay="0.2" data-duration="1.5" data-direction="right">
+        </div>
+        <div class="flex flex-col order-1 lg:order-2 text-left lg:pl-10">
+          <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-[1.2] mb-6 reveal" data-once="true"
+            data-delay="0.2" data-duration="1.5" data-mode="word">Saatnya Mulai dari Langkah
+            Sederhana.</h2>
+          <p class="text-gray-500 text-sm leading-relaxed lg:ml-auto text-left fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.9">Kamu tidak harus langsung
+            memahami semua istilah keuangan. Cukup mulai dari kebiasaan kecil: memisahkan uang usaha, mencatat
+            transaksi, dan melihat kembali kondisi usahamu setiap hari.</p>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full">
+        <div class="flex flex-col lg:pr-10">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.3">
+            Solusi Laku
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+          <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-[1.2] reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9">Belajar dulu, lalu kelola usaha
+            dengan lebih percaya diri.</h2>
+        </div>
+        <div class="flex flex-col lg:pl-4">
+          <p class="text-gray-500 text-sm leading-relaxed mb-6 fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">Laku tidak hanya menampilkan informasi, tetapi juga
+            mengajak pengguna memahami materi melalui pembelajaran singkat dan kuis sederhana. Dengan begitu, pengguna
+            tidak hanya memakai alat, tetapi juga memahami alasan di balik pengelolaan usaha yang baik.</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-8 fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">Setelah belajar, pengguna dapat memakai aplikasi
+            Laku untuk menghitung harga jual, mencatat pemasukan dan pengeluaran, melakukan simulasi laba rugi, serta
+            mengecek kesiapan digital usahanya.</p>
+          <div class="flex">
+            <a href="#"
+              class="inline-flex items-center justify-center gap-2 bg-[#e3fbc1] hover:bg-[#d6f5a3] transition-colors text-black-main font-semibold px-8 py-3 rounded-full group text-sm fade-in"
+              data-once="true" data-delay="0.2" data-duration="0.9" data-direction="up">
+              Belajar
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="group-hover:translate-x-1 transition-transform">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 4 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start w-full">
+        <div class="flex flex-col lg:col-span-4 lg:pr-6">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.3">
+            Nilai Laku
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+          <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-[1.1] reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9" data-mode="word">Dibuat sederhana, dekat, dan
+            bermanfaat.</h2>
+        </div>
+        <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1 -->
+          <div
+            class="bg-white border border-gray-100 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-full fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.9" data-direction="right">
+            <p class="text-black-main text-sm leading-relaxed mb-10">
+              <span class="font-bold block mb-1">Mudah Dipahami</span>
+              Laku memakai bahasa yang sederhana agar pelaku UMKM dapat belajar tanpa merasa terbebani.
+            </p>
+            <div class="flex items-center gap-4">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuKiVrFgaCktxXF0QFKHAD9ZwirmPjLN5jaE5c4hZkHg&s=10"
+                alt="" class="w-12 h-12 rounded-full object-cover">
+              <div>
+                <h4 class="font-bold text-sm text-black-main">Khoirul Yani</h4>
+                <p class="text-gray-400 text-[11px] mt-0.5 leading-[1.4]">UMKM</p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div
+            class="bg-white border border-gray-100 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-full fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.9" data-direction="right">
+            <p class="text-black-main text-sm leading-relaxed mb-10">
+              <span class="font-bold block mb-1">Langsung Bisa Dipakai</span>
+              Fitur Laku dirancang untuk kebutuhan harian UMKM, mulai dari mencatat sampai menghitung laba rugi.
+            </p>
+            <div class="flex items-center gap-4">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuKiVrFgaCktxXF0QFKHAD9ZwirmPjLN5jaE5c4hZkHg&s=10"
+                alt="" class="w-12 h-12 rounded-full object-cover">
+              <div>
+                <h4 class="font-bold text-sm text-black-main">Pak Solihin</h4>
+                <p class="text-gray-400 text-[11px] mt-0.5 leading-[1.4]">UMKM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Call to action -->
+    <section class="w-full bg-white py-24 px-6 min-h-screen w-full max-w-7xl mx-auto">
+      <div class="max-w-5xl mx-auto center flex-col flex ">
+        <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 md:text-center text-start">
+          Aplikasi
+          <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+        </p>
+        <h2
+          class="text-3xl md:text-4xl font-bold text-black-main leading-tight md:text-center text-start fade-in"
+          data-once="true" data-delay="0.2" data-duration="0.6">
+          Saatnya Mengelola UMKM
+          <br />
+          Dengan Lebih Mudah
+        </h2>
+        <p class="max-w-3xl mx-auto mt-8 text-sm text-gray-600 leading-relaxed md:text-center text-start fade-in"
+          data-once="true" data-delay="0.2" data-duration="0.5">
+          Gunakan
+          <span class="font-semibold text-black-main">Aplikasi Laku</span>
+          untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
+          belajar lebih praktis dalam satu tempat.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
+          <div class="flex items-start relative group fade-in" data-once="true" data-delay="0.2" data-duration="0.6">
+            <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
+                href="app.html">Aplikasi</a></button>
+            <button
+              class="rounded-full p-3 text-center bg-black-main relative transform group-hover:translate-x-3 transition-all duration-450">
+              <a href="app.html" class="text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
+                  class="transform rotate-45">
+                  <path d="M0 0h16v16H0z" fill="none" />
+                  <path fill="white"
+                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
+                </svg>
+              </a>
+
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- End Call to action -->
+
+
+
+    <!-- Footer  -->
+    <footer class="relative overflow-hidden bg-white-main text-black-main pt-24 pb-10 min-h-screen">
       <div
         class="absolute -left-72 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-backdrop opacity-20 blur-[180px]">
       </div>
@@ -404,14 +398,17 @@
         </div>
       </div>
       <h2
-        class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+        class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none reveal"
+        data-once="true" data-delay="0.2" data-duration="1" data-mode="char">
         Laku
       </h2>
     </footer>
-    </div>
     <!-- ENd Footer  -->
-  </body>
-  <script src="./javascript/core/icons.js"></script>
-  <script src="./javascript/core/navbar.js"></script>
-  <script src="./javascript/core/animations.js"></script>
+  </div>
+
+</body>
+<script src="./javascript/core/icons.js"></script>
+<script src="./javascript/core/navbar.js"></script>
+<script src="./javascript/core/animations.js"></script>
+
 </html>

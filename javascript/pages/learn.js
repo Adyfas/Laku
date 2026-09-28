@@ -80,3 +80,40 @@
         }
     });
 })();
+
+const listLearn = [
+    {
+        title: "Memisahkan uang usaha dan uang pribadi",
+        icon: "walletv2"
+    },
+    {
+        title: "Mencatat transaksi harian",
+        icon: "book"
+    },
+    {
+        title: "Memahami pemasukan, pengeluaran, dan keuntungan",
+        icon: "flag"
+    },
+]
+
+
+// render list
+
+const sectionLearnList = document.getElementById('listLearn')
+
+
+// render 
+const sectionLearnMapping = listLearn.map((item, index) => `
+<li class="flex items-center my-2 gap-2 fade-in"  data-once="true"
+            data-delay="0.2" data-duration="${0.8 * index+1}" data-direction="up">          
+        <div class="p-2 w-10 h-10 text-center bg-lime-main mx-2 rounded-full">
+        ${window.LakuIcons.svg(item.icon)}
+        </div>
+        <p>
+            ${item.title}
+        </p>
+</li>
+`).join('')
+
+
+sectionLearnList.innerHTML = sectionLearnMapping;

@@ -7,6 +7,8 @@
     <title>About | Laku</title>
 
     <!-- PWA -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#274c43">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,10 +41,10 @@
             class="fixed inset-0 bg-black/35 backdrop-blur-[6px] opacity-0 pointer-events-none z-99 transition-all duration-450">
         </div>
 
+        <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
+            class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]"> -->
         <nav data-delay="0.9" data-direction="down" id="navbar"
-            class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)]">
-            <!-- <nav data-delay="0.9" data-direction="down" id="navbar"
-            class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in"> -->
+            class="fixed top-[30px] left-1/2 -translate-x-1/2 bg-white rounded-[22px] overflow-hidden z-100 shadow-[0_15px_40px_rgba(0,0,0,.08)] fade-in">
             <div class="h-[72px] flex items-center justify-between px-[22px]">
                 <a href="/" class="text-xl font-bold tracking-[3px] text-black-main no-underline">
                     LAKU
@@ -86,26 +88,61 @@
 
 
         <section class="min-h-screen flex py-24 px-6 flex-col mt-26">
-            <div class="flex justify-between flex-col items-start md:flex-row relative">
+            <div class="flex justify-between flex-col items-start md:flex-row relative my-2">
                 <!-- Kolom Kiri -->
                 <div class="flex md:w-[500px] flex-col w-full">
-                    <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start">
+                    <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in"
+                        data-once="true" data-delay="0.2" data-duration="0.3">
                         Belajar
                         <span class="text-lime-600 text-xl" data-laku-icon="sparkle"
                             data-laku-icon-size="1.25em"></span>
                     </p>
-                    <h1 class="text-4xl font-semibold text-start leading-tight">
-                        Menuju UMKM Sejahtera Dengan Belajar Lebih Lanjut
+                    <h1 class="text-4xl md:text-5xl font-semibold text-start leading-tight reveal" data-once="true" data-delay="0.2"
+                        data-duration="0.8" data-mode="word">
+                        Belajar Mengelola Usaha dari Masalah Nyata
                     </h1>
                 </div>
 
                 <!-- Kolom Kanan -->
                 <div class="flex items-start gap-2 justify-start flex-col md:w-[500px] w-full md:pt-[32px]">
-                    <p class="leading-relaxed">
-                        Belajar dari Masalah Nyata UMKM, setiap usaha punya tantangan. Yuk, bantu Ibu Siti menghadapi
-                        masalah usahanya dan temukan cara yang lebih baik untuk mengelolanya.
+                    <p class="leading-relaxed fade-in" data-once="true" data-delay="0.2" data-duration="0.8">
+                        Setiap UMKM punya tantangannya sendiri. Lewat cerita dan simulasi sederhana, Laku membantu kamu
+                        memahami masalah keuangan usaha dan menemukan langkah yang bisa langsung diterapkan.
+                        Tombol: Mulai Belajar
                     </p>
+                </div>
+            </div>
+
+
+            <div class="w-full bg-[url('/assets/images/Background-learn.jpg')] bg-cover bg-center bg-no-repeat rounded-4xl h-[500px] fade-in"
+                data-once="true" data-delay="0.2" data-duration="0.8" data-direction="up">
+                <div class="m-2 flex items-end justify-end gap-5">
+                </div>
+            </div>
+
+            <div class="flex justify-between my-8 flex-col lg:flex-row">
+                <div
+                    class="w-full md:w-[500px] h-[350px] relative flex items-end justify-start md:justify-center overflow-hidden p-4 bottom-10">
+                    <img class="h-[300px] object-contain z-10 select-none fade-in" data-once="true" data-delay="0.2"
+                        data-duration="0.8" data-direction="right" src="./assets/images/busiti-bubblechat.png"
+                        alt="Bu Siti">
+                </div>
+
+
+                <div class="flex items-start gap-2 justify-start flex-col w-full md:w-[500px]">
+                    <h1 class="text-4xl md:text-5xl font-semibold text-start reveal" data-once="true" data-delay="0.2"
+                        data-duration="0.9" data-mode="word">Temani Ibu Siti Menata Usahanya</h1>
+                    <p class="fade-in" data-once="true" data-delay="0.2" data-duration="0.8">Warung Ibu Siti ramai,
+                        tetapi uang usaha dan uang pribadi masih sering bercampur. Bantu Ibu Siti
+                        mengambil keputusan yang tepat, dari menjaga modal hingga memahami keuntungan usaha.
+                        Kamu akan belajar:</p>
                     <div class="flex items-start relative my-5 group">
+                        <ul class="my-2">
+                            <li id="listLearn"></li>
+                        </ul>
+                    </div>
+                    <div class="flex items-start relative my-5 group fade-in"  data-once="true"
+            data-delay="0.2" data-duration="0.8" data-direction="up">
                         <button onclick="window.LakuLearn.open('s1')"
                             class="rounded-2xl bg-black-main text-white-main p-2 px-8">
                             Belajar Sekarang
@@ -122,84 +159,11 @@
                     </div>
                 </div>
             </div>
-
-
-            <div
-                class="w-full bg-[url('/assets/images/Background-learn.jpg')] bg-cover bg-center bg-no-repeat rounded-4xl h-[500px]">
-                <div class="m-2 flex items-end justify-end gap-5">
-
-                    <!-- <div class="bg-white-main/50 backdrop-blur-md flex flex-col w-[400px] rounded-4xl p-5 ">
-                        <div class="flex items-center flex-col gap-4">
-                            <h1 class="text-2xl font-semibold">1Lorem, ipsum dolor sit amet consectetur adipisicing
-                                elit. A, incidunt.</h1>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, molestiae illo? Magnam
-                                praesentium modi, officiis expedita accusamus placeat rem voluptates?</p>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-white-main/50 backdrop-blur-md flex flex-col w-[400px] h-[500px] rounded-4xl p-5 justify-between">
-                        <div class="flex items-center flex-col gap-4">
-                            <h1 class="text-2xl font-semibold my-2">Lorem, ipsum dolor sit amet consectetur adipisicing
-                                elit. A, incidunt.</h1>
-                            <p>2Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, molestiae illo? Magnam
-                                praesentium modi, officiis expedita accusamus placeat rem voluptates?</p>
-                        </div>
-
-                        <div class="flex items-center justify-between relative">
-                            <div class="my-5 ">
-                                <p>Lorem ipsum dolor sit amet consec</p>
-                                <h1 class="text-7xl font-semibold my-2">55</h1>
-                            </div>
-                        </div>
-
-                    </div> -->
-
-                </div>
-            </div>
-
-            <div class="flex justify-between my-8 flex-col lg:flex-row">
-                <div
-                    class="w-full md:w-[500px] h-[350px] relative flex items-end justify-start md:justify-center overflow-hidden p-4 bottom-10">
-                    <img class="h-[300px] object-contain z-10 select-none" src="./assets/images/busiti-bubblechat.png"
-                        alt="Bu Siti">
-                    <!-- <div
-                        class="absolute top-4 right-0 z-20 w-[195px] h-[195px] flex items-center justify-center md:justify-start p-4">
-                        <img class="w-full h-full object-contain absolute top-0 left-0 -z-10"
-                            src="./assets/images/Bubble Chat.png" alt="Chat">
-
-                        <p class="text-[11px] text-center text-slate-800 leading-tight px-2 reveal font-bold"
-                            class="reveal" data-mode="word" data-duration="" data-stagger="0.08" data-distance="50"
-                            data-once="true">
-                            Halo! Mari belajar bersama Bu Siti hari ini.
-                        </p>
-                    </div> -->
-                </div>
-
-
-                <div class="flex items-start gap-2 justify-start flex-col w-full md:w-[500px]">
-                    <h1 class="text-4xl font-semibold text-start">Bantu Ibu Siti mengembangkan usahanya.</h1>
-                    <p>Mulai dari satu masalah kecil. Ibu Siti akan memandu kamu untuk belajar masalah masalah yang ada
-                        di UMKM dan kamu yang akan menentukan perjalanan ini dengan Ibu Siti.</p>
-                    <div class="flex items-start relative my-5 group">
-                        <!-- <button onclick="window.LakuLearn.open('s1')" class="rounded-2xl bg-black-main text-white-main p-2 px-8">Belajar Sekarang</button>
-                        <button onclick="window.LakuLearn.open('s1')"
-                            class="rounded-full p-3 text-center bg-black-main relative right-1 transform group-hover:translate-x-3 transition-all duration-450">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"
-                                class="transform rotate-45">
-                                <path d="M0 0h16v16H0z" fill="none" />
-                                <path fill="white"
-                                    d="M13 2a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5.414l-8.293 8.293a1 1 0 1 1-1.414-1.414L10.586 4H3a1 1 0 0 1 0-2z" />
-                            </svg>
-
-                        </button> -->
-                    </div>
-                </div>
-            </div>
     </div>
 
 
     <!-- End Konten -->
+
 
 
     <!-- Call to action -->
@@ -209,13 +173,14 @@
                 Aplikasi
                 <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
             </p>
-            <h2
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-black-main leading-tight md:text-center text-start">
+            <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-tight md:text-center text-start fade-in"
+                data-once="true" data-delay="0.2" data-duration="0.6">
                 Saatnya Mengelola UMKM
                 <br />
                 Dengan Lebih Mudah
             </h2>
-            <p class="max-w-3xl mx-auto mt-8 text-lg text-gray-600 leading-relaxed md:text-center text-start">
+            <p class="max-w-3xl mx-auto mt-8 text-sm text-gray-600 leading-relaxed md:text-center text-start fade-in"
+                data-once="true" data-delay="0.2" data-duration="0.5">
                 Gunakan
                 <span class="font-semibold text-black-main">Aplikasi Laku</span>
                 untuk mencatat usaha, menghitung harga jual, memantau laba rugi, dan
@@ -223,7 +188,8 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4 mt-5">
-                <div class="flex items-start relative group">
+                <div class="flex items-start relative group fade-in" data-once="true" data-delay="0.2"
+                    data-duration="0.6">
                     <button class="rounded-2xl bg-black-main text-white-main p-2 px-8"> <a class="text-xl"
                             href="app.html">Aplikasi</a></button>
                     <button
@@ -258,10 +224,6 @@
         <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
                 <div class="lg:col-span-2">
-                    <!-- <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3">
-                Footer
-              <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
-            </p> -->
                     <h2 class="text-4xl font-semibold leading-tight">
                         Bersama Laku,
                         <br />
@@ -294,8 +256,8 @@
                 </div>
             </div>
         </div>
-        <h2
-            class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none">
+        <h2 class="absolute left-1/2 -translate-x-1/2 bottom-[-180px] text-[220px] md:text-[360px] lg:text-[520px] font-black leading-none tracking-tight whitespace-nowrap text-black-main/15 select-none pointer-events-none reveal"
+            data-once="true" data-delay="0.2" data-duration="1" data-mode="char">
             Laku
         </h2>
     </footer>
@@ -346,7 +308,7 @@
                                 class="text-[11px] font-bold uppercase tracking-widest text-emerald-800 mb-1">Bu Siti
                             </p>
                             <p id="learnBubbleText"
-                                class="text-sm sm:text-[15px] font-medium text-slate-800 leading-relaxed"></p>
+                                class="text-sm font-medium text-slate-800 leading-relaxed"></p>
                         </div>
                     </div>
                     <!-- <p class="mt-2 text-center text-xs text-gray-500">Klik bubble untuk skip typing</p> -->
@@ -374,7 +336,7 @@
     <script src="./javascript/pages/learn/learnRender.js"></script>
     <script src="./javascript/pages/learn/learnActions.js"></script>
     <script src="./javascript/pages/learn.js"></script>
-    <script src="./javascript/pages/learn/learnDebug.js"></script>
+    <!-- <script src="./javascript/pages/learn/learnDebug.js"></script> -->
     <script src="./javascript/core/navbar.js"></script>
     <script src="./javascript/core/animations.js"></script>
 </body>
