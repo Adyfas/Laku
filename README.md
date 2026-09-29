@@ -453,10 +453,15 @@ Aplikasi memakai sejumlah foto dan satu video dari pihak luar. Daftar lengkapnya
 
 ### 8.2 Video eksternal
 
-Rekaman layar dokumentasi (`Screen_Recording_2026-…mov`) di akun Cloudinary tim
-(`res.cloudinary.com/gjs6suvk`) — dipakai di kartu video navbar ke-7 halaman
-(`index.html:67,275`, `about.html:63`, `app.html:66`, `kontak.html:65`,
-`learn.html:70`, `404.html:66`).
+Dua file video di akun Cloudinary tim (`res.cloudinary.com/gjs6suvk`):
+
+- `Laku.mov` — dipakai di **kartu video navbar semua halaman** (`index.html:70`,
+  `app.html:70`, `about.html:67`, `kontak.html:69`, `learn.html:75`, `404.html:69`),
+  hardcoded di tag `<source>` tiap HTML. File aslinya QuickTime (87 MB) yang tidak
+  bisa diputar Chrome, jadi dipakai versi transcode `w_640,q_auto,f_mp4` (~13 MB,
+  MP4/H.264).
+- `Screen_Recording_2026-…mov` — rekaman layar dokumentasi, dipakai di video besar
+  section dokumenter `index.html:277`.
 
 ### 8.3 Aset milik sendiri / bebas lisensi
 

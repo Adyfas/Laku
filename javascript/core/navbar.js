@@ -154,7 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
   overlay.addEventListener("click", closeMenu);
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+    if (e.key === "Escape") {
+      closeMenu();
+    }
   });
 
   function normalizePath(pathname) {

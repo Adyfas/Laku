@@ -58,17 +58,21 @@
 
         </div>
         <div class="flex flex-col justify-between">
-          <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group">
-            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
-              <source
-                src="https://res.cloudinary.com/gjs6suvk/video/upload/v1786454750/Screen_Recording_2026-906-26_at_14.55.27_1.mov"
-                type="video/mp4" />
-            </video>
-            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
-            <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
-              <a href="./learn.html"
-                class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform">Mulai
-                Belajar →</a>
+          <div class="flex flex-col justify-between">
+            <div id="nav-card" class="overflow-hidden rounded-2xl h-[210px] relative group cursor-pointer">
+              <img src="/assets/images/Background-learn.jpg" alt="Laku Art"
+                class="absolute inset-0 w-full h-full object-cover">
+              <!-- <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+                            <source
+                                src="https://res.cloudinary.com/gjs6suvk/video/upload/w_640,q_auto,f_mp4/v1790662027/Laku.mov"
+                                type="video/mp4" />
+                        </video> -->
+              <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
+              <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
+                <a href="./learn.html"
+                  class="text-white-main font-semibold text-lg no-underline hover:scale-105 transition-transform">Mulai
+                  Belajar →</a>
+              </div>
             </div>
           </div>
         </div>
@@ -76,89 +80,96 @@
     <!-- End Navbar -->
 
     <section class="mt-26 justify-center flex flex-col items-center px-6 py-20 w-full max-w-7xl mx-auto">
-  <!-- Top Header Section -->
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start my-6">
-    <!-- Kolom Kiri -->
-    <div class="md:col-span-7">
-      <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true" data-delay="0.2" data-duration="0.3">
-        About Laku
-        <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
-      </p>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 reveal" data-once="true" data-delay="0.2" data-duration="0.9" data-mode="word">
-        Laku Membantu Kamu Mengelola Uang Usaha, Tanpa Ribet.
-      </h1>
-    </div>
+      <!-- Top Header Section -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start my-6">
+        <!-- Kolom Kiri -->
+        <div class="md:col-span-7">
+          <p class="uppercase tracking-[5px] text-lime-600 font-semibold mb-3 text-start fade-in" data-once="true"
+            data-delay="0.2" data-duration="0.3">
+            About Laku
+            <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
+          </p>
+          <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 reveal" data-once="true"
+            data-delay="0.2" data-duration="0.9" data-mode="word">
+            Laku Membantu Kamu Mengelola Uang Usaha, Tanpa Ribet.
+          </h1>
+        </div>
 
-    <!-- Kolom Kanan -->
-    <div class="md:col-span-5 flex flex-col justify-end">
-      <div class="hidden md:block h-[1.5rem] mb-3"></div>
-      <p class="text-sm md:text-base text-neutral-600 leading-relaxed fade-in" data-once="true" data-delay="0.2" data-duration="0.9">
-        Laku adalah pendamping keuangan harian untuk UMKM. Mulai dari memisahkan uang pribadi dan uang usaha, mencatat transaksi, hingga memahami kondisi usahamu dengan lebih jelas.
-      </p>
-    </div>
-  </div>
-
-  <!-- Bottom Cards Section -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-    <!-- Kartu Kiri Besar -->
-    <div
-      class="bg-neutral-100/90 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between gap-6 overflow-hidden relative min-h-[720px] lg:min-h-[520px] lg:min-h-[560px] fade-in"
-      data-once="true" data-delay="0.2" data-duration="0.8" data-direction="up">
-      
-      <!-- Teks Diberi mb-16 atau mb-20 Agar Tidak Tertimpa -->
-      <div class="z-10 mb-20">
-        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-3 tracking-tight">
-          Uang usaha dan uang pribadi, kini lebih jelas.
-        </h2>
-        <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-md">
-          Laku membantu kamu membangun batas yang sehat antara uang untuk usaha dan uang untuk kebutuhan pribadi.
-        </p>
-      </div>
-
-      <!-- Posisi Mockup Digeser ke Bawah (top-64 atau top-[260px]) agar Aman -->
-      <div class="absolute top-[260px] left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
-        data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
-        <img src="./assets/images/LakuAppVertical.png" alt="App Mockup"
-          class="w-[340px] translate-y-6 drop-shadow-2xl object-contain object-bottom" />
-      </div>
-    </div>
-
-    <!-- Kolom Kanan -->
-    <div class="flex flex-col gap-6 h-full fade-in" data-once="true" data-delay="0.2" data-duration="0.8">
-      <!-- Kartu Kanan Atas -->
-      <div class="bg-neutral-100/90 rounded-[2.5rem] p-8 flex-1 min-h-[560px] lg:min-h-[560px] flex flex-col justify-between overflow-hidden relative">
-        <!-- Teks Diberi Margin Bawah -->
-        <div class="z-10 mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
-            Catat setiap transaksi, kapan saja.
-          </h2>
-          <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-sm">
-            Masukkan pemasukan dan pengeluaran usaha dalam beberapa langkah sederhana.
+        <!-- Kolom Kanan -->
+        <div class="md:col-span-5 flex flex-col justify-end">
+          <div class="hidden md:block h-[1.5rem] mb-3"></div>
+          <p class="text-sm md:text-base text-neutral-600 leading-relaxed fade-in" data-once="true" data-delay="0.2"
+            data-duration="0.9">
+            Laku adalah pendamping keuangan harian untuk UMKM. Mulai dari memisahkan uang pribadi dan uang usaha,
+            mencatat transaksi, hingga memahami kondisi usahamu dengan lebih jelas.
           </p>
         </div>
+      </div>
 
-        <!-- Posisi Mockup Disesuaikan top-52 -->
-        <div class="absolute top-52 left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
-          data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
-          <img src="./assets/images/keuanganMokup.png" alt="App Mockup"
-            class="w-[300px] drop-shadow-lg object-contain object-top" />
+      <!-- Bottom Cards Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        <!-- Kartu Kiri Besar -->
+        <div
+          class="bg-neutral-100/90 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between gap-6 overflow-hidden relative min-h-[720px] lg:min-h-[520px] lg:min-h-[560px] fade-in"
+          data-once="true" data-delay="0.2" data-duration="0.8" data-direction="up">
+
+          <!-- Teks Diberi mb-16 atau mb-20 Agar Tidak Tertimpa -->
+          <div class="z-10 mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-3 tracking-tight">
+              Uang usaha dan uang pribadi, kini lebih jelas.
+            </h2>
+            <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-md">
+              Laku membantu kamu membangun batas yang sehat antara uang untuk usaha dan uang untuk kebutuhan pribadi.
+            </p>
+          </div>
+
+          <!-- Posisi Mockup Digeser ke Bawah (top-64 atau top-[260px]) agar Aman -->
+          <div
+            class="absolute top-[260px] left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
+            data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
+            <img src="./assets/images/LakuAppVertical.png" alt="App Mockup"
+              class="w-[340px] translate-y-6 drop-shadow-2xl object-contain object-bottom" />
+          </div>
+        </div>
+
+        <!-- Kolom Kanan -->
+        <div class="flex flex-col gap-6 h-full fade-in" data-once="true" data-delay="0.2" data-duration="0.8">
+          <!-- Kartu Kanan Atas -->
+          <div
+            class="bg-neutral-100/90 rounded-[2.5rem] p-8 flex-1 min-h-[560px] lg:min-h-[560px] flex flex-col justify-between overflow-hidden relative">
+            <!-- Teks Diberi Margin Bawah -->
+            <div class="z-10 mb-16">
+              <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
+                Catat setiap transaksi, kapan saja.
+              </h2>
+              <p class="text-sm md:text-base text-neutral-600 leading-relaxed max-w-sm">
+                Masukkan pemasukan dan pengeluaran usaha dalam beberapa langkah sederhana.
+              </p>
+            </div>
+
+            <!-- Posisi Mockup Disesuaikan top-52 -->
+            <div
+              class="absolute top-52 left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none fade-in"
+              data-once="true" data-delay="0.2" data-duration="1.5" data-direction="up">
+              <img src="./assets/images/keuanganMokup.png" alt="App Mockup"
+                class="w-[300px] drop-shadow-lg object-contain object-top" />
+            </div>
+          </div>
+
+          <!-- Kartu Kanan Bawah -->
+          <div class="bg-lime-200/80 rounded-[2.5rem] p-8 md:p-10 flex-1 min-h-0 flex flex-col justify-center fade-in"
+            data-once="true" data-delay="0.2" data-duration="0.6">
+            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
+              Ketahui uangmu bekerja ke mana.
+            </h2>
+            <p class="text-neutral-700 text-sm md:text-base leading-relaxed">
+              Lihat ringkasan pemasukan, pengeluaran, dan kondisi usaha agar keputusan untuk belanja stok, menentukan
+              harga, atau mengambil uang pribadi terasa lebih yakin.
+            </p>
+          </div>
         </div>
       </div>
-
-      <!-- Kartu Kanan Bawah -->
-      <div class="bg-lime-200/80 rounded-[2.5rem] p-8 md:p-10 flex-1 min-h-0 flex flex-col justify-center fade-in"
-        data-once="true" data-delay="0.2" data-duration="0.6">
-        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-2 tracking-tight">
-          Ketahui uangmu bekerja ke mana.
-        </h2>
-        <p class="text-neutral-700 text-sm md:text-base leading-relaxed">
-          Lihat ringkasan pemasukan, pengeluaran, dan kondisi usaha agar keputusan untuk belanja stok, menentukan
-          harga, atau mengambil uang pribadi terasa lebih yakin.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
 
@@ -305,8 +316,7 @@
           Aplikasi
           <span class="text-lime-600 text-xl" data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
         </p>
-        <h2
-          class="text-3xl md:text-4xl font-bold text-black-main leading-tight md:text-center text-start fade-in"
+        <h2 class="text-3xl md:text-4xl font-bold text-black-main leading-tight md:text-center text-start fade-in"
           data-once="true" data-delay="0.2" data-duration="0.6">
           Saatnya Mengelola UMKM
           <br />
