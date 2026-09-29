@@ -1,6 +1,3 @@
-/**
- * labaApp.js — Template UI Cek Untung Rugi Bulanan UMKM
- */
 function getLabaAppUI() {
   return `
  <div class="max-w-3xl mx-auto space-y-8 animate-fade-in-up">

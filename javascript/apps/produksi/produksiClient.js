@@ -1,7 +1,3 @@
-/**
- * produksiClient.js - Immutable production transactions and stock deduction.
- * A recipe is only a plan; stock changes only after production confirmation.
- */
 (function () {
   "use strict";
 
@@ -381,7 +377,6 @@ function renderRecipes(paginatedItems) {
 
   function initProduksiAppLogic() {
     bindTabs();
-    // Initial render via shared pagination controller
     pagination.refresh();
     renderHistory();
   }

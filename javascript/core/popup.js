@@ -1,17 +1,3 @@
-/**
- * popup.js - Custom Modal Dialog & Prompt System (LAKU Design Tokens)
- * Replaces native browser alert(), confirm(), and prompt() with custom styled UI.
- */
-
-/**
- * showAlert — Reusable toast/inline alert (warning or error).
- * Warning: for validation reminders (field belum diisi, data kurang, dll).
- * Error: for fatal/unexpected problems (data hilang, operasi gagal, dll).
- *
- * Usage:
- *   window.showAlert({ type: "warning", title: "Perhatian", message: "Isi nama dulu ya!" });
- *   window.showAlert({ type: "error",   title: "Gagal",      message: "Data tidak ditemukan." });
- */
 window.showAlert = function ({
   type = "warning",
   title = "",

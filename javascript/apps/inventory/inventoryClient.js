@@ -1,31 +1,22 @@
-/**
- * inventoryClient.js — Logika Inventory UMKM (CRUD stok, migrasi satuan, alert)
- */
 function initInventoryAppLogic() {
   const INV_STORAGE_KEY = "laku_inventory_data";
   const INVENTORY_SCHEMA_VERSION = 2;
 
   const U = window.LakuUnits;
-
-  /** Ambil data inventory dari localStorage, jalankan migrasi jika perlu */
   const loadInventoryData = () => {
     const raw = localStorage.getItem(INV_STORAGE_KEY);
     return raw ? migrateInventoryData(JSON.parse(raw)) : [];
   };
 
-  /** Simpan data inventory ke localStorage */
   const saveInventoryData = (data) => {
     localStorage.setItem(INV_STORAGE_KEY, JSON.stringify(data));
   };
 
-  // === LakuInventory namespace for inline edit (must be defined before renderTable) ===
   window.LakuInventory = {
     editingItemId: null,
     editingItemDraft: null,
 
-    /** Start inline editing an inventory item */
     startEditItem(id, draft) {
-      // Cancel any existing edit
       if (this.editingItemId && this.editingItemId !== id) {
         this.cancelInlineEditItem(this.editingItemId);
       }
@@ -48,8 +39,6 @@ function initInventoryAppLogic() {
       };
       pagination.refresh();
     },
-
-    /** Update inline edit draft */
     updateEditDraft(id, updates) {
       if (this.editingItemId !== id) return;
       this.editingItemDraft = {
@@ -58,13 +47,11 @@ function initInventoryAppLogic() {
       };
     },
 
-    /** Save inline edited item with confirmation */
     async saveInlineEditItem(id) {
       if (this.editingItemId !== id || !this.editingItemDraft) return;
 
       const draft = this.editingItemDraft;
 
-      // Validate required fields
       if (!draft.nama || draft.nama.trim() === "") {
         window.showAlert({ type: "warning", title: "Nama Kosong", message: "Nama barang tidak boleh kosong." });
         return;
@@ -78,7 +65,6 @@ function initInventoryAppLogic() {
         return;
       }
 
-      // Confirm before saving
       const ok = await window.showCustomConfirm({
         title: "Simpan Perubahan?",
         message: `Yakin ingin menyimpan perubahan untuk "${draft.nama}"?`,
@@ -88,7 +74,6 @@ function initInventoryAppLogic() {
 
       if (!ok) return;
 
-      // Apply changes
       const currentData = loadInventoryData();
       const idx = currentData.findIndex((it) => it.id === id);
       if (idx === -1) return;
@@ -109,7 +94,6 @@ function initInventoryAppLogic() {
         harga: draft.harga,
         stok: Math.max(0, U.round2(draft.stok)),
         minStok: Math.max(0, U.round2(draft.minStok || 0)),
-        // Update nestedLevels from draft (filter out invalid entries)
         nestedLevels: (draft.nestedLevels || [])
           .map((level) => ({
             unit: U.normalizeUnit(level?.unit),
@@ -122,13 +106,11 @@ function initInventoryAppLogic() {
       saveInventoryData(currentData);
       window.dispatchEvent(new CustomEvent("laku-inventory-updated"));
 
-      // Reset edit state
       this.editingItemId = null;
       this.editingItemDraft = null;
       pagination.refresh();
     },
 
-    /** Cancel inline editing */
     cancelInlineEditItem(id) {
       if (this.editingItemId !== id) return;
       this.editingItemId = null;
@@ -137,7 +119,6 @@ function initInventoryAppLogic() {
     },
   };
 
-  /** Render nested levels for inline edit */
   const renderEditNestingLevels = (item, draft, view = "desktop") => {
     const nestedLevels = draft.nestedLevels || item.nestedLevels || [];
     const countUnits = window.LakuUnits.getCountUnits ? window.LakuUnits.getCountUnits() : ["pcs", "bungkus", "pack", "botol", "roll", "lembar", "dosin", "lusin", "dus"];
@@ -185,7 +166,6 @@ function initInventoryAppLogic() {
     return parseFloat(n.toFixed(2)).toString();
   };
 
-  /** Normalisasi data inventory ke schema unit utama + sisa isi. */
   const normalizeInventoryItem = (item) => {
     const displayUnit = String(item?.displayUnit || item?.satuan || "pcs").trim().toLowerCase();
     const baseUnit = String(item?.baseUnit || U.getBaseUnit(displayUnit) || displayUnit).trim().toLowerCase();
@@ -220,8 +200,6 @@ function initInventoryAppLogic() {
       nestedLevels,
     };
 
-    // Versi sebelum schema v2 menyimpan stok dalam base/isi terdalam.
-    // Karena kontraknya diketahui, migrasi dilakukan berdasarkan versi, bukan besar angka.
     if ((item?.schemaVersion || 1) < INVENTORY_SCHEMA_VERSION) {
       const legacyUnit = nestedLevels.length > 0
         ? U.getNestedUnit(normalizedItem)
@@ -247,14 +225,11 @@ function initInventoryAppLogic() {
     return migrated;
   };
 
-  // Filter function for Inventory (uses U and normalizeInventoryItem)
   const invFilterFn = (item, state) => {
-    // Search filter
     if (state.searchTerm && item.nama.toLowerCase().indexOf(state.searchTerm.toLowerCase()) === -1) {
       return false;
     }
 
-    // Status filter
     if (state.statusFilter !== "all") {
       const normalizedItem = normalizeInventoryItem(item);
       const workingStock = U.toWorkingQuantity(
@@ -284,7 +259,6 @@ function initInventoryAppLogic() {
     return true;
   };
 
-  // Initialize shared pagination controller
   const pagination = window.LakuPagination.createPaginationController({
     storageKey: "laku_inventory_ui_state",
     getData: loadInventoryData,
@@ -308,7 +282,6 @@ function initInventoryAppLogic() {
     debounceMs: 300,
   });
 
-  /** Render nesting levels fields in the form */
   const renderNestingFields = (levels = []) => {
     const container = document.getElementById("invNestingLevels");
     const addBtn = document.getElementById("invAddNestingLevel");
@@ -333,19 +306,15 @@ function initInventoryAppLogic() {
       return row;
     };
 
-    // Render existing levels
     levels.forEach(l => container.appendChild(createLevelRow(l.unit, l.isi)));
 
-    // Add level button
     addBtn.addEventListener("click", () => {
       container.appendChild(createLevelRow());
     });
   };
 
-  // Form Submit Handler — tambah barang baru ke inventaris
   const form = document.getElementById("inventoryForm");
   if (form) {
-    // Initialize nesting fields (empty for new items)
     renderNestingFields([]);
 
     form.addEventListener("submit", (e) => {
@@ -360,7 +329,6 @@ function initInventoryAppLogic() {
 
       const satuan = document.getElementById("invSatuan")?.value || "pcs";
 
-      // Collect nesting levels
       const nestedLevels = [];
       document.querySelectorAll("#invNestingLevels .nesting-row").forEach(row => {
         const unit = row.querySelector(".nesting-unit").value;
@@ -368,7 +336,6 @@ function initInventoryAppLogic() {
         if (unit && isi && isi > 0) nestedLevels.push({ unit, isi });
       });
 
-      // Calculate cumulative isi for stock conversion
       const newItem = {
         id: Date.now(),
         nama,
@@ -391,21 +358,18 @@ function initInventoryAppLogic() {
       window.dispatchEvent(new CustomEvent("laku-inventory-updated"));
 
       form.reset();
-      // Reset nesting fields
       const container = document.getElementById("invNestingLevels");
       if (container) container.innerHTML = "";
       pagination.refresh();
     });
   }
 
-  /** Render seluruh tabel desktop & kartu mobile, serta update overview cards */
   const renderTable = (paginatedItems) => {
     const allData = loadInventoryData();
     const data = paginatedItems || allData;
     const tbody = document.getElementById("inventoryTableBody");
     const mobileList = document.getElementById("inventoryMobileList");
 
-    // Overview cards dihitung dari SEMUA data (bukan hasil filter/pagination)
     let totalItemsCount = allData.length;
     let lowStockCount = 0;
     let emptyStockCount = 0;
@@ -446,7 +410,6 @@ function initInventoryAppLogic() {
         `;
       }
     } else {
-      // Build Desktop Rows & Mobile Cards
       let desktopHtml = "";
       let mobileHtml = "";
 
@@ -491,7 +454,6 @@ function initInventoryAppLogic() {
             }, []).join(" → ")
           : null;
 
-        // Check if this item is being edited
         const isEditing = window.LakuInventory.editingItemId === normalizedItem.id;
         const draft = window.LakuInventory.editingItemDraft || {};
 
@@ -502,7 +464,6 @@ function initInventoryAppLogic() {
         const unitOptions = units.map(u => `<option value="${u}" ${draft.satuan === u || (!draft.satuan && normalizedItem.satuan === u) ? "selected" : ""}>${window.LakuUnits.formatUnitLabel(u)}</option>`).join("");
 
         if (isEditing) {
-          // Inline edit mode
           const editRow = `
             <tr class="bg-blue-50">
               <td colspan="5" class="py-4 px-4">
@@ -713,7 +674,6 @@ function initInventoryAppLogic() {
     document.getElementById("invLowStockItems").textContent = `${lowStockCount} Item`;
     document.getElementById("invEmptyStockItems").textContent = `${emptyStockCount} Item`;
 
-    // Bind Edit buttons
     document.querySelectorAll("[data-edit-inv]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const id = parseInt(e.target.closest("[data-edit-inv]").getAttribute("data-edit-inv"));
@@ -721,7 +681,6 @@ function initInventoryAppLogic() {
       });
     });
 
-    // Bind Save Inline Edit
     document.querySelectorAll("[data-save-edit-inv]").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.closest("[data-save-edit-inv]").getAttribute("data-save-edit-inv"));
@@ -729,7 +688,6 @@ function initInventoryAppLogic() {
       });
     });
 
-    // Bind Cancel Inline Edit
     document.querySelectorAll("[data-cancel-edit-inv]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const id = parseInt(e.target.closest("[data-cancel-edit-inv]").getAttribute("data-cancel-edit-inv"));
@@ -737,7 +695,6 @@ function initInventoryAppLogic() {
       });
     });
 
-    // Bind draft input changes
     document.querySelectorAll("[data-edit-nama]").forEach((input) => {
       input.addEventListener("input", (e) => {
         const id = parseInt(e.target.getAttribute("data-edit-nama"));
@@ -778,7 +735,6 @@ function initInventoryAppLogic() {
       });
     });
 
-    // Bind nested levels edit: add level
     document.querySelectorAll("[data-add-nesting]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const id = parseInt(e.target.closest("[data-add-nesting]").getAttribute("data-add-nesting"));
@@ -806,16 +762,13 @@ function initInventoryAppLogic() {
         `;
         container.appendChild(row);
 
-        // Update draft
         const updatedNested = [...nestedLevels, { unit: "", isi: 1 }];
         window.LakuInventory.updateEditDraft(id, { nestedLevels: updatedNested });
 
-        // Re-render to sync both views
         pagination.refresh();
       });
     });
 
-    // Bind nested levels edit: remove level (with confirmation)
     async function handleRemoveNestingLevel(e) {
       const btn = e.target.closest(".remove-nesting-edit");
       if (!btn) return;
@@ -853,11 +806,9 @@ function initInventoryAppLogic() {
       updatedNested.splice(index, 1);
       window.LakuInventory.updateEditDraft(editingId, { nestedLevels: updatedNested });
 
-      // Re-render to sync both views
       pagination.refresh();
     }
 
-    // Attach delegated remove handler to each nesting container
     document.querySelectorAll("[data-nesting-section]").forEach((section) => {
       const container = section.querySelector("[data-nesting-container]");
       if (container) {
@@ -867,10 +818,8 @@ function initInventoryAppLogic() {
       }
     });
 
-    // Bind nested levels edit: input changes (delegated per container)
     function bindNestingEditEvents() {
       document.querySelectorAll("[data-nesting-container]").forEach((container) => {
-        // Remove existing handlers to avoid duplicates
         container.removeEventListener("change", container.__nestingUnitHandler);
         container.removeEventListener("input", container.__nestingIsiHandler);
 
@@ -910,13 +859,10 @@ function initInventoryAppLogic() {
       });
     }
 
-    // Initial bind for existing nested levels
     bindNestingEditEvents();
 
-// Bind Delete Item - use event delegation on container for both desktop & mobile
     const deleteTarget = tbody?.parentElement || mobileList?.parentElement;
     if (deleteTarget) {
-      // Remove any existing listener first
       deleteTarget.removeEventListener("click", window.__invDeleteHandler);
       window.__invDeleteHandler = async (e) => {
         const btn = e.target.closest(".deleteInvBtn");
@@ -945,11 +891,9 @@ function initInventoryAppLogic() {
 }
   }
 
-  // Initial render
   pagination.refresh();
 }
 
-/** Entry point: pasang template UI lalu jalankan logika inventory */
 function renderInventoryApp(container) {
   if (!container) return;
   container.innerHTML = getInventoryAppUI();

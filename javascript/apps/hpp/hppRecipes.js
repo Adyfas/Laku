@@ -1,15 +1,4 @@
-/**
- * hppRecipes.js — Recipe CRUD for HPP Kalkulator
- * Handles saving, rendering, editing, duplicating, and deleting recipes.
- * Recipes are stored in localStorage under "laku_recipe_data".
- *
- * All functions attach to window.LakuHpp namespace.
- * Uses window.formatRupiah() from appUtils.js (no local formatRupiah).
- */
-
 const RECIPE_SCHEMA_VERSION = 2;
-
-/** Save current form data as a new recipe or update existing one */
 window.LakuHpp.saveCurrentRecipe = function () {
   const namaProduk =
     document.getElementById("hppNamaProduk")?.value.trim();
@@ -69,9 +58,7 @@ window.LakuHpp.saveCurrentRecipe = function () {
       calculationQty: ing.jumlahPakai,
       calculationUnit: ing.satuan,
       ...(ing._inputUnitPrice !== undefined ? { inputUnitPrice: ing._inputUnitPrice } : {}),
-      // Nesting levels for auto-calculation on restore
       ...(ing.nestedLevels ? { nestedLevels: ing.nestedLevels } : {}),
-      // Conversion data (for restoring original input & stock deduct):
       ...(ing._qtyBase !== undefined ? { _qtyBase: ing._qtyBase } : {}),
       ...(ing._baseUnit ? { _baseUnit: ing._baseUnit } : {}),
       ...(ing._inputQty !== undefined ? { _inputQty: ing._inputQty } : {}),
@@ -95,7 +82,6 @@ window.LakuHpp.saveCurrentRecipe = function () {
   };
 
   if (window.LakuHpp.editingRecipeId) {
-    // UPDATE existing recipe
     const recipes = loadRecipes();
     const idx = recipes.findIndex((r) => window.LakuHpp.idsEqual(r.id, window.LakuHpp.editingRecipeId));
     if (idx === -1) {
@@ -112,13 +98,11 @@ window.LakuHpp.saveCurrentRecipe = function () {
     saveRecipes(recipes);
     window.LakuHpp.editingRecipeId = null;
   } else {
-    // INSERT new recipe
     const recipes = loadRecipes();
     recipes.unshift(recipe);
     saveRecipes(recipes);
   }
 
-  // Visual feedback
   const simpanBtn = document.getElementById("hppSimpanResep");
   if (simpanBtn) {
     simpanBtn.innerHTML = window.LakuIcons.svg("checkCircle", "1em") + " Tersimpan!";
@@ -131,11 +115,9 @@ window.LakuHpp.saveCurrentRecipe = function () {
     }, 2000);
   }
 
-  // Clear session and reset form for new product
   if (window.LakuHpp.resetForm) {
     window.LakuHpp.resetForm();
   } else {
-    // Fallback if resetForm not available
     window.LakuHpp.clearSession();
     window.LakuHpp.ingredients = [];
     window.LakuHpp.overheadItems = [];
@@ -150,14 +132,12 @@ window.LakuHpp.saveCurrentRecipe = function () {
   window.LakuHpp.refreshRecipeList();
 };
 
-/** Render recipe list: desktop table + mobile cards with event delegation.
- *  Accepts optional paginated items from the shared pagination controller. */
+
 window.LakuHpp.renderRecipeList = function (paginatedItems) {
   const tbody = document.getElementById("recipeTableBody");
   const mobileList = document.getElementById("recipeMobileList");
   if (!tbody || !mobileList) return;
 
-  // Get filtered and paginated recipes from the shared pagination controller
   const paginationData = window.LakuHpp.paginationController
     ? window.LakuHpp.paginationController.getPaginatedData()
     : { items: [], totalItems: 0, totalPages: 1, currentPage: 1, pageSize: 10, startIdx: 0, endIdx: 0 };
@@ -171,7 +151,6 @@ window.LakuHpp.renderRecipeList = function (paginatedItems) {
     `;
     tbody.innerHTML = `<tr><td colspan="6" class="py-2">${emptyHtml}</td></tr>`;
     mobileList.innerHTML = emptyHtml;
-    // Remove any existing delegated listeners
     if (tbody._recipeClickHandler) {
       tbody.removeEventListener("click", tbody._recipeClickHandler);
       tbody._recipeClickHandler = null;
@@ -245,8 +224,6 @@ window.LakuHpp.renderRecipeList = function (paginatedItems) {
   tbody.innerHTML = desktopHtml;
   mobileList.innerHTML = mobileHtml;
 
-  // Set up delegated click handlers
-  // Remove old handlers first
   if (tbody._recipeClickHandler) {
     tbody.removeEventListener("click", tbody._recipeClickHandler);
   }
@@ -278,16 +255,11 @@ window.LakuHpp.renderRecipeList = function (paginatedItems) {
   mobileList.addEventListener("click", mobileList._recipeClickHandler);
 };
 
-/** Fill the wizard form with recipe data (for edit or duplicate) */
 window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
   const el = (id) => document.getElementById(id);
-
-  // Step 1
   el("hppNamaProduk").value = newName ?? recipe.namaProduk;
   el("hppJumlahProduksi").value = recipe.jumlahProduksi;
   el("hppSatuanProduksi").value = recipe.satuanProduksi || "porsi";
-
-  // Step 2 — ingredients (restore original user input if available)
   window.LakuHpp.ingredients = (recipe.bahanBaku || []).map((ing) => {
     const restored = {
       id: window.LakuHpp.generateHppId("ing"),
@@ -296,7 +268,6 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
       hargaBeli: ing.hargaBeli,
       jumlahPakai: ing.jumlahPakai,
       satuan: ing.satuan || "unit",
-      // Restore nesting levels for auto-calculation
       ...(ing.nestedLevels ? { nestedLevels: ing.nestedLevels } : {}),
     };
     if (ing._inputQty !== undefined && ing._inputUnit) {
@@ -309,7 +280,6 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
     return restored;
   });
 
-  // Step 3 — costs
   const tk = recipe.tenagaKerja || {};
   el("hppJamKerja").value = tk.jam || "";
   el("hppUpahPerJam").value = tk.upahPerJam || "";
@@ -321,31 +291,25 @@ window.LakuHpp.prefillFromRecipe = function (recipe, newName) {
   el("hppBiayaKemasan").value = recipe.biayaKemasan || "";
   if (recipe.biayaKemasan) window.formatNumberInput(el("hppBiayaKemasan"));
 
-  // Step 4 — margin
   el("hppMarginSlider").value = recipe.margin ?? 30;
   el("hppMarginDisplay").textContent = `${recipe.margin ?? 30}%`;
 
-  // Render & start from step 1
   goToStep(1);
   window.LakuHpp.renderIngredients();
   window.LakuHpp.renderOverhead();
 };
 
-/** Load a recipe into the form for editing */
 window.LakuHpp.openRecipeForEdit = function (recipeId) {
   const recipe = loadRecipes().find((r) => window.LakuHpp.idsEqual(r.id, recipeId));
   if (!recipe) return;
   window.LakuHpp.editingRecipeId = recipeId;
   window.LakuHpp.prefillFromRecipe(recipe);
-  // Show "Buat Baru" buttons when in edit mode
   if (typeof window.LakuHpp.toggleBuatBaruButtons === "function") {
     window.LakuHpp.toggleBuatBaruButtons(true);
   }
-  // Scroll to top of wizard
   document.getElementById("hppStep1")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-/** Duplicate a recipe with a new name */
 window.LakuHpp.duplicateRecipe = async function (recipeId) {
   const recipe = loadRecipes().find((r) => window.LakuHpp.idsEqual(r.id, recipeId));
   if (!recipe) return;
@@ -365,7 +329,6 @@ window.LakuHpp.duplicateRecipe = async function (recipeId) {
   document.getElementById("hppStep1")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-/** Delete a recipe with confirmation */
 window.LakuHpp.deleteRecipe = async function (recipeId) {
   const ok = await window.showCustomConfirm({
     title: "Hapus Resep",
@@ -376,7 +339,6 @@ window.LakuHpp.deleteRecipe = async function (recipeId) {
   });
   if (!ok) return;
   saveRecipes(loadRecipes().filter((r) => !window.LakuHpp.idsEqual(r.id, recipeId)));
-  // If we were editing this recipe, clear the editing state
   if (window.LakuHpp.idsEqual(window.LakuHpp.editingRecipeId, recipeId)) {
     window.LakuHpp.editingRecipeId = null;
   }

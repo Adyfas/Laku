@@ -1,15 +1,4 @@
-/**
- * hppCalc.js — Calculation engine & overhead management for HPP Kalkulator
- * Handles the main HPP calculation (bahan + tenaga + overhead + kemasan + margin → HPP per unit → harga jual),
- * plus rendering and adding overhead items.
- *
- * All functions attach to window.LakuHpp namespace.
- * Uses window.formatRupiah() and window.roundToNearest() from appUtils.js (no local versions).
- */
-
 const MAX_MARGIN = 99;
-
-/** Render overhead list with edit/remove handlers using event delegation */
 window.LakuHpp.renderOverhead = function () {
   const list = document.getElementById("hppOverheadList");
   if (!list) return;
@@ -18,7 +7,6 @@ window.LakuHpp.renderOverhead = function () {
     list.innerHTML = `
       <div class="text-center py-3 text-amber-700/60 text-xs">Kosong — isi kalau ada biaya lain.</div>
     `;
-    // Remove any existing delegated listeners
     if (list._overheadClickHandler) {
       list.removeEventListener("click", list._overheadClickHandler);
       list._overheadClickHandler = null;
@@ -36,7 +24,6 @@ window.LakuHpp.renderOverhead = function () {
       const draft = window.LakuHpp.editingOverheadDraft || {};
 
       if (isEditing) {
-        // Inline edit mode
         return `
           <div class="flex flex-col gap-2 bg-white p-3 rounded-xl border border-amber-200/50" data-overhead-id="${item.id}">
             <div class="flex flex-col gap-2">
@@ -73,17 +60,12 @@ window.LakuHpp.renderOverhead = function () {
       `;
     })
     .join("");
-
-  // Set up delegated event handlers
-  // Remove old handlers first
   if (list._overheadClickHandler) {
     list.removeEventListener("click", list._overheadClickHandler);
   }
   if (list._overheadInputHandler) {
     list.removeEventListener("input", list._overheadInputHandler);
   }
-
-  // Click handler for buttons
   list._overheadClickHandler = (e) => {
     const target = e.target.closest("button");
     if (!target) return;
@@ -103,8 +85,6 @@ window.LakuHpp.renderOverhead = function () {
     }
   };
   list.addEventListener("click", list._overheadClickHandler);
-
-  // Input handler for inline edit fields
   list._overheadInputHandler = (e) => {
     const target = e.target;
     const overheadEl = target.closest("[data-overhead-id]");
@@ -120,8 +100,6 @@ window.LakuHpp.renderOverhead = function () {
   };
   list.addEventListener("input", list._overheadInputHandler);
 };
-
-/** Handle remove overhead with confirmation */
 async function handleRemoveOverhead(id) {
   const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!item) return;
@@ -135,17 +113,12 @@ async function handleRemoveOverhead(id) {
     window.LakuHpp.saveSession();
   }
 }
-
-/** Start inline editing an overhead item in its box — save-first transition */
 window.LakuHpp.startEditOverhead = function (id, draft) {
-  // If another overhead item is being edited, try to save it first
   if (window.LakuHpp.editingOverheadId && !window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) {
     const currentDraft = window.LakuHpp.editingOverheadDraft;
     if (currentDraft && (currentDraft.nama || currentDraft.biaya !== undefined)) {
-      // Try to save the current edit
       const saved = window.LakuHpp.saveInlineEditOverhead(window.LakuHpp.editingOverheadId);
       if (!saved) {
-        // Save failed (validation error), stay on current edit
         window.showAlert({
           type: "warning",
           title: "Simpan Dulu",
@@ -154,15 +127,12 @@ window.LakuHpp.startEditOverhead = function (id, draft) {
         return;
       }
     } else {
-      // No changes, just cancel
       window.LakuHpp.cancelInlineEditOverhead(window.LakuHpp.editingOverheadId);
     }
   }
 
   const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!item) return;
-
-  // Initialize draft with current values
   const initialDraft = draft || {
     nama: item.nama,
     biaya: item.biaya,
@@ -173,8 +143,6 @@ window.LakuHpp.startEditOverhead = function (id, draft) {
   window.LakuHpp.saveSession();
   window.LakuHpp.renderOverhead();
 };
-
-/** Update inline edit draft and persist to session */
 window.LakuHpp.updateOverheadEditDraft = function (id, updates) {
   if (!window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) return;
   window.LakuHpp.editingOverheadDraft = {
@@ -183,8 +151,6 @@ window.LakuHpp.updateOverheadEditDraft = function (id, updates) {
   };
   window.LakuHpp.saveSession();
 };
-
-/** Save inline edited overhead item — returns true on success */
 window.LakuHpp.saveInlineEditOverhead = function (id) {
   const item = window.LakuHpp.overheadItems.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!item) return false;
@@ -194,8 +160,6 @@ window.LakuHpp.saveInlineEditOverhead = function (id) {
 
   const nama = draft.nama;
   const biaya = draft.biaya;
-
-  // Validate required fields
   if (!nama || biaya === undefined) {
     window.showAlert({
       type: "error",
@@ -214,22 +178,16 @@ window.LakuHpp.saveInlineEditOverhead = function (id) {
     });
     return false;
   }
-
-  // Find and replace overhead item
   const idx = window.LakuHpp.overheadItems.findIndex((i) => window.LakuHpp.idsEqual(i.id, id));
   if (idx === -1) return false;
 
   window.LakuHpp.overheadItems[idx] = { id, nama, biaya: biayaValidation.value };
-
-  // Reset editing state
   window.LakuHpp.editingOverheadId = null;
   window.LakuHpp.editingOverheadDraft = null;
   window.LakuHpp.renderOverhead();
   window.LakuHpp.saveSession();
   return true;
 };
-
-/** Cancel inline editing overhead item */
 window.LakuHpp.cancelInlineEditOverhead = function (id) {
   if (!window.LakuHpp.idsEqual(window.LakuHpp.editingOverheadId, id)) return;
   window.LakuHpp.editingOverheadId = null;
@@ -237,8 +195,6 @@ window.LakuHpp.cancelInlineEditOverhead = function (id) {
   window.LakuHpp.saveSession();
   window.LakuHpp.renderOverhead();
 };
-
-/** Cancel active overhead edit mode (general) */
 window.LakuHpp.cancelEditOverhead = function () {
   if (window.LakuHpp.editingOverheadId) {
     window.LakuHpp.cancelInlineEditOverhead(window.LakuHpp.editingOverheadId);
@@ -251,18 +207,14 @@ window.LakuHpp.cancelEditOverhead = function () {
   if (namaInput) namaInput.value = "";
   if (biayaInput) biayaInput.value = "";
 };
-
-/** Add an overhead item from the input fields — single-flight guard */
 window.LakuHpp.addOverhead = function () {
-  // Single-flight guard
   if (window.LakuHpp._addingOverhead) return;
   window.LakuHpp._addingOverhead = true;
 
   try {
-    // If currently editing, treat as save
     if (window.LakuHpp.editingOverheadId) {
       const saved = window.LakuHpp.saveInlineEditOverhead(window.LakuHpp.editingOverheadId);
-      if (saved === false) return; // Validation failed, stay in edit mode
+      if (saved === false) return;
     }
 
     const namaInput = document.getElementById("hppOverheadNama");
@@ -274,8 +226,6 @@ window.LakuHpp.addOverhead = function () {
 
     const biayaValidation = window.LakuHpp.validatePositiveFinite(biaya, "Biaya");
     if (!nama || !biayaValidation.valid) return;
-
-    // Generate a unique ID
     const id = window.LakuHpp.generateHppId("ovh");
     window.LakuHpp.overheadItems.push({ id, nama, biaya: biayaValidation.value });
     namaInput.value = "";
@@ -286,8 +236,6 @@ window.LakuHpp.addOverhead = function () {
     window.LakuHpp._addingOverhead = false;
   }
 };
-
-/** Pure calculation engine shared by the result screen and recipe persistence. */
 window.LakuHpp.calculateValues = function ({
   ingredients = window.LakuHpp.ingredients,
   jam = 0,
@@ -297,7 +245,6 @@ window.LakuHpp.calculateValues = function ({
   jumlahProduksi = 1,
   margin = 30,
 } = {}) {
-  // Validate all numeric inputs
   const validatedJam = Number.isFinite(jam) && jam >= 0 ? jam : 0;
   const validatedUpah = Number.isFinite(upah) && upah >= 0 ? upah : 0;
   const validatedBiayaKemasan = Number.isFinite(biayaKemasan) && biayaKemasan >= 0 ? biayaKemasan : 0;
@@ -340,9 +287,7 @@ window.LakuHpp.calculateValues = function ({
   };
 };
 
-/** Main calculation: total bahan + tenaga + overhead + kemasan + margin → HPP per unit → harga jual */
 window.LakuHpp.calculateAll = function () {
-  // Tenaga kerja
   const jam =
     parseFloat(document.getElementById("hppJamKerja")?.value) || 0;
   const upah = window.getRawNumber(
@@ -363,8 +308,6 @@ window.LakuHpp.calculateAll = function () {
     jumlahProduksi,
     margin,
   });
-
-  // Update tenaga display
   const tenagaDisplay = document.getElementById("hppTotalTenaga");
   const tenagaValue = document.getElementById("hppTotalTenagaValue");
   if (jam > 0 && upah > 0) {
@@ -377,7 +320,6 @@ window.LakuHpp.calculateAll = function () {
   const satuan =
     document.getElementById("hppSatuanProduksi")?.value || "unit";
 
-  // Update summary displays
   const el = (id) => document.getElementById(id);
   if (el("hppRingkasanBahan"))
     el("hppRingkasanBahan").textContent = window.formatRupiah(values.totalBahan);

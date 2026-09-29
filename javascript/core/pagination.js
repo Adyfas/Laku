@@ -1,37 +1,5 @@
-/**
- * pagination.js — Shared pagination utility for Laku modules
- * Centralizes pagination logic: filtering, slicing, UI updates, event binding
- */
 (function () {
   "use strict";
-
-  /**
-   * Create a pagination controller for a module
-   * @param {Object} config
-   * @param {string} config.storageKey - localStorage key for UI state persistence
-   * @param {Function} config.getData - Function returning raw data array
-   * @param {Function} config.filterFn - Function(item, state) => boolean for custom filtering
-   * @param {Object} config.elements - DOM element IDs
-   * @param {string} config.elements.searchInput
-   * @param {string} [config.elements.typeFilter]
-   * @param {string} [config.elements.statusFilter]
-   * @param {string} [config.elements.dateStart]
-   * @param {string} [config.elements.dateEnd]
-   * @param {string} config.elements.pageSizeSelect
-   * @param {string} config.elements.prevPage
-   * @param {string} config.elements.nextPage
-   * @param {string} config.elements.currentPage
-   * @param {string} config.elements.totalPages
-   * @param {string} config.elements.startIndex
-   * @param {string} config.elements.endIndex
-   * @param {string} config.elements.totalCount
-   * @param {string} config.elements.paginationContainer
-   * @param {string} [config.elements.clearFilters]
-   * @param {Function} config.onChange - Callback when page/data changes (receives paginated items)
-   * @param {number} [config.defaultPageSize=10]
-   * @param {number} [config.debounceMs=300]
-   * @returns {Object} Controller with { refresh, getState, setState, destroy }
-   */
   function createPaginationController(config) {
     const {
       storageKey,

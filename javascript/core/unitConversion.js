@@ -1,9 +1,3 @@
-/**
- * unitConversion.js — Utilitas satuan standar dan nested packaging.
- * Nilai inventory tetap memakai unit utama user; konversi dipakai sebagai
- * nilai kerja saat HPP, validasi stok, dan produksi.
- */
-
 const UNIT_DEFINITIONS = {
   weight: {
     base: "gram",
@@ -77,23 +71,16 @@ const PACKAGING_UNITS = new Set([
   "lembar",
 ]);
 
-/**
- * Round ke 2 desimal — mencegah floating point error (0.1 + 0.2 = 0.30000...4)
- */
 function round2(value) {
   const num = Number(value);
   if (!isFinite(num)) return 0;
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
 
-/** Normalisasi nama unit agar semua modul memakai nilai yang sama. */
 function normalizeUnit(unit) {
   return String(unit || "").trim().toLowerCase();
 }
 
-/**
- * Dapatkan grup satuan ("weight" | "volume" | "count") atau null jika tidak dikenal
- */
 function getUnitGroup(unit) {
   const u = normalizeUnit(unit);
   if (!u) return null;
@@ -103,24 +90,17 @@ function getUnitGroup(unit) {
   return null;
 }
 
-/** Alias yang lebih jelas untuk aturan bisnis dan modul baru. */
 function getUnitFamily(unit) {
   return getUnitGroup(unit);
 }
 
-/**
- * Dapatkan satuan dasar dari sebuah satuan (mis. "kg" → "gram")
- * Return null jika satuan tidak dikenal
- */
 function getBaseUnit(unit) {
   const group = getUnitGroup(unit);
   if (!group) return null;
   return UNIT_DEFINITIONS[group].base;
 }
 
-/**
- * Dapatkan faktor konversi satuan ke satuan dasar grupnya
- */
+
 function getUnitFactor(unit) {
   const u = normalizeUnit(unit);
   if (!u) return null;
@@ -129,11 +109,6 @@ function getUnitFactor(unit) {
   return UNIT_DEFINITIONS[group].units[u];
 }
 
-/**
- * Konversi nilai antar satuan dalam grup yang SAMA.
- * Rumus: base = nilai × faktorFrom → hasil = base / faktorTo
- * Return null jika satuan tidak kompatibel / tidak dikenal.
- */
 function convertUnitExact(value, fromUnit, toUnit) {
   const num = Number(value);
   if (!isFinite(num)) return null;

@@ -1,15 +1,3 @@
-/**
- * icons.js — Global inline SVG icon helper for all Laku pages
- *
- * Returns inline <svg> markup (not <img>) so CSS can control color
- * via currentColor + Tailwind text-* classes.
- *
- * Usage: window.LakuIcons.svg("package", "1.25em") → <svg>…</svg>
- *
- * HTML auto-init: <span data-laku-icon="sparkle" data-laku-icon-size="1.25em"></span>
- *
- * Load BEFORE other app scripts.
- */
 (function () {
     "use strict";
 
@@ -210,15 +198,6 @@
     };
 
 
-    /**
-     * Returns inline <svg> markup for the given icon name.
-     * Color is controlled by CSS `color` property (currentColor).
-     *
-     * @param {string} name  - Key from ICONS map
-     * @param {string} [size="1em"] - CSS width/height
-     * @param {string} [extraClass=""] - Additional CSS classes (e.g. Tailwind)
-     * @returns {string} HTML string of inline <svg>
-     */
     function svg(name, size, extraClass) {
         var icon = ICONS[name];
         if (!icon) return "";
@@ -229,10 +208,7 @@
             '" class="' + cls + '" aria-hidden="true">' + icon.b + '</svg>';
     }
 
-    /**
-     * Auto-replace [data-laku-icon] elements with inline SVG.
-     * Attributes: data-laku-icon="name", data-laku-icon-size="1.25em"
-     */
+
     function initIcons() {
         var els = document.querySelectorAll("[data-laku-icon]");
         for (var i = 0; i < els.length; i++) {

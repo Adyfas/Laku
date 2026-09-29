@@ -1,6 +1,3 @@
-/**
- * produksiApp.js - UI template for recipe production and read-only history.
- */
 function getProduksiAppUI() {
   return `
     <div class="max-w-4xl mx-auto space-y-6 animate-fade-in-up">

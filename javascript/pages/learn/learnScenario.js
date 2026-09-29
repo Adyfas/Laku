@@ -1,17 +1,4 @@
-/**
- * learnScenario.js — Navigation & choice logic for the Learn module
- *
- * Manages scenario lifecycle (start, navigate, choose, retry, reveal)
- * and unlock/completion tracking.
- *
- * Forward reference: calls window.LakuLearnRender.renderStep() at runtime
- * because learnRender.js loads after this file.
- *
- * Dependencies: LakuLearnData (constants, getScenario, createEmptyScenarioRecord),
- *               LakuLearnState (touchStreak, addXp, saveState),
- *               LakuLearnDOM (showBubble)
- * Exports: window.LakuLearnScenario
- */
+
 (function () {
     "use strict";
 

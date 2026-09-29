@@ -1,34 +1,23 @@
-/**
- * kasClient.js — Logika Interaktif Buku Kas Digital UMKM
- * Pencatatan pemasukan & pengeluaran harian.
- */
 function initKasAppLogic() {
   const KAS_STORAGE_KEY = "laku_cashbook_data";
-
-  /** Muat data kas dari localStorage */
   const loadKasData = () => {
     const raw = localStorage.getItem(KAS_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   };
 
-  /** Simpan data kas ke localStorage */
   const saveKasData = (data) => {
     localStorage.setItem(KAS_STORAGE_KEY, JSON.stringify(data));
   };
 
-  // Filter function for Kas
   const kasFilterFn = (item, state) => {
-    // Search filter
     if (state.searchTerm && item.note.toLowerCase().indexOf(state.searchTerm.toLowerCase()) === -1) {
       return false;
     }
 
-    // Type filter
     if (state.typeFilter !== "all" && item.type !== state.typeFilter) {
       return false;
     }
 
-    // Date range filter
     if (state.dateStart && item.date < state.dateStart) {
       return false;
     }
@@ -39,7 +28,6 @@ function initKasAppLogic() {
     return true;
   };
 
-  // Initialize shared pagination controller
   const pagination = window.LakuPagination.createPaginationController({
     storageKey: "laku_kas_ui_state",
     getData: loadKasData,
@@ -65,7 +53,6 @@ function initKasAppLogic() {
     debounceMs: 300,
   });
 
-  /** Render tabel desktop + kartu mobile */
   const renderTable = (data, paginationData) => {
     const tbody = document.getElementById("kasTableBody");
     const mobileList = document.getElementById("kasMobileList");
@@ -106,7 +93,6 @@ function initKasAppLogic() {
         const amountColor = isMasuk ? "text-emerald-700" : "text-rose-700";
         const sign = isMasuk ? "+" : "-";
 
-        // Desktop Table Row
         desktopHtml += `
           <tr class="hover:bg-stone-50/80 transition-colors">
             <td class="py-3.5 px-4 text-xs text-gray-500 font-mono">${item.date}</td>
@@ -155,7 +141,6 @@ function initKasAppLogic() {
     document.getElementById("kasTotalKeluar").textContent = window.formatRupiah(totalKeluar);
     document.getElementById("kasSaldoAkhir").textContent = window.formatRupiah(saldoAkhir);
 
-    // Bind Delete Event (Desktop & Mobile)
     document.querySelectorAll(".deleteKasBtn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -233,7 +218,6 @@ function initKasAppLogic() {
   pagination.refresh();
 }
 
-/** Entry point: render template + init logic */
 function renderKasApp(container) {
   if (!container) return;
   container.innerHTML = getKasAppUI();

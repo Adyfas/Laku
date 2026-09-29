@@ -1,13 +1,3 @@
-/**
- * hppApp.js — Template UI Kalkulator HPP & Harga Jual (Recipe-Based)
- * Multi-step wizard: Info Produk → Bahan dari Stok → Biaya Tambahan → Margin & Hasil
- *
- * Changes from monolithic version:
- * - Removed mode toggle (📋 Pakai Stok / ⚡ Hitung Cepat)
- * - Removed hppManualIngredientArea (cepat mode deleted)
- * - Removed hppJumlahPakaiSatuan span (replaced by hppJumlahPakaiUnit select)
- * - Added hppOnboarding div (shown when inventory is empty)
- */
 function getHppAppUI() {
   var I = window.LakuIcons;
   return `

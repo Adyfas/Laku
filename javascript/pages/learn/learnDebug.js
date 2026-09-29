@@ -1,14 +1,3 @@
-/**
- * learnDebug.js — Testing toolbar for Learn module
- *
- * Floating debug panel with dropdowns to jump to any scenario/step/dialogue.
- * Only for development/testing — does NOT affect production behavior.
- *
- * Toggle: click "🐛" button or press Ctrl+Shift+D
- *
- * Dependencies: all learn module scripts loaded before this
- * Exports: window.LakuLearnDebug
- */
 (function () {
     "use strict";
 
@@ -18,7 +7,7 @@
     var panel = null;
     var visible = false;
 
-    /* ── Build dropdown options ── */
+
 
     function scenarioOptions() {
         var html = '<option value="">-- Skenario --</option>';

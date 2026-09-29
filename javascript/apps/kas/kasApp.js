@@ -1,6 +1,3 @@
-/**
- * kasApp.js — Template UI Buku Kas Digital UMKM
- */
 function getKasAppUI() {
   var I = window.LakuIcons;
   return `

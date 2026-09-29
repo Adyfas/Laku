@@ -1,15 +1,3 @@
-/**
- * learnActions.js — User action handlers for the Learn module
- *
- * Handles scenario opening, action refresh/completion, checklist toggling,
- * progress reset, and deep-link query parameter handling.
- *
- * Dependencies: LakuLearnData (constants, getScenario),
- *               LakuLearnState (addXp, saveState, normalizeState),
- *               LakuLearnScenario (isUnlocked, getScenarioRecord, getScenario),
- *               LakuLearnRender (renderStep, renderChecklist, renderPage, openLearnModal)
- * Exports: window.LakuLearnActions
- */
 (function () {
     "use strict";
 

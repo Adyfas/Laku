@@ -1,12 +1,4 @@
-/**
- * learnState.js — State persistence & gamification logic
- *
- * Manages localStorage persistence, XP/level/streak calculations,
- * and action completion tracking.
- *
- * Dependencies: LakuLearnData (constants, getScenario, createEmptyScenarioRecord)
- * Exports: window.LakuLearnState
- */
+
 (function () {
     "use strict";
     var D = window.LakuLearnData;

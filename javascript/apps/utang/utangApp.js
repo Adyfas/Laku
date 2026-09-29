@@ -1,5 +1,3 @@
-/** @file utangApp.js — Template UI Catat Utang & Piutang UMKM */
-
 function getUtangAppUI() {
   var I = window.LakuIcons;
   return `

@@ -55,9 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
     showNavbarIfProfileExists();
   }
 
-  // Utilities sudah dipindah ke core/appUtils.js
-  // window.formatNumberInput, getRawNumber, NumberDecimal3Digit → appUtils.js
-
   // 1. Mobile Navigation Toggle (Selengkapnya -> Show Form)
   if (buttonSelengkapnya && regisBanner && regisFormContainer) {
     buttonSelengkapnya.addEventListener("click", () => {

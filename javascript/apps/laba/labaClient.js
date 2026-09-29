@@ -1,7 +1,3 @@
-/**
- * labaClient.js — Logika Interaktif Cek Untung Rugi Bulanan UMKM
- * Menggunakan window.formatRupiah() dari core/appUtils.js
- */
 function initLabaAppLogic() {
   const form = document.getElementById("labaForm");
   if (!form) return;

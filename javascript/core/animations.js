@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Presets
   const EASING_PRESETS = {
     linear: "linear",
     ease: "ease",

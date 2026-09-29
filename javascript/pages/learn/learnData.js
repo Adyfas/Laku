@@ -1,12 +1,3 @@
-/**
- * learnData.js — Pure data definitions for the Learn module
- *
- * Contains scenario data, constants, and pure data lookup functions.
- * No logic, no DOM, no state mutations.
- *
- * Dependencies: None (loaded first)
- * Exports: window.LakuLearnData
- */
 (function () {
     "use strict";
     var STORAGE_KEY = "laku_learn_state";

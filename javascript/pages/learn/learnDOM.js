@@ -1,12 +1,3 @@
-/**
- * learnDOM.js — DOM manipulation primitives for the Learn module
- *
- * Handles DOM caching, Bu Siti mood/expression, bubble chat with typing animation,
- * and HTML escaping. No rendering logic — that lives in learnRender.js.
- *
- * Dependencies: LakuLearnData (MOOD_LABELS, getScenario)
- * Exports: window.LakuLearnDOM
- */
 (function () {
     "use strict";
     var D = window.LakuLearnData;

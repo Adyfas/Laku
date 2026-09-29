@@ -1,28 +1,20 @@
-/** @file utangClient.js — Logika Utang Piutang UMKM (CRUD, notifikasi, WA deep-link) */
-
-/** Menginisialisasi seluruh logika interaktif halaman utang/piutang */
 function initUtangAppLogic() {
   const UTANG_STORAGE_KEY = "laku_utang_data";
 
-  /** Mengambil data utang/piutang dari localStorage */
   const loadUtangData = () => {
     const raw = localStorage.getItem(UTANG_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   };
 
-  /** Menyimpan data utang/piutang ke localStorage */
   const saveUtangData = (data) => {
     localStorage.setItem(UTANG_STORAGE_KEY, JSON.stringify(data));
   };
 
-  // Filter function for Utang
   const utangFilterFn = (item, state) => {
-    // Search filter
     if (state.searchTerm && item.nama.toLowerCase().indexOf(state.searchTerm.toLowerCase()) === -1) {
       return false;
     }
 
-    // Type filter
     if (state.typeFilter !== "all" && item.type !== state.typeFilter) {
       return false;
     }
@@ -30,7 +22,6 @@ function initUtangAppLogic() {
     return true;
   };
 
-  // Initialize shared pagination controller
   const pagination = window.LakuPagination.createPaginationController({
     storageKey: "laku_utang_ui_state",
     getData: loadUtangData,
@@ -54,7 +45,6 @@ function initUtangAppLogic() {
     debounceMs: 300,
   });
 
-  /** Mengirim notifikasi browser untuk catatan yang jatuh tempo hari ini */
   const checkDueNotifications = () => {
     if (!("Notification" in window) || Notification.permission !== "granted") return;
     const data = loadUtangData();
@@ -75,7 +65,6 @@ function initUtangAppLogic() {
     }
   };
 
-  /** Me-render ulang tabel desktop, kartu mobile, dan ringkasan overview */
   const renderTable = (paginatedItems) => {
     const allData = loadUtangData();
     const data = paginatedItems || allData;
@@ -87,7 +76,6 @@ function initUtangAppLogic() {
     let dueTodayCount = 0;
     const todayStr = new Date().toISOString().split("T")[0];
 
-    // Ringkasan overview dihitung dari SEMUA data (bukan hasil filter/pagination)
     allData.forEach((item) => {
       const remaining = item.totalAmount - item.paidAmount;
       const isLunas = remaining <= 0;
@@ -142,7 +130,6 @@ function initUtangAppLogic() {
           ? `<span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg text-xs">PIUTANG</span>`
           : `<span class="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg text-xs">UTANG</span>`;
 
-        // Membuat tombol deep-link WhatsApp untuk pengingat tagihan
         let waBtn = "";
         if (item.wa && !isLunas) {
           const cleanWa = item.wa.replace(/[^0-9]/g, "").replace(/^0/, "62");
@@ -236,12 +223,10 @@ function initUtangAppLogic() {
       if (mobileList) mobileHtml ? (mobileList.innerHTML = mobileHtml) : null;
     }
 
-    // Memperbarui kartu ringkasan (overview) di atas halaman
     document.getElementById("utangTotalPiutang").textContent = window.formatRupiah(totalPiutang);
     document.getElementById("utangTotalUtang").textContent = window.formatRupiah(totalUtang);
     document.getElementById("utangTotalDueToday").textContent = `${dueTodayCount} Catatan`;
 
-    // Mengikat event handler tombol "Cicil / Bayar" (desktop & mobile)
     document.querySelectorAll(".payUtangBtn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -270,7 +255,7 @@ function initUtangAppLogic() {
       });
     });
 
-    // Mengikat event handler tombol "Hapus" (desktop & mobile)
+
     document.querySelectorAll(".deleteUtangBtn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
@@ -353,7 +338,6 @@ function initUtangAppLogic() {
   checkDueNotifications();
 }
 
-/** Entry point: memasang template UI dan logika ke container yang diberikan */
 function renderUtangApp(container) {
   if (!container) return;
   container.innerHTML = getUtangAppUI();

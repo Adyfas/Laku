@@ -1,41 +1,24 @@
-/**
- * hppIngredients.js — Ingredient management for HPP Kalkulator
- * Handles populating the inventory dropdown, rendering ingredient cards,
- * and adding ingredients from stock with unit conversion.
- * Supports nested packaging levels (e.g., pack → bungkus → pcs).
- *
- * All functions attach to window.LakuHpp namespace.
- * Uses window.formatRupiah() from appUtils.js (no local formatRupiah).
- * Removed: addManualIngredient() (cepat mode deleted).
- */
-
-/** Helper: get cumulative isi from nestedLevels */
 function getCumulativeIsi(item) {
   if (!item.nestedLevels || item.nestedLevels.length === 0) return 1;
   return item.nestedLevels.reduce((prod, level) => prod * (level.isi || 1), 1);
 }
 
-/** Helper: get innermost unit from nestedLevels */
 function getInnermostUnit(item) {
   if (!item.nestedLevels || item.nestedLevels.length === 0) return item.displayUnit || item.satuan || "pcs";
   const last = item.nestedLevels[item.nestedLevels.length - 1];
   return last.unit;
 }
-
-/** Helper: get innermost unit label */
 function getInnermostUnitLabel(item) {
   const unit = getInnermostUnit(item);
   return window.LakuUnits.formatUnitLabel(unit);
 }
 
-/** Total stok dalam unit kerja terdalam untuk validasi pemakaian. */
 function getWorkingStock(item) {
   const displayUnit = item.displayUnit || item.satuan || "pcs";
   const converted = window.LakuUnits.toWorkingQuantity(item, item.stok || 0, displayUnit);
   return (converted.value || 0) + Number(item.looseQty || 0);
 }
 
-/** Harga per unit input, hanya untuk menjelaskan biaya kepada user. */
 function getInputUnitPrice(item, inputUnit) {
   const displayUnit = item.displayUnit || item.satuan || "pcs";
   const oneInputInDisplay = item.nestedLevels?.length
@@ -46,7 +29,6 @@ function getInputUnitPrice(item, inputUnit) {
     : item.harga * oneInputInDisplay;
 }
 
-/** Get compatible units for an inventory item (for inline edit select) */
 function getCompatibleUnitsForItem(item) {
   if (!item) return [];
   const displayUnit = item.displayUnit || item.satuan || "pcs";
@@ -56,7 +38,6 @@ function getCompatibleUnitsForItem(item) {
   return window.LakuUnits.getCompatibleUnits(displayUnit);
 }
 
-/** Populate inventory dropdown, toggle empty state, update unit selector */
 window.LakuHpp.refreshIngredientUI = function () {
   const emptyState = document.getElementById("hppInventoryEmpty");
   const addArea = document.getElementById("hppAddIngredientArea");
@@ -64,7 +45,6 @@ window.LakuHpp.refreshIngredientUI = function () {
   const select = document.getElementById("hppInventorySelect");
   const unitLabel = document.getElementById("hppJumlahPakaiUnitLabel");
 
-  // Always show inventory mode UI (cepat mode removed)
   if (step2Desc) step2Desc.textContent = "Pilih bahan dari stok yang sudah kamu catat.";
 
   const inv = loadInventory();
@@ -81,18 +61,15 @@ window.LakuHpp.refreshIngredientUI = function () {
     if (emptyState) emptyState.classList.add("hidden");
     if (addArea) addArea.classList.remove("hidden");
 
-    // Populate select (exclude already-added items, but include currently editing ingredient)
     if (select) {
       const usedIds = window.LakuHpp.ingredients
         .map((ing) => ing.inventoryId)
         .filter(Boolean);
-      // If editing, allow the editing ingredient's inventoryId to be selectable
       const editingId = window.LakuHpp.editingIngredientId;
       const editingInventoryId = editingId
         ? window.LakuHpp.ingredients.find((i) => window.LakuHpp.idsEqual(i.id, editingId))?.inventoryId
         : null;
       if (editingInventoryId) {
-        // Remove editing ingredient's id from usedIds so it appears in dropdown
         const idx = usedIds.indexOf(editingInventoryId);
         if (idx !== -1) usedIds.splice(idx, 1);
       }
@@ -103,7 +80,6 @@ window.LakuHpp.refreshIngredientUI = function () {
           const stokDisplay = item.nestedLevels?.length
             ? window.LakuUnits.formatInventoryQuantity(item, getWorkingStock(item))
             : `${window.LakuUnits.round2(item.stok || 0)} ${window.LakuUnits.formatUnitLabel(displayUnit)}`;
-          // Show nesting info in dropdown if present
           let nestedText = "";
           if (item.nestedLevels && item.nestedLevels.length > 0) {
             const relationText = item.nestedLevels.reduce((parts, level, index) => {
@@ -117,7 +93,6 @@ window.LakuHpp.refreshIngredientUI = function () {
         }
       });
 
-      // Populate compatible unit selector when selection changes
       const updateUnitSelector = () => {
         const selId = select.value;
         const unitSel = document.getElementById("hppJumlahPakaiUnit");
@@ -140,7 +115,6 @@ window.LakuHpp.refreshIngredientUI = function () {
           return;
         }
 
-        // Nested item dapat dipakai dalam unit utama atau unit isi yang terdaftar.
         if (selItem.nestedLevels && selItem.nestedLevels.length > 0) {
           const nestedUnits = Object.keys(window.LakuUnits.getNestedUnitMap(selItem));
           const defaultUnit = selItem.displayUnit || selItem.satuan || nestedUnits[0];
@@ -152,7 +126,6 @@ window.LakuHpp.refreshIngredientUI = function () {
           unitSel.innerHTML = optionsHtml;
           unitSel.disabled = false;
           if (unitLabel) unitLabel.textContent = "Satuan yang dipakai";
-          // Helper text explaining parent/child relationship
           if (unitHelper) {
             const relationText = selItem.nestedLevels.reduce((parts, level, index) => {
               const parentUnit = index === 0 ? (selItem.displayUnit || selItem.satuan) : selItem.nestedLevels[index - 1].unit;
@@ -162,7 +135,6 @@ window.LakuHpp.refreshIngredientUI = function () {
             unitHelper.innerHTML = `${window.LakuIcons.svg("info", "0.9em")} Hubungan satuan: ${relationText}. Pilih satuan sesuai cara pemakaian (contoh: jika memakai butir, pilih "butir").`;
           }
         } else {
-          // Normal item: show compatible units
           const displayUnit = selItem.displayUnit || selItem.satuan || "pcs";
           const compatible = window.LakuUnits.getCompatibleUnits(displayUnit);
           let optionsHtml = '';
@@ -178,8 +150,6 @@ window.LakuHpp.refreshIngredientUI = function () {
           }
         }
       };
-
-      // Remove old handler before adding new one
       select.removeEventListener("change", select._satuanHandler);
       select._satuanHandler = updateUnitSelector;
       select.addEventListener("change", updateUnitSelector);
@@ -187,14 +157,10 @@ window.LakuHpp.refreshIngredientUI = function () {
     }
   }
 
-  // Also update onboarding visibility based on inventory
   toggleOnboardingVisibility();
-
-  // Render the ingredient cards
   window.LakuHpp.renderIngredients();
 };
 
-/** Render ingredient cards with edit/remove handlers using event delegation */
 window.LakuHpp.renderIngredients = function () {
   const list = document.getElementById("hppIngredientList");
   const subtotal = document.getElementById("hppSubtotalBahan");
@@ -202,7 +168,6 @@ window.LakuHpp.renderIngredients = function () {
 
   if (!list) return;
 
-  // Load inventory to check for deleted items
   const inv = loadInventory();
 
   if (window.LakuHpp.ingredients.length === 0) {
@@ -212,7 +177,6 @@ window.LakuHpp.renderIngredients = function () {
       </div>
     `;
     if (subtotal) subtotal.classList.add("hidden");
-    // Remove any existing delegated listener
     if (list._ingredientClickHandler) {
       list.removeEventListener("click", list._ingredientClickHandler);
       list._ingredientClickHandler = null;
@@ -233,10 +197,8 @@ window.LakuHpp.renderIngredients = function () {
       const shownQty = ing._inputQty ?? ing.jumlahPakai;
       const shownUnit = ing._inputUnit || ing.satuan || "unit";
       const shownPrice = ing._inputUnitPrice ?? ing.hargaBeli;
-      // Check if inventory item still exists
       const inventoryItem = inv.find((i) => String(i.id) === String(ing.inventoryId));
       const isMissing = !inventoryItem;
-      // Check if this ingredient is being edited inline
       const isEditing = window.LakuHpp.editingIngredientId && window.LakuHpp.idsEqual(window.LakuHpp.editingIngredientId, ing.id);
       const draft = window.LakuHpp.editingIngredientDraft || {};
 
@@ -246,7 +208,6 @@ window.LakuHpp.renderIngredients = function () {
       }
 
       if (isEditing) {
-        // Inline edit mode
         const compatibleUnits = inventoryItem
           ? getCompatibleUnitsForItem(inventoryItem)
           : [];
@@ -306,9 +267,6 @@ window.LakuHpp.renderIngredients = function () {
 
   if (subtotal) subtotal.classList.remove("hidden");
   if (subtotalValue) subtotalValue.textContent = window.formatRupiah(totalBahan);
-
-  // Set up delegated event handlers
-  // Remove old handlers first
   if (list._ingredientClickHandler) {
     list.removeEventListener("click", list._ingredientClickHandler);
   }
@@ -316,8 +274,6 @@ window.LakuHpp.renderIngredients = function () {
     list.removeEventListener("input", list._ingredientInputHandler);
     list.removeEventListener("change", list._ingredientInputHandler);
   }
-
-  // Click handler for buttons
   list._ingredientClickHandler = (e) => {
     const target = e.target.closest("button");
     if (!target) return;
@@ -339,8 +295,6 @@ window.LakuHpp.renderIngredients = function () {
     }
   };
   list.addEventListener("click", list._ingredientClickHandler);
-
-  // Input/change handler for inline edit fields
   list._ingredientInputHandler = (e) => {
     const target = e.target;
     const ingredientEl = target.closest("[data-ingredient-id]");
@@ -360,7 +314,6 @@ window.LakuHpp.renderIngredients = function () {
   list.addEventListener("change", list._ingredientInputHandler);
 };
 
-/** Handle remove ingredient with confirmation */
 async function handleRemoveIngredient(id) {
   const ingredient = window.LakuHpp.ingredients.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!ingredient) return;
@@ -375,7 +328,6 @@ async function handleRemoveIngredient(id) {
   }
 }
 
-/** Get compatible units for an inventory item (for inline edit select) */
 function getCompatibleUnitsForItem(item) {
   if (!item) return [];
   const displayUnit = item.displayUnit || item.satuan || "pcs";
@@ -385,16 +337,12 @@ function getCompatibleUnitsForItem(item) {
   return window.LakuUnits.getCompatibleUnits(displayUnit);
 }
 
-/** Start inline editing an ingredient in its box — save-first transition */
 window.LakuHpp.startEditIngredient = function (id, draft) {
-  // If another ingredient is being edited, try to save it first
   if (window.LakuHpp.editingIngredientId && !window.LakuHpp.idsEqual(window.LakuHpp.editingIngredientId, id)) {
     const currentDraft = window.LakuHpp.editingIngredientDraft;
     if (currentDraft && (currentDraft.jumlahPakai || currentDraft.satuan)) {
-      // Try to save the current edit
       const saved = window.LakuHpp.saveInlineEditIngredient(window.LakuHpp.editingIngredientId);
       if (!saved) {
-        // Save failed (validation error), stay on current edit
         window.showAlert({
           type: "warning",
           title: "Simpan Dulu",
@@ -403,7 +351,6 @@ window.LakuHpp.startEditIngredient = function (id, draft) {
         return;
       }
     } else {
-      // No changes, just cancel
       window.LakuHpp.cancelInlineEditIngredient(window.LakuHpp.editingIngredientId);
     }
   }
@@ -411,11 +358,8 @@ window.LakuHpp.startEditIngredient = function (id, draft) {
   const ingredient = window.LakuHpp.ingredients.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!ingredient) return;
 
-  // Allow editing even if inventory item is missing (user can replace or delete)
   const inventoryItem = loadInventory().find((i) => String(i.id) === String(ingredient.inventoryId));
   const isMissing = !inventoryItem;
-
-  // Initialize draft with current values
   const initialDraft = draft || {
     jumlahPakai: ingredient._inputQty ?? ingredient.jumlahPakai,
     satuan: ingredient._inputUnit || ingredient.satuan || "",
@@ -427,26 +371,21 @@ window.LakuHpp.startEditIngredient = function (id, draft) {
   window.LakuHpp.renderIngredients();
 };
 
-/** Replace a missing inventory ingredient with a new one from inventory */
 window.LakuHpp.replaceIngredient = function (ingredientId) {
   const ingredient = window.LakuHpp.ingredients.find((i) => window.LakuHpp.idsEqual(i.id, ingredientId));
   if (!ingredient) return;
 
-  // Open the inventory dropdown for selection - focus the select
   const select = document.getElementById("hppInventorySelect");
   const jumlahInput = document.getElementById("hppJumlahPakai");
   const unitSel = document.getElementById("hppJumlahPakaiUnit");
   if (!select || !jumlahInput || !unitSel) return;
 
-  // Scroll to the add ingredient area
   select.scrollIntoView({ behavior: "smooth", block: "center" });
   select.focus();
 
-  // Store the ingredient being replaced for the add function to handle
   window.LakuHpp._replacingIngredientId = ingredientId;
 };
 
-/** Update inline edit draft and persist to session */
 window.LakuHpp.updateIngredientEditDraft = function (id, updates) {
   if (!window.LakuHpp.idsEqual(window.LakuHpp.editingIngredientId, id)) return;
   window.LakuHpp.editingIngredientDraft = {
@@ -456,7 +395,6 @@ window.LakuHpp.updateIngredientEditDraft = function (id, updates) {
   window.LakuHpp.saveSession();
 };
 
-/** Save inline edited ingredient — returns true on success */
 window.LakuHpp.saveInlineEditIngredient = function (id) {
   const ingredient = window.LakuHpp.ingredients.find((i) => window.LakuHpp.idsEqual(i.id, id));
   if (!ingredient) return false;
@@ -467,7 +405,6 @@ window.LakuHpp.saveInlineEditIngredient = function (id) {
   const jumlah = draft.jumlahPakai;
   const inputUnit = draft.satuan;
 
-  // Validate required fields
   const qtyValidation = window.LakuHpp.validatePositiveFinite(jumlah, "Jumlah pakai");
   if (!qtyValidation.valid || !inputUnit) {
     window.showAlert({
@@ -522,7 +459,6 @@ window.LakuHpp.saveInlineEditIngredient = function (id) {
     return false;
   }
 
-  // Find and replace ingredient
   const idx = window.LakuHpp.ingredients.findIndex((i) => window.LakuHpp.idsEqual(i.id, id));
   if (idx === -1) return false;
 
@@ -541,7 +477,6 @@ window.LakuHpp.saveInlineEditIngredient = function (id) {
     _inputUnitPrice: inputUnitPrice,
   };
 
-  // Reset editing state
   window.LakuHpp.editingIngredientId = null;
   window.LakuHpp.editingIngredientDraft = null;
   window.LakuHpp.refreshIngredientUI();
@@ -549,7 +484,6 @@ window.LakuHpp.saveInlineEditIngredient = function (id) {
   return true;
 };
 
-/** Cancel inline editing ingredient */
 window.LakuHpp.cancelInlineEditIngredient = function (id) {
   if (!window.LakuHpp.idsEqual(window.LakuHpp.editingIngredientId, id)) return;
   window.LakuHpp.editingIngredientId = null;
@@ -558,7 +492,6 @@ window.LakuHpp.cancelInlineEditIngredient = function (id) {
   window.LakuHpp.renderIngredients();
 };
 
-/** Save edited ingredient (legacy - uses form at bottom) */
 window.LakuHpp.saveEditedIngredient = function () {
   const select = document.getElementById("hppInventorySelect");
   const jumlahInput = document.getElementById("hppJumlahPakai");
@@ -611,7 +544,6 @@ window.LakuHpp.saveEditedIngredient = function () {
     return;
   }
 
-  // Find and replace ingredient
   const idx = window.LakuHpp.ingredients.findIndex((i) => window.LakuHpp.idsEqual(i.id, id));
   if (idx === -1) return;
 
@@ -630,13 +562,11 @@ window.LakuHpp.saveEditedIngredient = function () {
     _inputUnitPrice: inputUnitPrice,
   };
 
-  // Reset editing state
   window.LakuHpp.cancelEditIngredient();
   window.LakuHpp.refreshIngredientUI();
   window.LakuHpp.saveSession();
 };
 
-/** Cancel editing ingredient (legacy - uses form at bottom) */
 window.LakuHpp.cancelEditIngredient = function () {
   const select = document.getElementById("hppInventorySelect");
   const jumlahInput = document.getElementById("hppJumlahPakai");
@@ -662,17 +592,14 @@ window.LakuHpp.cancelEditIngredient = function () {
   window.LakuHpp.refreshIngredientUI();
 };
 
-/** Add ingredient from stock inventory with unit conversion — single-flight guard */
 window.LakuHpp.addIngredientFromInventory = function () {
-  // Single-flight guard
   if (window.LakuHpp._addingIngredient) return;
   window.LakuHpp._addingIngredient = true;
 
   try {
-    // If currently editing, treat as save
     if (window.LakuHpp.editingIngredientId) {
       const saved = window.LakuHpp.saveEditedIngredient();
-      if (saved === false) return; // Validation failed, stay in edit mode
+      if (saved === false) return; // Validation edit mode
     }
 
     const select = document.getElementById("hppInventorySelect");
@@ -748,7 +675,6 @@ window.LakuHpp.addIngredientFromInventory = function () {
       return;
     }
 
-    // Check if we're replacing an existing ingredient
     const replacingId = window.LakuHpp._replacingIngredientId;
     window.LakuHpp._replacingIngredientId = null;
 
@@ -768,13 +694,11 @@ window.LakuHpp.addIngredientFromInventory = function () {
     };
 
     if (replacingId) {
-      // Replace the existing ingredient
       const idx = window.LakuHpp.ingredients.findIndex((i) => window.LakuHpp.idsEqual(i.id, replacingId));
       if (idx !== -1) {
         window.LakuHpp.ingredients[idx] = newIngredient;
       }
     } else {
-      // Add new ingredient
       window.LakuHpp.ingredients.push(newIngredient);
     }
 

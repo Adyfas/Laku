@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Array of contact information
+
   const contactData = [
     {
       title: "Contact Info",

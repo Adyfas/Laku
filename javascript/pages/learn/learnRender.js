@@ -1,20 +1,7 @@
-/**
- * learnRender.js — All HTML template generation for the Learn module
- *
- * Renders the modal content (intro, step types, result) and the
- * landing page sections (path, badges, warung, checklist, hero).
- *
- * CSS class constants live in the UI object at the top — edit there
- * to restyle the entire module without hunting through templates.
- *
- * Dependencies: LakuLearnData, LakuLearnState, LakuLearnDOM,
- *               LakuLearnScenario
- * Exports: window.LakuLearnRender
- */
+
 (function () {
     "use strict";
 
-    /* ── Module Aliases ── */
 
     var D = window.LakuLearnData;       // constants + data lookups
     var S = window.LakuLearnState;      // state persistence & gamification
@@ -23,11 +10,7 @@
     var I = window.LakuLearnInternal;   // shared runtime state
     var ICONS = window.LakuLearnIcons;  // SVG icon helper
 
-    /* ── UI Class Constants ──
-     *
-     * Change styles here instead of hunting through template strings.
-     * Each key maps to a commonly-used CSS class combination.
-     */
+  
     var UI = {
         // Cards
         card:        "rounded-3xl bg-white border border-gray-100 shadow-xl p-5 sm:p-6",

@@ -1,19 +1,3 @@
-/**
- * guidedTour.js — Interactive guided tour engine for LAKU
- * High-accuracy spotlight cutout, adaptive multi-device popover positioning,
- * smooth scrolling synchronization, and gaptek-friendly UX for Indonesian UMKM.
- *
- * Namespace: window.LakuTour
- * API:
- *   LakuTour.start(moduleKey)   — Start tour for a module
- *   LakuTour.stop()             — Stop currently running tour
- *   LakuTour.isCompleted(key)   — Check if a module tour is done
- *   LakuTour.markCompleted(key) — Mark a module tour as done
- *   LakuTour.resetAll()         — Reset all tour completion status
- *   LakuTour.next()             — Advance to next step
- *   LakuTour.prev()             — Go back to previous step
- */
-
 window.LakuTour = (function () {
   var STORAGE_KEY = "laku_tour_completed";
   var OVERLAY_Z = 99990;
@@ -465,9 +449,7 @@ window.LakuTour = (function () {
   function _removeDOM() {
     console.log("[LakuTour] _removeDOM called, rootContainer:", !!rootContainer);
     if (rootContainer) {
-      // Immediately hide to prevent any visual persistence
       rootContainer.style.display = "none";
-      // Remove all child event listeners by clearing inner content first
       try { rootContainer.innerHTML = ""; } catch (e) {}
       rootContainer.remove();
       rootContainer = null;
@@ -481,7 +463,6 @@ window.LakuTour = (function () {
     }
   }
 
-  // ─── Positioning & Spotlight Synchronization ───────────────
 
   function _calculateTargetBounds(el) {
     if (!el) return null;
@@ -492,8 +473,6 @@ window.LakuTour = (function () {
     var width = rect.width;
     var height = rect.height;
 
-    // Dynamic fallback if the element is currently invisible (0x0)
-    // We walk up to find a visible parent just for this frame
     if (width === 0 && height === 0) {
       var parent = el.parentElement;
       while (parent && parent !== document.body) {
@@ -659,7 +638,6 @@ window.LakuTour = (function () {
     engineRafId = requestAnimationFrame(_engineLoop);
   }
 
-  // ─── Smooth Scroll Synchronization ─────────────────────────
 
   function _scrollTargetIntoView(el) {
     if (!el) return;
@@ -667,10 +645,8 @@ window.LakuTour = (function () {
       var rect = el.getBoundingClientRect();
       var vh = window.innerHeight;
 
-      // Check if element is inside the app modal overlay (has its own scroll context)
       var modalOverlay = document.getElementById("appModalOverlay");
       if (modalOverlay && modalOverlay.contains(el)) {
-        // Element is inside modal — scroll the modal container, not the body
         var modalRect = modalOverlay.getBoundingClientRect();
         var elTopInModal = rect.top - modalRect.top + modalOverlay.scrollTop;
         var targetScroll = elTopInModal - (modalRect.height / 2) + (rect.height / 2);
@@ -679,7 +655,6 @@ window.LakuTour = (function () {
           behavior: "smooth",
         });
       } else {
-        // Element is in the body — use standard scrollIntoView
         if (rect.top >= 0 && rect.bottom <= vh) return;
 
         el.scrollIntoView({
@@ -695,7 +670,6 @@ window.LakuTour = (function () {
     }
   }
 
-  // ─── Render Popover Content ────────────────────────────────
 
   function _renderPopover() {
     if (!popover) return;
